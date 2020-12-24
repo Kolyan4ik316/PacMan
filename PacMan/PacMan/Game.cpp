@@ -2,7 +2,18 @@
 HGE *Game::hge					= 0;
 Game::Game()
 {
+	InitWindow();
+	InitStates();
 }
+void Game::InitWindow()
+{
+
+}
+void Game::InitStates()
+{
+	states.push(new GameState());
+}
+
 void Game::Run()
 {
 	// Here we use global pointer to HGE interface.
@@ -15,12 +26,11 @@ void Game::Run()
 	hge->System_SetState(HGE_FRAMEFUNC, Update);
 
 	// Set the window title
-	hge->System_SetState(HGE_TITLE, "HGE Tutorial 01 - Minimal HGE application");
+	hge->System_SetState(HGE_TITLE, "PacMan");
 	
 	// Run in windowed mode
 	// Default window size is 800x600
-	hge->System_SetState(HGE_WINDOWED, false);
-
+	hge->System_SetState(HGE_WINDOWED, true);
 	// Don't use BASS for sound
 	hge->System_SetState(HGE_USESOUND, false);
 
@@ -74,7 +84,6 @@ bool Game::Render()
 	
 	// Render quads here. This time just
 	// one of them will serve our needs.
-	//hge->Gfx_RenderQuad(&quad);
 
 	// End rendering and update the screen
 	hge->Gfx_EndScene();
@@ -84,5 +93,9 @@ bool Game::Render()
 }
 Game::~Game()
 {
-
+	for(unsigned int i = 0; i < states.size(); i++)
+	{
+		delete states.top();
+		states.pop();
+	}
 }

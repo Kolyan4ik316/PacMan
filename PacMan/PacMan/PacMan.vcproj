@@ -189,6 +189,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\EntryHeader.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Game.h"
 				>
 			</File>
@@ -198,6 +202,30 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+		</Filter>
+		<Filter
+			Name="States"
+			>
+			<File
+				RelativePath=".\GameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GameState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\State.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Entities"
+			>
+			<File
+				RelativePath=".\Entity.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
