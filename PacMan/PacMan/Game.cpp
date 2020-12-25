@@ -67,9 +67,22 @@ void Game::Run()
 		// If HGE initialization failed show error message
 		throw(std::exception(hge->System_GetErrorMessage()));
 	}
+	for(unsigned int i = 0; i < states.size(); i++)
+	{	
+		states.top()->FreeResources(hge);
+		delete states.top();
+		states.pop();
+	}
+	// Restore video mode and free
+	// all allocated resources
+	hge->System_Shutdown();
 
 	
-
+	
+	// Release the HGE interface.
+	// If there are no more references,
+	// the HGE object will be deleted.
+	hge->Release();
 	
 	
 }
@@ -92,19 +105,6 @@ bool Game::Render()
 }
 Game::~Game()
 {
-	for(unsigned int i = 0; i < states.size(); i++)
-	{	
-		states.top()->FreeResources(hge);
-		delete states.top();
-		states.pop();
-	}
-	// Restore video mode and free
-	// all allocated resources
-	hge->System_Shutdown();
-
-	// Release the HGE interface.
-	// If there are no more references,
-	// the HGE object will be deleted.
-	hge->Release();
 	
+
 }
