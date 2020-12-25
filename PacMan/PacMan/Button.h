@@ -8,7 +8,6 @@ public:
 	void Update(const float dt) override;
 	void Render(HGE *hge) override;
 	virtual ~Button();
-protected:
-	static position pos;
 };
+
 #endif

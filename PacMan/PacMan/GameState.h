@@ -1,6 +1,7 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 #include "State.h"
+#include "PacMan.h"
 
 class GameState : public State
 {
@@ -32,6 +33,7 @@ private:
 	static const float speed;
 	static const float friction;
 	static bool isLoadedResources;
+	static PacMan player;
 
 };
 

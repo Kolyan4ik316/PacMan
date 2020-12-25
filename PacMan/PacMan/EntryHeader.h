@@ -8,6 +8,9 @@
 
 //Linking lib
 #pragma comment( lib, "hge.lib" )
+#pragma comment( lib, "hgehelpers.lib" )
+#pragma comment( lib, "hgelibpng.lib" )
+#pragma comment( lib, "hge-static.lib" )
 
 #include <stack>
 #include <memory>
@@ -17,9 +20,4 @@
 #include <string>
 #include <list>
 
-struct position
-{
-	static float x;
-	static float y;
-};
 #endif

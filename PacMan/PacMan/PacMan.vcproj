@@ -234,6 +234,14 @@
 				RelativePath=".\Entity.h"
 				>
 			</File>
+			<File
+				RelativePath=".\PacMan.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PacMan.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Widgets"

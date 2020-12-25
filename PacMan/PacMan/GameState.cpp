@@ -8,6 +8,7 @@ float GameState::y = 100.0f;
 const float GameState::speed = 90;
 const float GameState::friction = 0.98f;
 bool GameState::isLoadedResources = false;
+PacMan GameState::player = PacMan();
 GameState::GameState()
 {
 }
@@ -20,7 +21,7 @@ void GameState::LoadResources(HGE *hge)
 	// Load sound and texture
 	snd=hge->Effect_Load("menu.wav");
 	quad.tex=hge->Texture_Load("particles.png");
-
+	player.LoadResources(hge);
 	if(!snd || !quad.tex)
 	{
 		throw(std::exception("Can't find sound or texture"));
@@ -49,7 +50,7 @@ bool GameState::Update(HGE *hge, const float dt)
 	// Get the time elapsed since last call of FrameFunc().
 	// This will help us to synchronize on different
 	// machines and video modes.
-
+	player.LoadResources(hge);
 	// Process keys
 	if (hge->Input_GetKeyState(HGEK_ESCAPE)) return true;
 	if (hge->Input_GetKeyState(HGEK_LEFT)) dx-=speed*dt;
@@ -95,6 +96,7 @@ void GameState::Render(HGE *hge)
 	// Render quads here. This time just
 	// one of them will serve our needs.
 	hge->Gfx_RenderQuad(&quad);
+	player.Render(hge);
 
 	// End rendering and update the screen
 	hge->Gfx_EndScene();
@@ -107,6 +109,7 @@ void GameState::FreeResources(HGE* hge)
 {
 	hge->Texture_Free(quad.tex);
 	hge->Effect_Free(snd);
+	player.FreeResources(hge);
 }
 GameState::~GameState()
 {

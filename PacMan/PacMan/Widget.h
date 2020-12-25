@@ -8,5 +8,8 @@ public:
 	virtual bool Update(const float dt) = 0;
 	virtual bool Render(HGE *hge) = 0;
 	virtual ~Widget();
+protected:
+	static Position pos;
 };
+Position Widget::pos = {};
 #endif
