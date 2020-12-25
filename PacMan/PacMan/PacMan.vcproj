@@ -215,6 +215,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MainMenu.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MainMenu.h"
+				>
+			</File>
+			<File
 				RelativePath=".\State.h"
 				>
 			</File>
@@ -224,6 +232,18 @@
 			>
 			<File
 				RelativePath=".\Entity.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Widgets"
+			>
+			<File
+				RelativePath=".\Button.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Widget.h"
 				>
 			</File>
 		</Filter>

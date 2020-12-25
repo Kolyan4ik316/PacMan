@@ -3,7 +3,6 @@
 
 #include "State.h"
 #include "GameState.h"
-
 class Game
 {
 public:
@@ -21,8 +20,12 @@ private:
 	void InitWindow();
 	void InitStates();
 private:
-	std::stack<State*> states;
+	static std::stack<State*> states;
 	static HGE *hge;
+private:
+	static int screenWidth;
+	static int screenHeight;
+	static bool windowed;
 };
 
 

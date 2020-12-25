@@ -6,10 +6,12 @@ class Entity
 public:
 	Entity(){};
 	//Update
-	virtual bool Update() = 0;
+	virtual void Update(const float dt) = 0;
 	//Render
-	virtual bool Render() = 0;
+	virtual void Render(HGE *hge) = 0;
 	virtual ~Entity(){};
+protected:
+	static position pos;
 }
 
 
