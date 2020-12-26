@@ -9,7 +9,7 @@ public:
 	virtual bool Render(HGE *hge) = 0;
 	virtual ~Widget();
 protected:
-	static Position pos;
+	static float pos_x;
+	static float pos_y;
 };
-Position Widget::pos = {};
 #endif

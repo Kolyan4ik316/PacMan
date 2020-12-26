@@ -10,7 +10,7 @@
 #pragma comment( lib, "hge.lib" )
 #pragma comment( lib, "hgehelpers.lib" )
 #pragma comment( lib, "hgelibpng.lib" )
-#pragma comment( lib, "hge-static.lib" )
+//#pragma comment( lib, "hge-static.lib" )
 
 #include <stack>
 #include <memory>
