@@ -6,7 +6,7 @@ class Entity
 public:
 	Entity(){};
 	//Update
-	virtual void Update(HGE *hge, const float dt) = 0;
+	virtual void Update(HGE *hge, const float& dt) = 0;
 	//Render
 	virtual void SetPosition(const hgeVector& pos_in)
 	{

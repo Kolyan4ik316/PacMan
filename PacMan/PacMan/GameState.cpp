@@ -4,6 +4,7 @@ bool GameState::isLoadedResources = false;
 PacMan GameState::player = PacMan();
 GameState::GameState()
 {
+	player.SetPosition(hgeVector(400.0f, 300.0f));
 }
 void GameState::LoadResources(HGE *hge)
 {
@@ -18,7 +19,7 @@ void GameState::LoadResources(HGE *hge)
 	// 0,0 means top left corner and 1,1 -
 	// bottom right corner of the texture.
 }
-bool GameState::Update(HGE *hge, const float dt)
+bool GameState::Update(HGE *hge, const float& dt)
 {
 	// Get the time elapsed since last call of FrameFunc().
 	// This will help us to synchronize on different
@@ -57,7 +58,7 @@ void GameState::Render(HGE *hge)
 	// End rendering and update the screen
 	hge->Gfx_EndScene();
 }
-void GameState::UpdateInput(HGE *hge, const float dt)
+void GameState::UpdateInput(HGE *hge, const float& dt)
 {	
 	hgeVector dir = hgeVector(0.0f, 0.0f);
 

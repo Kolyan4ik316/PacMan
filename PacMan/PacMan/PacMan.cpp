@@ -2,14 +2,14 @@
 hgeSprite* PacMan::sprite = 0;
 HTEXTURE PacMan::tex = 0;
 HEFFECT PacMan::snd = 0;
-hgeVector Entity::pos = hgeVector(300.0f, 400.0f);
+hgeVector Entity::pos = hgeVector();
 hgeVector Entity::dir = hgeVector();
 const float PacMan::speed = 90;
 //const float PacMan::friction = 0.98f;
 PacMan::PacMan()
 {
 }
-void PacMan::Update(HGE *hge, const float dt)
+void PacMan::Update(HGE *hge, const float& dt)
 {
 	// Do some movement calculations and collision detection	
 	pos.x+=dir.x * speed * dt; 

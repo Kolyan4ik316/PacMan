@@ -244,18 +244,14 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Widgets"
+			Name="GUIManager"
 			>
 			<File
-				RelativePath=".\Button.h"
+				RelativePath=".\MenuManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Label.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Widget.h"
+				RelativePath=".\MenuManager.h"
 				>
 			</File>
 		</Filter>

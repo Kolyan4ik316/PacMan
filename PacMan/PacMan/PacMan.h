@@ -7,7 +7,7 @@ class PacMan : public Entity
 public:
 	PacMan();
 	//Update
-	virtual void Update(HGE *hge, const float dt) override;
+	virtual void Update(HGE *hge, const float& dt) override;
 	//Render
 	virtual void Render(HGE *hge) override;
 	virtual void LoadResources(HGE *hge) override;

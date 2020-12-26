@@ -5,12 +5,17 @@
 #include <hgesprite.h>
 #include <hgefont.h>
 #include <hgeparticle.h>
+#include <hgegui.h>
+#include <hgecolor.h>
+#include <hgeguictrls.h>
+
 
 //Linking lib
 #pragma comment( lib, "hge.lib" )
 #pragma comment( lib, "hgehelpers.lib" )
 #pragma comment( lib, "hgelibpng.lib" )
 //#pragma comment( lib, "hge-static.lib" )
+//#pragma comment( lib, "zlib.lib" )
 
 #include <stack>
 #include <memory>

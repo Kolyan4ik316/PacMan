@@ -29,7 +29,7 @@ void Game::InitWindow()
 }
 void Game::InitStates()
 {
-	states.push(new GameState());
+	states.push(new MainMenu());
 }
 
 void Game::Run()
