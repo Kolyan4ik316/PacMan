@@ -8,34 +8,25 @@ public:
 	//Update
 	virtual void Update(HGE *hge, const float dt) = 0;
 	//Render
-	virtual void SetPosition(const float& x, const float& y)
+	virtual void SetPosition(const hgeVector& pos_in)
 	{
-		pos_x = x;
-		pos_y = y;
+		pos = pos_in;
 	};
-	virtual const float GetPositionX() const
+	virtual void SetDirection(const hgeVector& dir_in)
 	{
-		return pos_x;
+		dir = dir_in;
 	};
-	virtual void SetDirection(const float& dirX, const float& dirY)
+	virtual const hgeVector GetPosition() const
 	{
-		dir_x = dirX;
-		dir_y = dirY;
-	};
-	virtual const float GetPositionY() const
-	{
-		return pos_y;
+		return pos;
 	};
 	virtual void Render(HGE *hge) = 0;
 	virtual void LoadResources(HGE *hge) = 0;
 	virtual void FreeResources(HGE *hge) = 0;
 	virtual ~Entity(){};
 protected:
-
-	static float pos_x;
-	static float pos_y;
-	static float dir_x;
-	static float dir_y;
+	static hgeVector pos;
+	static hgeVector dir;
 };
 
 

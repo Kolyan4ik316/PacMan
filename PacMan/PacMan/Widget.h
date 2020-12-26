@@ -9,7 +9,7 @@ public:
 	virtual bool Render(HGE *hge) = 0;
 	virtual ~Widget();
 protected:
-	static float pos_x;
-	static float pos_y;
+	static hgeVector pos;
+	static hgeVector dir;
 };
 #endif

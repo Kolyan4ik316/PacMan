@@ -24,9 +24,7 @@ protected:
 	static hgeSprite* sprite;
 	static HTEXTURE	 tex;
 	// Some "gameplay" variables and constants
-
 	static const float speed;
-	
 	static HEFFECT snd;
 
 };

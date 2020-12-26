@@ -1,23 +1,20 @@
 #include "PacMan.h"
 hgeSprite* PacMan::sprite = 0;
 HTEXTURE PacMan::tex = 0;
-float Entity::pos_x = 0;
-float Entity::pos_y = 0;
-float Entity::dir_x = 0;
-float Entity::dir_y = 0;
 HEFFECT PacMan::snd = 0;
+hgeVector Entity::pos = hgeVector(300.0f, 400.0f);
+hgeVector Entity::dir = hgeVector();
 const float PacMan::speed = 90;
 //const float PacMan::friction = 0.98f;
 PacMan::PacMan()
 {
-	pos_x = 300.0f;
-	pos_y = 400.0f;
 }
 void PacMan::Update(HGE *hge, const float dt)
 {
 	// Do some movement calculations and collision detection	
-	pos_x+=dir_x * speed * dt; 
-	pos_y+=dir_y * speed * dt;
+	pos.x+=dir.x * speed * dt; 
+	pos.y+=dir.y * speed * dt;
+
 	//if(x>784) {x=784-(x-784);dx=-dx;boom(hge);}
 	//if(x<16) {x=16+16-x;pos_x=-pos_x;boom(hge);}
 	//if(y>584) {y=584-(y-584);pos_y=-pos_y;boom(hge);}
@@ -25,7 +22,7 @@ void PacMan::Update(HGE *hge, const float dt)
 }
 void PacMan::Render(HGE* hge)
 {
-	sprite->Render(pos_x, pos_y);
+	sprite->Render(pos.x, pos.y);
 }
 void PacMan::LoadResources(HGE *hge)
 {

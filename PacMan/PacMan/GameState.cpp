@@ -59,23 +59,29 @@ void GameState::Render(HGE *hge)
 }
 void GameState::UpdateInput(HGE *hge, const float dt)
 {	
-	player.SetDirection(0.0f,0.0f);
-	if (hge->Input_GetKeyState(HGEK_LEFT))
+	hgeVector dir = hgeVector(0.0f, 0.0f);
+
+	if(hge->Input_GetKeyState(HGEK_LEFT))
 	{
-		player.SetDirection(-1.0f, 0.0f);
+		dir -= hgeVector(1.0f, 0.0f);
 	};
-	if (hge->Input_GetKeyState(HGEK_RIGHT))
+	if(hge->Input_GetKeyState(HGEK_RIGHT))
 	{
-		player.SetDirection(1.0f, 0.0f);
+		dir += hgeVector(1.0f, 0.0f);
 	};
-	if (hge->Input_GetKeyState(HGEK_UP))
+	if(hge->Input_GetKeyState(HGEK_UP))
 	{
-		player.SetDirection(0.0f, -1.0f);
+		dir -= hgeVector(0.0f, 1.0f);
 	};
-	if (hge->Input_GetKeyState(HGEK_DOWN))
+	if(hge->Input_GetKeyState(HGEK_DOWN))
 	{
-		player.SetDirection(0.0f, 1.0f);
+		dir += hgeVector(0.0f, 1.0f);
 	};
+	if(hge->Input_GetKeyState(HGEK_SPACE))
+	{
+		player.SetPosition(hgeVector(400.0f, 300.0f));
+	};
+	player.SetDirection(dir);
 
 }
 void GameState::FreeResources(HGE* hge)
