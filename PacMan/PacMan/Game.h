@@ -5,16 +5,6 @@
 #include "GameState.h"
 class Game
 {
-private:
-	/*enum CurrentState
-	{
-		mainMenu,
-		game,
-		pause,
-		options,
-		credits,
-		exit
-	};*/
 public:
 	Game();
 	//Main function
@@ -27,12 +17,17 @@ public:
 	//void QuitFromApplication();
 	~Game();	
 private:
+	// For initialize window attributes
 	void InitWindow();
+	// For initialize state of game
 	void InitStates();
 private:
+	// Container of states
 	static std::stack<State*> states;
+	// Main pointer of HGE class
 	static HGE *hge;
 private:
+	//Window attributes
 	static int screenWidth;
 	static int screenHeight;
 	static bool windowed;

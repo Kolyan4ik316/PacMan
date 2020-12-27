@@ -13,13 +13,12 @@ public:
 	void Update(HGE *hge, const float& dt) override;
 	//Render
 	void Render(HGE *hge) override;
-	void ToPreviousState();
 	void UpdateInput(HGE *hge, const float& dt) override;
-	//void EndState() override{};
-	void FreeResources(HGE *hge);
+	void FreeResources(HGE *hge) override;
 	virtual ~GameState();
 private:
 	static bool isLoadedResources;
+	// Player variable
 	static PacMan player;
 };
 

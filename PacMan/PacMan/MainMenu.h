@@ -19,9 +19,8 @@ public:
 	virtual void FreeResources(HGE *hge) override{};
 	virtual ~MainMenu();
 private:
+	//Will managing our menu
 	static MenuManager manager;
-	//static std::list<hgeGUIText> texts;
-	//static std::list<hgeGUIButton> buttons;
 };
 
 

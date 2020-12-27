@@ -4,44 +4,22 @@ PacMan GameState::player = PacMan();
 GameState::GameState(std::stack<State*>* states_in) : State(states_in)
 {
 	quit = false;
-	//states = states_in;
 	player.SetPosition(hgeVector(400.0f, 300.0f));
 }
 void GameState::LoadResources(HGE *hge)
 {
-	if(!hge)
-	{
-		throw(std::exception("HGE is nullptr"));
-	}
-	// Load sound and texture
 	player.LoadResources(hge);
-
-	// Set up quad's texture coordinates.
-	// 0,0 means top left corner and 1,1 -
-	// bottom right corner of the texture.
 }
 void GameState::Update(HGE *hge, const float& dt)
-{
-	// Get the time elapsed since last call of FrameFunc().
-	// This will help us to synchronize on different
-	// machines and video modes.
-	//player.LoadResources(hge);
+{	
+	// Process keys
 	UpdateInput(hge, dt);
 	player.Update(hge, dt);
-	// Process keys
 	// Continue execution
-}
-void GameState::ToPreviousState()
-{
-	EndState();
-
+	
 }
 void GameState::Render(HGE *hge)
 {
-	if(!hge)
-	{
-		throw(std::exception("HGE is nullptr"));
-	}
 	if(!isLoadedResources)
 	{
 		LoadResources(hge);
@@ -76,7 +54,7 @@ void GameState::UpdateInput(HGE *hge, const float& dt)
 	};
 	if(hge->Input_GetKeyState(HGEK_ESCAPE))
 	{
-		ToPreviousState();
+		EndState();
 	};
 	player.SetDirection(dir);
 

@@ -9,14 +9,9 @@ PacMan::PacMan()
 }
 void PacMan::Update(HGE *hge, const float& dt)
 {
-	// Do some movement calculations and collision detection	
+	// Do some movement calculations
 	pos.x+=dir.x * speed * dt; 
 	pos.y+=dir.y * speed * dt;
-
-	//if(x>784) {x=784-(x-784);dx=-dx;boom(hge);}
-	//if(x<16) {x=16+16-x;pos_x=-pos_x;boom(hge);}
-	//if(y>584) {y=584-(y-584);pos_y=-pos_y;boom(hge);}
-	//if(y<16) {y=16+16-y;pos_y=-pos_y;boom(hge);}
 }
 void PacMan::Render(HGE* hge)
 {
@@ -26,6 +21,10 @@ void PacMan::LoadResources(HGE *hge)
 {
 	tex=hge->Texture_Load("particles.png");
 	snd=hge->Effect_Load("menu.wav");
+	if(!tex || !snd)
+	{
+		throw(std::exception("Can't find particles.png, or menu.wav"));
+	}
 	sprite=new hgeSprite(tex, 96, 64, 32, 32);
 	sprite->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
 	sprite->SetHotSpot(16,16);
