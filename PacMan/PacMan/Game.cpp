@@ -1,6 +1,7 @@
 #include "Game.h"
 HGE *Game::hge					= 0;
-
+//Game::CurrentState Game::currState = Game::CurrentState::mainMenu;
+int Game::currState = 0;
 int Game::screenWidth = 800;
 int Game::screenHeight = 600;
 bool Game::windowed = true;;
@@ -29,7 +30,7 @@ void Game::InitWindow()
 }
 void Game::InitStates()
 {
-	states.push(new MainMenu());
+	states.push(new MainMenu(&states));
 }
 
 void Game::Run()

@@ -223,6 +223,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\State.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\State.h"
 				>
 			</File>
@@ -230,6 +234,10 @@
 		<Filter
 			Name="Entities"
 			>
+			<File
+				RelativePath=".\Entity.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\Entity.h"
 				>

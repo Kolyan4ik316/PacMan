@@ -4,7 +4,8 @@
 class State
 {
 public:
-	State(){};
+	//State(){};
+	State(std::stack<State*>* states_in);
 	//Update
 	virtual bool Update(HGE *hge, const float& dt) = 0;
 	//Render
@@ -15,8 +16,13 @@ public:
 
 	virtual void LoadResources(HGE *hge) = 0;
 	virtual void FreeResources(HGE *hge) = 0;
+	
+	virtual void ToPreviousState(){};
+	virtual void ToNextState(){};
 
 	virtual ~State(){};
 protected:
+	std::stack<State*>* states;
 };
+//
 #endif

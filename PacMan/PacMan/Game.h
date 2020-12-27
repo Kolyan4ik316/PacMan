@@ -5,6 +5,16 @@
 #include "GameState.h"
 class Game
 {
+private:
+	/*enum CurrentState
+	{
+		mainMenu,
+		game,
+		pause,
+		options,
+		credits,
+		exit
+	};*/
 public:
 	Game();
 	//Main function
@@ -15,7 +25,7 @@ public:
 	static bool Render();
 
 	void QuitFromApplication();
-	~Game();
+	~Game();	
 private:
 	void InitWindow();
 	void InitStates();
@@ -26,6 +36,8 @@ private:
 	static int screenWidth;
 	static int screenHeight;
 	static bool windowed;
+private:
+	static int currState;
 };
 
 
