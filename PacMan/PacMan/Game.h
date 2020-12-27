@@ -24,7 +24,7 @@ public:
 	//Render
 	static bool Render();
 
-	void QuitFromApplication();
+	//void QuitFromApplication();
 	~Game();	
 private:
 	void InitWindow();
@@ -37,7 +37,6 @@ private:
 	static int screenHeight;
 	static bool windowed;
 private:
-	static int currState;
 };
 
 

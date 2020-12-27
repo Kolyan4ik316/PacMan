@@ -1,7 +1,6 @@
 #include "Game.h"
 HGE *Game::hge					= 0;
 //Game::CurrentState Game::currState = Game::CurrentState::mainMenu;
-int Game::currState = 0;
 int Game::screenWidth = 800;
 int Game::screenHeight = 600;
 bool Game::windowed = true;;
@@ -87,20 +86,50 @@ void Game::Run()
 	
 	
 }
+void QuitFromApplication()
+{
+
+}
 bool Game::Update()
 {
 	// Now ESC has been pressed or the user
 	// has closed the window by other means.
 	// By returning "true" we tell HGE
 	// to stop running the application.
+	if(!states.empty())
+	{
+		states.top()->Update(hge, hge->Timer_GetDelta());
+		if(states.top()->GetQuit())
+		{
+			//states.top()->EndState();
+			delete states.top();
+			states.pop();
+		}
+		return false;
+	}
+	else
+	{
+		//QuitFromApplication();
+		return true;
+	}
 	
-	return states.top()->Update(hge, hge->Timer_GetDelta());
 	// Continue execution
 	//return false;
 }
 bool Game::Render()
 {
-	states.top()->Render(hge);
+	if (!states.empty())
+	{
+		hge->Gfx_BeginScene();
+
+		// Clear screen with black color
+		hge->Gfx_Clear(0);
+
+		states.top()->Render(hge);
+
+		// End rendering and update the screen
+		hge->Gfx_EndScene();
+	}
 	// RenderFunc should always return false
 	return false;
 }

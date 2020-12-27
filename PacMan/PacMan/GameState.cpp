@@ -1,9 +1,9 @@
 #include "GameState.h"
-
 bool GameState::isLoadedResources = false;
 PacMan GameState::player = PacMan();
 GameState::GameState(std::stack<State*>* states_in) : State(states_in)
 {
+	quit = false;
 	//states = states_in;
 	player.SetPosition(hgeVector(400.0f, 300.0f));
 }
@@ -20,7 +20,7 @@ void GameState::LoadResources(HGE *hge)
 	// 0,0 means top left corner and 1,1 -
 	// bottom right corner of the texture.
 }
-bool GameState::Update(HGE *hge, const float& dt)
+void GameState::Update(HGE *hge, const float& dt)
 {
 	// Get the time elapsed since last call of FrameFunc().
 	// This will help us to synchronize on different
@@ -29,13 +29,12 @@ bool GameState::Update(HGE *hge, const float& dt)
 	UpdateInput(hge, dt);
 	player.Update(hge, dt);
 	// Process keys
-	if (hge->Input_GetKeyState(HGEK_ESCAPE)) return true;
 	// Continue execution
-	return false;
 }
 void GameState::ToPreviousState()
 {
-	states->pop();
+	EndState();
+
 }
 void GameState::Render(HGE *hge)
 {
@@ -48,20 +47,8 @@ void GameState::Render(HGE *hge)
 		LoadResources(hge);
 		isLoadedResources = true;
 	}
-	//Begin rendering quads.
-	// This function must be called
-	// before any actual rendering.
-	hge->Gfx_BeginScene();
 
-	// Clear screen with black color
-	hge->Gfx_Clear(0);
-	
-	// Render quads here. This time just
-	// one of them will serve our needs.
 	player.Render(hge);
-
-	// End rendering and update the screen
-	hge->Gfx_EndScene();
 }
 void GameState::UpdateInput(HGE *hge, const float& dt)
 {	
@@ -87,7 +74,7 @@ void GameState::UpdateInput(HGE *hge, const float& dt)
 	{
 		player.SetPosition(hgeVector(400.0f, 300.0f));
 	};
-	if(hge->Input_GetKeyState(HGEK_BACKSPACE))
+	if(hge->Input_GetKeyState(HGEK_ESCAPE))
 	{
 		ToPreviousState();
 	};
