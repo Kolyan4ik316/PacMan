@@ -1,6 +1,5 @@
 #include "Game.h"
 HGE *Game::hge					= 0;
-//Game::CurrentState Game::currState = Game::CurrentState::mainMenu;
 int Game::screenWidth = 800;
 int Game::screenHeight = 600;
 bool Game::windowed = true;;
@@ -9,8 +8,6 @@ std::stack<State*> Game::states = std::stack<State*>();
 Game::Game()
 {
 	InitWindow();
-	//InitStates();
-	
 
 	// Here we use global pointer to HGE interface.
 	// Instead you may use hgeCreate() every
@@ -24,8 +21,10 @@ void Game::InitWindow()
 	std::string path = "Configs\\window.ini";
 	std::ifstream ifs;
 	ifs.open(path.c_str());
+	// if file is already exist
 	if(ifs.is_open())
 	{
+		//Reading variables
 		ifs>> nameOfWindow
 			>>screenWidth
 			>>screenHeight
@@ -33,14 +32,17 @@ void Game::InitWindow()
 	}
 	else
 	{
+		//if not exist creating new file in same path
 		std::ofstream ofs;
 		ofs.open(path.c_str());
 		if(ofs.is_open())
 		{
+			//Writing variables
 			ofs<<nameOfWindow.c_str()<<"\n"<<screenWidth<<"\n"<<screenHeight<<"\n"<<windowed<<"\n";
 		}
 		else
 		{
+			// if can't create
 			throw(std::exception("Unknown error while writing to file window.ini"));
 		}
 		ofs.close();
@@ -50,6 +52,7 @@ void Game::InitWindow()
 }
 void Game::InitStates()
 {
+	// Pushing main menu
 	states.push(new MainMenu(&states, hge));
 }
 void Game::ChangePreference()
@@ -72,21 +75,13 @@ void Game::Run()
 	hge->System_SetState(HGE_RENDERFUNC, Render);
 
 	ChangePreference();
-	// Don't use BASS for sound
-	//hge->System_SetState(HGE_USESOUND, true);
 	
-	// Tries to initiate HGE with the states set.
-	// If something goes wrong, "false" is returned
-	// and more specific description of what have
-	// happened can be read with System_GetErrorMessage().
 	
 	if(hge->System_Initiate())
 	{
+		// Creating main menu
 		InitStates();
-		//states.top()->LoadRecources(hge);
-		// Starts running FrameFunc().
-		// Note that the execution "stops" here
-		// until "true" is returned from FrameFunc().
+		// Starting programm itself
 		hge->System_Start();
 	}
 	else
@@ -113,6 +108,8 @@ void Game::Run()
 }
 void Game::QuitFromApplication()
 {
+	// cleaning our states pointers
+	// for (unsgned int i = 0; i< states.size(); i++) not erasing first element
 	while(!states.empty())
 	{
 		states.top()->FreeResources();
@@ -122,29 +119,30 @@ void Game::QuitFromApplication()
 }
 bool Game::Update()
 {
-	// By returning "true" we tell HGE
-	// to stop running the application.
+	// if container have states game will updating
 	if(!states.empty())
 	{
+		//We are gonna to use timer from a lib, becouse in this version of c++
+		//chrono is not exist :)
 		states.top()->Update(hge->Timer_GetDelta());
 		if(states.top()->GetQuit())
 		{
-			//states.top()->EndState();
 			delete states.top();
 			states.pop();
 		}
+		// Continue execution
 		return false;
 	}
 	else
 	{
+		// By returning "true" we tell HGE
+		// to stop running the application.
 		return true;
 	}
-	
-	// Continue execution
-	//return false;
 }
 bool Game::Render()
 {
+	// if container have states game will rendering
 	if (!states.empty())
 	{
 		hge->Gfx_BeginScene();
