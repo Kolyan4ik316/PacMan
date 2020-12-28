@@ -21,7 +21,31 @@ Game::Game()
 }
 void Game::InitWindow()
 {
-	std::fstream fs;
+	std::string path = "Configs\\window.ini";
+	std::ifstream ifs;
+	ifs.open(path.c_str());
+	if(ifs.is_open())
+	{
+		ifs>> nameOfWindow
+			>>screenWidth
+			>>screenHeight
+			>>windowed;
+	}
+	else
+	{
+		std::ofstream ofs;
+		ofs.open(path.c_str());
+		if(ofs.is_open())
+		{
+			ofs<<nameOfWindow.c_str()<<"\n"<<screenWidth<<"\n"<<screenHeight<<"\n"<<windowed<<"\n";
+		}
+		else
+		{
+			throw(std::exception("Unknown error while writing to file window.ini"));
+		}
+		ofs.close();
+	}
+	ifs.close();
 	
 }
 void Game::InitStates()
