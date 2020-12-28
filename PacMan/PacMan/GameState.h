@@ -7,14 +7,14 @@
 class GameState : public State
 {
 public:
-	GameState(std::stack<State*>* states_in);
-	void LoadResources(HGE *hge) override;
+	GameState(std::stack<State*>* states_in, HGE* hge_in);
+	void LoadResources() override;
 	//Update
-	void Update(HGE *hge, const float& dt) override;
+	void Update(const float& dt) override;
 	//Render
-	void Render(HGE *hge) override;
-	void UpdateInput(HGE *hge, const float& dt) override;
-	void FreeResources(HGE *hge) override;
+	void Render() override;
+	void UpdateInput(const float& dt) override;
+	void FreeResources() override;
 	virtual ~GameState();
 private:
 	static bool isLoadedResources;

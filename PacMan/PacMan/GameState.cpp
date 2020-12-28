@@ -1,34 +1,34 @@
 #include "GameState.h"
 bool GameState::isLoadedResources = false;
 PacMan GameState::player = PacMan();
-GameState::GameState(std::stack<State*>* states_in) : State(states_in)
+GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
 {
 	quit = false;
 	player.SetPosition(hgeVector(400.0f, 300.0f));
 }
-void GameState::LoadResources(HGE *hge)
+void GameState::LoadResources()
 {
 	player.LoadResources(hge);
 }
-void GameState::Update(HGE *hge, const float& dt)
+void GameState::Update(const float& dt)
 {	
 	// Process keys
-	UpdateInput(hge, dt);
+	UpdateInput(dt);
 	player.Update(hge, dt);
 	// Continue execution
 	
 }
-void GameState::Render(HGE *hge)
+void GameState::Render()
 {
 	if(!isLoadedResources)
 	{
-		LoadResources(hge);
+		LoadResources();
 		isLoadedResources = true;
 	}
 
 	player.Render(hge);
 }
-void GameState::UpdateInput(HGE *hge, const float& dt)
+void GameState::UpdateInput(const float& dt)
 {	
 	hgeVector dir = hgeVector(0.0f, 0.0f);
 
@@ -59,7 +59,7 @@ void GameState::UpdateInput(HGE *hge, const float& dt)
 	player.SetDirection(dir);
 
 }
-void GameState::FreeResources(HGE* hge)
+void GameState::FreeResources()
 {
 	player.FreeResources(hge);
 }

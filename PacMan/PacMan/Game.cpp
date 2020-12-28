@@ -9,7 +9,7 @@ std::stack<State*> Game::states = std::stack<State*>();
 Game::Game()
 {
 	InitWindow();
-	InitStates();
+	//InitStates();
 	
 
 	// Here we use global pointer to HGE interface.
@@ -26,7 +26,7 @@ void Game::InitWindow()
 }
 void Game::InitStates()
 {
-	states.push(new MainMenu(&states));
+	states.push(new MainMenu(&states, hge));
 }
 void Game::ChangePreference()
 {
@@ -58,6 +58,7 @@ void Game::Run()
 	
 	if(hge->System_Initiate())
 	{
+		InitStates();
 		//states.top()->LoadRecources(hge);
 		// Starts running FrameFunc().
 		// Note that the execution "stops" here
@@ -90,7 +91,7 @@ void Game::QuitFromApplication()
 {
 	while(!states.empty())
 	{
-		states.top()->FreeResources(hge);
+		states.top()->FreeResources();
 		delete states.top();
 		states.pop();
 	}
@@ -101,7 +102,7 @@ bool Game::Update()
 	// to stop running the application.
 	if(!states.empty())
 	{
-		states.top()->Update(hge, hge->Timer_GetDelta());
+		states.top()->Update(hge->Timer_GetDelta());
 		if(states.top()->GetQuit())
 		{
 			//states.top()->EndState();
@@ -127,7 +128,7 @@ bool Game::Render()
 		// Clear screen with black color
 		hge->Gfx_Clear(0);
 
-		states.top()->Render(hge);
+		states.top()->Render();
 
 		// End rendering and update the screen
 		hge->Gfx_EndScene();

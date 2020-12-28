@@ -5,21 +5,21 @@ class State
 {
 public:
 	//Ctor(takes paramaters, i'm gonna add more paramaters later)
-	State(std::stack<State*>* states_in);
+	State(std::stack<State*>* states_in, HGE* hge_in);
 	//Update
-	virtual void Update(HGE *hge, const float& dt) = 0;
+	virtual void Update(const float& dt) = 0;
 	//Render
-	virtual void Render(HGE *hge) = 0;
+	virtual void Render() = 0;
 	// Updating key states, mouse state
-	virtual void UpdateInput(HGE *hge, const float& dt) = 0;
+	virtual void UpdateInput(const float& dt) = 0;
 	// function calling when we need to quit
 	virtual void EndState()
 	{
 		quit = true;
 	}
 	// Function for loading resources and releasing them
-	virtual void LoadResources(HGE *hge) = 0;
-	virtual void FreeResources(HGE *hge) = 0;
+	virtual void LoadResources() = 0;
+	virtual void FreeResources() = 0;
 	
 	// Returning if we quit from state
 	const bool& GetQuit() const
@@ -34,6 +34,7 @@ protected:
 	// Pointer to stack of pointer of states
 	// we can managing of states by using him
 	std::stack<State*>* states;
+	HGE* hge;
 };
 //
 #endif
