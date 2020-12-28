@@ -1,11 +1,15 @@
 #include "PacMan.h"
-hgeSprite* PacMan::sprite = 0;
-HTEXTURE PacMan::tex = 0;
-HEFFECT PacMan::snd = 0;
-const float PacMan::speed = 90;
+//hgeSprite* PacMan::sprite = 0;
+//HTEXTURE PacMan::tex = 0;
+//HEFFECT PacMan::snd = 0;
+//const float PacMan::speed = 90;
 //const float PacMan::friction = 0.98f;
 PacMan::PacMan()
 {
+	tex = 0;
+	sprite = 0;
+	snd = 0;
+	speed = 90.0f;
 }
 void PacMan::Update(HGE *hge, const float& dt)
 {

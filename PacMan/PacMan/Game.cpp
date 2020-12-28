@@ -4,15 +4,12 @@ HGE *Game::hge					= 0;
 int Game::screenWidth = 800;
 int Game::screenHeight = 600;
 bool Game::windowed = true;;
+std::string Game::nameOfWindow = "PacMan";
 std::stack<State*> Game::states = std::stack<State*>();
 Game::Game()
 {
 	InitWindow();
 	InitStates();
-	
-	//screenWidth = 800;
-	//screenHeight = 600;
-	//windowed = true;
 	
 
 	// Here we use global pointer to HGE interface.
@@ -31,6 +28,18 @@ void Game::InitStates()
 {
 	states.push(new MainMenu(&states));
 }
+void Game::ChangePreference()
+{
+
+	// Set the window title
+	hge->System_SetState(HGE_TITLE, nameOfWindow.c_str());
+	
+	// Run in windowed mode
+	// Default window size is 800x600
+	hge->System_SetState(HGE_WINDOWED, windowed);
+	hge->System_SetState(HGE_SCREENWIDTH, screenWidth);
+	hge->System_SetState(HGE_SCREENHEIGHT, screenHeight);
+}
 
 void Game::Run()
 {
@@ -38,14 +47,7 @@ void Game::Run()
 	hge->System_SetState(HGE_FRAMEFUNC, Update);
 	hge->System_SetState(HGE_RENDERFUNC, Render);
 
-	// Set the window title
-	hge->System_SetState(HGE_TITLE, "PacMan");
-	
-	// Run in windowed mode
-	// Default window size is 800x600
-	hge->System_SetState(HGE_WINDOWED, windowed);
-	hge->System_SetState(HGE_SCREENWIDTH, screenWidth);
-	hge->System_SetState(HGE_SCREENHEIGHT, screenHeight);
+	ChangePreference();
 	// Don't use BASS for sound
 	//hge->System_SetState(HGE_USESOUND, true);
 	
@@ -67,12 +69,10 @@ void Game::Run()
 		// If HGE initialization failed show error message
 		throw(std::exception(hge->System_GetErrorMessage()));
 	}
-	for(unsigned int i = 0; i < states.size(); i++)
-	{	
-		states.top()->FreeResources(hge);
-		delete states.top();
-		states.pop();
-	}
+	//Cleaning states
+	// Bug is fixed;
+	QuitFromApplication();
+
 	// Restore video mode and free
 	// all allocated resources
 	hge->System_Shutdown();
@@ -86,14 +86,17 @@ void Game::Run()
 	
 	
 }
-void QuitFromApplication()
+void Game::QuitFromApplication()
 {
-
+	while(!states.empty())
+	{
+		states.top()->FreeResources(hge);
+		delete states.top();
+		states.pop();
+	}
 }
 bool Game::Update()
 {
-	// Now ESC has been pressed or the user
-	// has closed the window by other means.
 	// By returning "true" we tell HGE
 	// to stop running the application.
 	if(!states.empty())
@@ -109,7 +112,6 @@ bool Game::Update()
 	}
 	else
 	{
-		//QuitFromApplication();
 		return true;
 	}
 	
@@ -135,6 +137,4 @@ bool Game::Render()
 }
 Game::~Game()
 {
-	
-
 }

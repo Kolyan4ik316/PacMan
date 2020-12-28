@@ -13,8 +13,9 @@ public:
 	static bool Update();
 	//Render
 	static bool Render();
-
-	//void QuitFromApplication();
+	
+	static void ChangePreference();
+	static void QuitFromApplication();
 	~Game();	
 private:
 	// For initialize window attributes
@@ -31,6 +32,7 @@ private:
 	static int screenWidth;
 	static int screenHeight;
 	static bool windowed;
+	static std::string nameOfWindow;
 private:
 };
 

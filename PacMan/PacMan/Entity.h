@@ -30,8 +30,8 @@ public:
 	virtual ~Entity(){};
 protected:
 	// Position and direction
-	static hgeVector pos;
-	static hgeVector dir;
+	hgeVector pos;
+	hgeVector dir;
 };
 
 
