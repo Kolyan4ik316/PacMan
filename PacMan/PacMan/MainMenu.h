@@ -20,7 +20,7 @@ public:
 	virtual ~MainMenu();
 private:
 	//Will managing our menu
-	static MenuManager manager;
+	MenuManager* manager;
 };
 
 

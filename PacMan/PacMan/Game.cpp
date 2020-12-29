@@ -1,5 +1,5 @@
 #include "Game.h"
-HGE *Game::hge					= 0;
+HGE *Game::hge					= NULL;
 int Game::screenWidth = 800;
 int Game::screenHeight = 600;
 bool Game::windowed = true;;

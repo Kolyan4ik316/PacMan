@@ -6,9 +6,9 @@
 //const float PacMan::friction = 0.98f;
 PacMan::PacMan()
 {
-	tex = 0;
-	sprite = 0;
-	snd = 0;
+	tex = NULL;
+	sprite = NULL;
+	snd = NULL;
 	speed = 90.0f;
 }
 void PacMan::Update(HGE *hge, const float& dt)
@@ -41,6 +41,6 @@ void PacMan::FreeResources(HGE* hge)
 PacMan::~PacMan()
 {
 	delete sprite;
-	sprite = 0;
+	sprite = NULL;
 	
 }

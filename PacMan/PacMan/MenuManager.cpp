@@ -1,7 +1,9 @@
 #include "MenuManager.h"
 std::list<hgeGUIText> MenuManager::texts = std::list<hgeGUIText>();
 std::list<hgeGUIButton> MenuManager::buttons = std::list<hgeGUIButton>();
-MenuManager::MenuManager()
+MenuManager::MenuManager(HGE* hge_in)
+	:
+	hge(hge_in)
 {
 
 }
