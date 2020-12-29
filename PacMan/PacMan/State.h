@@ -35,6 +35,12 @@ protected:
 	// we can managing of states by using him
 	std::stack<State*>* states;
 	HGE* hge;
+	int screenWidth;
+	int screenHeight;
+	
+	float originX;
+	float originY;
+
 };
 //
 #endif

@@ -66,6 +66,7 @@ void Game::ChangePreference()
 	hge->System_SetState(HGE_WINDOWED, windowed);
 	hge->System_SetState(HGE_SCREENWIDTH, screenWidth);
 	hge->System_SetState(HGE_SCREENHEIGHT, screenHeight);
+	hge->System_SetState(HGE_SCREENBPP, 32);
 }
 
 void Game::Run()

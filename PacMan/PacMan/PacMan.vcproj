@@ -251,11 +251,11 @@
 			Name="GUIManager"
 			>
 			<File
-				RelativePath=".\MenuManager.cpp"
+				RelativePath=".\Button.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MenuManager.h"
+				RelativePath=".\Button.h"
 				>
 			</File>
 		</Filter>

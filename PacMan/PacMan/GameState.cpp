@@ -3,9 +3,10 @@ bool GameState::isLoadedResources = false;
 PacMan GameState::player = PacMan();
 GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
 {
-	// Setting position of player;
+	LoadResources();
 	quit = false;
-	player.SetPosition(hgeVector(400.0f, 300.0f));
+	// Setting position of player;
+	player.SetPosition(hgeVector(originX, originY));
 }
 void GameState::LoadResources()
 {
@@ -21,12 +22,6 @@ void GameState::Update(const float& dt)
 }
 void GameState::Render()
 {
-	// I'm gonna to chane this later;
-	if(!isLoadedResources)
-	{
-		LoadResources();
-		isLoadedResources = true;
-	}
 	// rendering player
 	player.Render(hge);
 }
@@ -54,7 +49,7 @@ void GameState::UpdateInput(const float& dt)
 	};
 	if(hge->Input_GetKeyState(HGEK_SPACE))
 	{
-		player.SetPosition(hgeVector(400.0f, 300.0f));
+		player.SetPosition(hgeVector(originX, originY));
 	};
 	// Input to back to main menu
 	if(hge->Input_GetKeyState(HGEK_ESCAPE))
