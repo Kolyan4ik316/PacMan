@@ -3,6 +3,18 @@ bool GameState::isLoadedResources = false;
 PacMan GameState::player = PacMan();
 GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
 {
+	// We are gonna latter add option class and we will can switch for resolution 4:3 16:9 16:10 etc
+	sizeX = 0;
+	sizeY = 0;
+	for(float x = 0.0f; x <screenWidth; x += 4.0f)
+	{
+		sizeX += 0.005f;
+	
+	}
+	for(float y = 0.0f; y <screenHeight; y += 3.0f)
+	{
+		sizeY += 0.005f;
+	}
 	LoadResources();
 	quit = false;
 	// Setting position of player;
@@ -23,7 +35,7 @@ void GameState::Update(const float& dt)
 void GameState::Render()
 {
 	// rendering player
-	player.Render(hge);
+	player.Render(hge, sizeX, sizeY);
 }
 void GameState::UpdateInput(const float& dt)
 {	

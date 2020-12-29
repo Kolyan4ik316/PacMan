@@ -10,6 +10,7 @@ PacMan::PacMan()
 	sprite = NULL;
 	snd = NULL;
 	speed = 90.0f;
+	
 }
 void PacMan::Update(HGE *hge, const float& dt)
 {
@@ -20,6 +21,10 @@ void PacMan::Update(HGE *hge, const float& dt)
 void PacMan::Render(HGE* hge)
 {
 	sprite->Render(pos.x, pos.y);
+}
+void PacMan::Render(HGE* hge, const float& sizeX, const float& sizeY)
+{
+	sprite->RenderEx(pos.x, pos.y, 0.0f, sizeX, sizeY);
 }
 void PacMan::LoadResources(HGE *hge)
 {
@@ -32,6 +37,9 @@ void PacMan::LoadResources(HGE *hge)
 	sprite=new hgeSprite(tex, 96, 64, 32, 32);
 	sprite->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
 	sprite->SetHotSpot(16,16);
+	//sprite->SetTextureRect(0.0f,
+	//sprite->height = 50.0f;
+	//sprite->tex_width = 50.0f;
 }
 void PacMan::FreeResources(HGE* hge)
 {

@@ -15,7 +15,7 @@ public:
 	virtual void	MouseOver(bool bOver);
 
 	virtual bool	MouseLButton(bool bDown);
-	//virtual bool	KeyClick(int key, int chr);
+	virtual bool	KeyClick(int key, int chr);
 
 
 	virtual ~Button();

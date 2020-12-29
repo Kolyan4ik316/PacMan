@@ -85,20 +85,21 @@ void MainMenu::Update(const float& dt)
 	quad.v[3].tx=tx;        quad.v[3].ty=ty+screenHeight/64;
 
 
+
 	UpdateInput(dt);
 }
 void MainMenu::Render()
 {
 	hge->Gfx_RenderQuad(&quad);
 	gui->Render();
-	fnt->SetColor(0xFFFFFFFF);
-	fnt->printf(5, 5, HGETEXT_LEFT, "dt:%.3f\nFPS:%d", hge->Timer_GetDelta(), hge->Timer_GetFPS());
+	//fnt->SetColor(0xFFFFFFFF);
+	//fnt->printf(5, 5, HGETEXT_LEFT, "dt:%.3f\nFPS:%d", hge->Timer_GetDelta(), hge->Timer_GetFPS());
 }
 void MainMenu::UpdateInput(const float& dt)
 {
 	/*if(hge->Input_GetKeyState(HGEK_SPACE))
 	{
-		states->push(new GameState(states, hge));
+		MouseLButton(true);
 	};*/
 	if(hge->Input_GetKeyState(HGEK_BACKSPACE))
 	{

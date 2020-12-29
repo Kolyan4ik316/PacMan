@@ -9,6 +9,7 @@ public:
 	virtual void Update(HGE *hge, const float& dt) = 0;
 	//Render
 	virtual void Render(HGE *hge) = 0;
+	virtual void Render(HGE* hge, const float& sizeX, const float& sizeY) = 0;
 	// Changing position
 	virtual void SetPosition(const hgeVector& pos_in)
 	{

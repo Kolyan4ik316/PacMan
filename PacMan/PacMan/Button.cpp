@@ -136,6 +136,15 @@ void Button::Update(float dt)
 	}
 
 }
+bool Button::KeyClick(int key, int chr)
+{
+	if(key==HGEK_ENTER)
+	{
+		MouseLButton(true);
+		return MouseLButton(false);
+	}
+	return false;
+}
 void Button::Render()
 {
 	fnt->SetColor(shadow.GetHWColor());

@@ -10,6 +10,7 @@ public:
 	virtual void Update(HGE *hge, const float& dt) override;
 	//Render
 	virtual void Render(HGE *hge) override;
+	virtual void Render(HGE* hge, const float& sizeX, const float& sizeY) override;
 	virtual void LoadResources(HGE *hge) override;
 	virtual void FreeResources(HGE *hge) override;
 	virtual ~PacMan();

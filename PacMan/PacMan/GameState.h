@@ -20,6 +20,8 @@ private:
 	static bool isLoadedResources;
 	// Player variable
 	static PacMan player;
+	float sizeX;
+	float sizeY;
 };
 
 #endif
