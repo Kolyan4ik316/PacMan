@@ -238,14 +238,38 @@
 				RelativePath=".\Entity.h"
 				>
 			</File>
-			<File
-				RelativePath=".\PacMan.cpp"
+			<Filter
+				Name="DynamicEntities"
 				>
-			</File>
-			<File
-				RelativePath=".\PacMan.h"
+				<File
+					RelativePath=".\DynamicEntity.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DynamicEntity.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Ghost.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Ghost.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PacMan.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PacMan.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="StaticEntities"
 				>
-			</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="GUIManager"

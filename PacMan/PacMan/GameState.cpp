@@ -8,10 +8,12 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	quit = false;
 	// Setting position of player;
 	player->SetPosition(hgeVector(originX, originY));
+	ghost->SetPosition(hgeVector(originX + 100.0f, originY + 100.0f));
 }
 void GameState::LoadResources()
 {
 	player = new PacMan(hge);
+	ghost = new Ghost(hge);
 	//player->LoadResources();
 }
 void GameState::Update(const float& dt)
@@ -20,12 +22,14 @@ void GameState::Update(const float& dt)
 	UpdateInput(dt);
 	// Updating player state
 	player->Update(dt);
+	ghost->Update(dt);
 	
 }
 void GameState::Render()
 {
 	// rendering player
 	player->Render(scaleX, scaleY);
+	ghost->Render(scaleX, scaleY);
 }
 void GameState::UpdateInput(const float& dt)
 {	
@@ -64,6 +68,7 @@ void GameState::UpdateInput(const float& dt)
 void GameState::FreeResources()
 {
 	//player->FreeResources();
+	delete ghost;
 	delete player;
 }
 GameState::~GameState()

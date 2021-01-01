@@ -3,6 +3,7 @@
 #include "State.h"
 #include "PacMan.h"
 #include "MainMenu.h"
+#include "Ghost.h"
 
 class GameState : public State
 {
@@ -20,6 +21,7 @@ private:
 	static bool isLoadedResources;
 	// Player variable
 	PacMan* player;
+	Ghost* ghost;
 };
 
 #endif

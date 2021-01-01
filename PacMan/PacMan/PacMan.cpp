@@ -6,12 +6,8 @@
 //const float PacMan::friction = 0.98f;
 PacMan::PacMan(HGE* hge_in)
 	:
-	Entity(hge_in)
+	DynamicEntity(hge_in)
 {
-	tex = NULL;
-	sprite = NULL;
-	snd = NULL;
-	animation = NULL;
 	speed = 90.0f;
 	LoadResources();
 	angle = 0.0f;
