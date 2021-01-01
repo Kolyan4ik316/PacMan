@@ -24,6 +24,7 @@ protected:
 protected:
 	float speed;
 	hgeAnimation* animation;
+	float angle;
 
 };
 #endif

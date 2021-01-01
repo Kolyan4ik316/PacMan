@@ -14,12 +14,29 @@ PacMan::PacMan(HGE* hge_in)
 	animation = NULL;
 	speed = 90.0f;
 	LoadResources();
+	angle = 0.0f;
 	animation->Play();
 }
 void PacMan::Update(const float& dt)
 {
 	// Do some movement calculations
-	pos.x+=dir.x * speed * dt; 
+	if(dir.y == -1)
+	{
+		angle = 1.5708f;
+	}
+	if(dir.x == -1)
+	{
+		angle = 0.0f;
+	}
+	if(dir.y == 1)
+	{
+		angle = 4.71239f;
+	}
+	if(dir.x == 1)
+	{
+		angle = 3.14159f;
+	}
+	pos.x+=dir.x * speed * dt;
 	pos.y+=dir.y * speed * dt;
 	animation->Update(dt);
 }
@@ -29,7 +46,7 @@ void PacMan::Render()
 }
 void PacMan::Render(const float& sizeX, const float& sizeY)
 {
-	animation->RenderEx(pos.x, pos.y, 0.0f, sizeX * 2.0f, sizeY * 2.0f);
+	animation->RenderEx(pos.x, pos.y, angle, sizeX * 2.0f, sizeY * 2.0f);
 	//sprite->RenderEx(pos.x, pos.y, 0.0f, sizeX * 2.0f, sizeY * 2.0f);
 }
 void PacMan::LoadResources()
@@ -42,7 +59,7 @@ void PacMan::LoadResources()
 	animation = new hgeAnimation(tex, 3, 6, 2, 2, 16, 16); 
 	//sprite = new hgeSprite(tex, 2, 2, 14, 14);
 	//sprite=new hgeSprite(tex, 96, 64, 32, 32);
-	animation->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
+	//animation->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
 	animation->SetHotSpot(7,7);
 }
 void PacMan::FreeResources()
