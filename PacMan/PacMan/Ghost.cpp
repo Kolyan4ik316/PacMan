@@ -3,7 +3,7 @@ Ghost::Ghost(HGE* hge_in)
 	:
 	DynamicEntity(hge_in)
 {
-	speed = 90.0f;
+	speed = 50.0f;
 	LoadResources();
 	angle = 0.0f;
 	animation->Play();
@@ -20,6 +20,26 @@ void Ghost::LoadResources()
 	//sprite=new hgeSprite(tex, 96, 64, 32, 32);
 	//animation->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
 	animation->SetHotSpot(7,7);
+}
+void Ghost::MoveTo(const hgeVector& pos_in, const float& dt)
+{
+	if(pos.x < pos_in.x)
+	{
+		pos.x += speed * dt;
+	}
+	if(pos.x > pos_in.x)
+	{
+		pos.x -= speed * dt;
+	}
+	if(pos.y < pos_in.y)
+	{
+		pos.y += speed * dt;
+	}
+	if(pos.y > pos_in.y)
+	{
+		pos.y -= speed * dt;
+	}
+	
 }
 void Ghost::Update(const float& dt)
 {

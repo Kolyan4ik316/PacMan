@@ -22,6 +22,7 @@ void GameState::Update(const float& dt)
 	UpdateInput(dt);
 	// Updating player state
 	player->Update(dt);
+	ghost->MoveTo(player->GetPosition(), dt);
 	ghost->Update(dt);
 	
 }

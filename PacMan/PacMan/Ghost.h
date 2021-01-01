@@ -12,6 +12,7 @@ public:
 	virtual void Render(const float& sizeX, const float& sizeY) override;
 	virtual void LoadResources() override;
 	virtual void FreeResources() override;
+	virtual void MoveTo(const hgeVector& pos_in, const float& dt);
 	virtual ~Ghost();
 private:
 
