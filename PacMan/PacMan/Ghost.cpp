@@ -57,5 +57,4 @@ Ghost::~Ghost()
 {
 	FreeResources();
 	delete animation;
-	sprite = NULL;
 }

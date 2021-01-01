@@ -67,6 +67,5 @@ PacMan::~PacMan()
 {
 	FreeResources();
 	delete animation;
-	sprite = NULL;
 	
 }

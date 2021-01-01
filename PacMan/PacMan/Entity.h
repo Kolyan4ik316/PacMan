@@ -7,7 +7,11 @@ public:
 	Entity(HGE* hge_in)
 		:
 	hge(hge_in)
-	{};
+	{
+		sprite = NULL;
+		tex = NULL;
+		snd = NULL;
+	};
 	//Update
 	virtual void Update(const float& dt) = 0;
 	//Render
@@ -31,7 +35,12 @@ public:
 	// Loading and releasing resources
 	virtual void LoadResources() = 0;
 	virtual void FreeResources() = 0;
-	virtual ~Entity(){};
+	virtual ~Entity()
+	{
+		sprite = NULL;
+		tex = NULL;
+		snd = NULL;
+	};
 protected:
 	HGE* hge;
 	// Position and direction
@@ -40,6 +49,7 @@ protected:
 	hgeSprite* sprite;
 	HTEXTURE	 tex;
 	HEFFECT snd;
+	hgeRect rect;
 };
 
 
