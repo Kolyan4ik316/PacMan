@@ -11,7 +11,7 @@ PacMan::PacMan(HGE* hge_in)
 	speed = 90.0f;
 	LoadResources();
 	angle = 0.0f;
-	animation->Play();
+	animation.back()->Play();
 }
 void PacMan::Update(const float& dt)
 {
@@ -34,15 +34,15 @@ void PacMan::Update(const float& dt)
 	}
 	pos.x+=dir.x * speed * dt;
 	pos.y+=dir.y * speed * dt;
-	animation->Update(dt);
+	animation.back()->Update(dt);
 }
 void PacMan::Render()
 {
-	sprite->Render(pos.x, pos.y);
+	//sprite->Render(pos.x, pos.y);
 }
 void PacMan::Render(const float& sizeX, const float& sizeY)
 {
-	animation->RenderEx(pos.x, pos.y, angle, sizeX * 2.0f, sizeY * 2.0f);
+	animation.back()->RenderEx(pos.x, pos.y, angle, sizeX * 2.0f, sizeY * 2.0f);
 	//sprite->RenderEx(pos.x, pos.y, 0.0f, sizeX * 2.0f, sizeY * 2.0f);
 }
 void PacMan::LoadResources()
@@ -52,11 +52,11 @@ void PacMan::LoadResources()
 	{
 		throw(std::exception("Can't find pacman.png"));
 	}
-	animation = new hgeAnimation(tex, 3, 6, 2, 2, 16, 16); 
+	animation.push_back(new hgeAnimation(tex, 3, 6, 2, 2, 16, 16)); 
 	//sprite = new hgeSprite(tex, 2, 2, 14, 14);
 	//sprite=new hgeSprite(tex, 96, 64, 32, 32);
 	//animation->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
-	animation->SetHotSpot(7,7);
+	animation.back()->SetHotSpot(7,7);
 }
 void PacMan::FreeResources()
 {
@@ -66,6 +66,10 @@ void PacMan::FreeResources()
 PacMan::~PacMan()
 {
 	FreeResources();
-	delete animation;
+	while(!animation.empty())
+	{
+		delete animation.back();
+		animation.pop_back();
+	}
 	
 }

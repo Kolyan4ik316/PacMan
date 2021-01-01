@@ -9,7 +9,7 @@ public:
 	virtual ~DynamicEntity();
 protected:
 	float speed;
-	hgeAnimation* animation;
+	std::list<hgeAnimation*> animation;
 	float angle;
 private:
 
