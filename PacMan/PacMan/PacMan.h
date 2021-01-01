@@ -23,6 +23,7 @@ protected:
 	};*/
 protected:
 	float speed;
+	hgeAnimation* animation;
 
 };
 #endif

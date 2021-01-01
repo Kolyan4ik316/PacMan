@@ -26,11 +26,32 @@ void Game::InitWindow()
 	if(ifs.is_open())
 	{
 		//Reading variables
-		ifs>> nameOfWindow
-			>>screenWidth
-			>>screenHeight
-			>>windowed
-			>>windowMode;
+		std::string tempStr;
+		while(tempStr.compare("[End]") != 0)
+		{
+			ifs>> tempStr;
+			if(tempStr.compare("[Window_Name]") == 0)
+			{
+				ifs>>nameOfWindow;
+			}
+			if(tempStr.compare("[Window_Width]") == 0)
+			{
+				ifs>>screenWidth;
+			}
+			if(tempStr.compare("[Window_Height]") == 0)
+			{
+				ifs>>screenHeight;
+			}
+			if(tempStr.compare("[Windowed]") == 0)
+			{
+				ifs>>windowed;
+			}
+			if(tempStr.compare("[Resolution_Mode]") == 0)
+			{
+				ifs>>windowMode;
+			}
+
+		}
 	}
 	else
 	{
@@ -40,11 +61,17 @@ void Game::InitWindow()
 		if(ofs.is_open())
 		{
 			//Writing variables
-			ofs<<nameOfWindow.c_str()<<"\n"
+			ofs<<"[Window_Name]\n"
+				<<nameOfWindow.c_str()<<"\n"
+				<<"[Window_Width]\n"
 				<<screenWidth<<"\n"
+				<<"[Window_Height]\n"
 				<<screenHeight<<"\n"
+				<<"[Windowed]\n"
 				<<windowed<<"\n"
-				<<windowMode.c_str()<<"\n";
+				<<"[Resolution_Mode]\n"
+				<<windowMode.c_str()<<"\n"
+				<<"[End]";
 		}
 		else
 		{

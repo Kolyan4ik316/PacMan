@@ -8,6 +8,7 @@
 #include <hgegui.h>
 #include <hgecolor.h>
 #include <hgeguictrls.h>
+#include <hgeanim.h>
 
 
 //Linking lib

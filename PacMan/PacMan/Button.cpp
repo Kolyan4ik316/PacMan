@@ -5,10 +5,6 @@ Button::Button(int _id, hgeFont *_fnt, HEFFECT _snd, float _x, float _y, float _
 	
 	id=_id;
 	fnt=_fnt;
-	if(!fnt)
-	{
-		fnt;
-	}
 	snd=_snd;
 	delay=_delay;
 	title=_title;
