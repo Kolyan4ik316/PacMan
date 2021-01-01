@@ -138,6 +138,7 @@ void MainMenu::FreeResources()
 }
 MainMenu::~MainMenu()
 {
+	FreeResources();
 	//FreeResources();
 	//delete gui;
 	//delete manager;

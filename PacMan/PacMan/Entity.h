@@ -4,12 +4,15 @@
 class Entity
 {
 public:
-	Entity(){};
+	Entity(HGE* hge_in)
+		:
+	hge(hge_in)
+	{};
 	//Update
-	virtual void Update(HGE *hge, const float& dt) = 0;
+	virtual void Update(const float& dt) = 0;
 	//Render
-	virtual void Render(HGE *hge) = 0;
-	virtual void Render(HGE* hge, const float& sizeX, const float& sizeY) = 0;
+	virtual void Render() = 0;
+	virtual void Render(const float& sizeX, const float& sizeY) = 0;
 	// Changing position
 	virtual void SetPosition(const hgeVector& pos_in)
 	{
@@ -26,13 +29,17 @@ public:
 		return pos;
 	};
 	// Loading and releasing resources
-	virtual void LoadResources(HGE *hge) = 0;
-	virtual void FreeResources(HGE *hge) = 0;
+	virtual void LoadResources() = 0;
+	virtual void FreeResources() = 0;
 	virtual ~Entity(){};
 protected:
+	HGE* hge;
 	// Position and direction
 	hgeVector pos;
 	hgeVector dir;
+	hgeSprite* sprite;
+	HTEXTURE	 tex;
+	HEFFECT snd;
 };
 
 

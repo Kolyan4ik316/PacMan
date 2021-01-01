@@ -4,6 +4,7 @@ int Game::screenWidth = 800;
 int Game::screenHeight = 600;
 bool Game::windowed = true;;
 std::string Game::nameOfWindow = "PacMan";
+std::string Game::windowMode = "4:3";
 std::stack<State*> Game::states = std::stack<State*>();
 Game::Game()
 {
@@ -28,7 +29,8 @@ void Game::InitWindow()
 		ifs>> nameOfWindow
 			>>screenWidth
 			>>screenHeight
-			>>windowed;
+			>>windowed
+			>>windowMode;
 	}
 	else
 	{
@@ -38,7 +40,11 @@ void Game::InitWindow()
 		if(ofs.is_open())
 		{
 			//Writing variables
-			ofs<<nameOfWindow.c_str()<<"\n"<<screenWidth<<"\n"<<screenHeight<<"\n"<<windowed<<"\n";
+			ofs<<nameOfWindow.c_str()<<"\n"
+				<<screenWidth<<"\n"
+				<<screenHeight<<"\n"
+				<<windowed<<"\n"
+				<<windowMode.c_str()<<"\n";
 		}
 		else
 		{
@@ -82,6 +88,7 @@ void Game::Run()
 	{
 		// Creating main menu
 		InitStates();
+		states.top()->SetReoslution(windowMode);
 		// Starting programm itself
 		hge->System_Start();
 	}
@@ -113,7 +120,7 @@ void Game::QuitFromApplication()
 	// for (unsgned int i = 0; i< states.size(); i++) not erasing first element
 	while(!states.empty())
 	{
-		states.top()->FreeResources();
+		//states.top()->FreeResources();
 		delete states.top();
 		states.pop();
 	}

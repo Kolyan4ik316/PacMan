@@ -5,14 +5,14 @@
 class PacMan : public Entity
 {
 public:
-	PacMan();
+	PacMan(HGE* hge_in);
 	//Update
-	virtual void Update(HGE *hge, const float& dt) override;
+	virtual void Update(const float& dt) override;
 	//Render
-	virtual void Render(HGE *hge) override;
-	virtual void Render(HGE* hge, const float& sizeX, const float& sizeY) override;
-	virtual void LoadResources(HGE *hge) override;
-	virtual void FreeResources(HGE *hge) override;
+	virtual void Render() override;
+	virtual void Render(const float& sizeX, const float& sizeY) override;
+	virtual void LoadResources() override;
+	virtual void FreeResources() override;
 	virtual ~PacMan();
 protected:
 	/*void boom(HGE* hge) 
@@ -22,10 +22,7 @@ protected:
 		hge->Effect_PlayEx(snd,100,pan,pitch);
 	};*/
 protected:
-	hgeSprite* sprite;
-	HTEXTURE	 tex;
 	float speed;
-	HEFFECT snd;
 
 };
 #endif

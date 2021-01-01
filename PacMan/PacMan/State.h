@@ -20,6 +20,7 @@ public:
 	// Function for loading resources and releasing them
 	virtual void LoadResources() = 0;
 	virtual void FreeResources() = 0;
+	virtual void SetReoslution(const std::string& resolution);
 	
 	// Returning if we quit from state
 	const bool& GetQuit() const
@@ -35,11 +36,14 @@ protected:
 	// we can managing of states by using him
 	std::stack<State*>* states;
 	HGE* hge;
-	int screenWidth;
-	int screenHeight;
+	static int screenWidth;
+	static int screenHeight;
 	
-	float originX;
-	float originY;
+	static float originX;
+	static float originY;
+
+	static float scaleX;
+	static float scaleY;
 
 };
 //

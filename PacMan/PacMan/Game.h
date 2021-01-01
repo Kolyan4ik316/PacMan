@@ -33,6 +33,7 @@ private:
 	static int screenHeight;
 	static bool windowed;
 	static std::string nameOfWindow;
+	static std::string windowMode;
 private:
 };
 
