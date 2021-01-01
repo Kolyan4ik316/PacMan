@@ -11,14 +11,17 @@ PacMan::PacMan(HGE* hge_in)
 	tex = NULL;
 	sprite = NULL;
 	snd = NULL;
+	animation = NULL;
 	speed = 90.0f;
 	LoadResources();
+	animation->Play();
 }
 void PacMan::Update(const float& dt)
 {
 	// Do some movement calculations
 	pos.x+=dir.x * speed * dt; 
 	pos.y+=dir.y * speed * dt;
+	animation->Update(dt);
 }
 void PacMan::Render()
 {
@@ -26,19 +29,21 @@ void PacMan::Render()
 }
 void PacMan::Render(const float& sizeX, const float& sizeY)
 {
-	sprite->RenderEx(pos.x, pos.y, 0.0f, sizeX, sizeY);
+	animation->RenderEx(pos.x, pos.y, 0.0f, sizeX * 2.0f, sizeY * 2.0f);
+	//sprite->RenderEx(pos.x, pos.y, 0.0f, sizeX * 2.0f, sizeY * 2.0f);
 }
 void PacMan::LoadResources()
 {
-	tex=hge->Texture_Load("particles.png");
-	snd=hge->Effect_Load("menu.wav");
-	if(!tex || !snd)
+	tex=hge->Texture_Load("pacman.png");
+	if(!tex)
 	{
-		throw(std::exception("Can't find particles.png, or menu.wav"));
+		throw(std::exception("Can't find pacman.png"));
 	}
-	sprite=new hgeSprite(tex, 96, 64, 32, 32);
-	sprite->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
-	sprite->SetHotSpot(16,16);
+	animation = new hgeAnimation(tex, 3, 6, 2, 2, 16, 16); 
+	//sprite = new hgeSprite(tex, 2, 2, 14, 14);
+	//sprite=new hgeSprite(tex, 96, 64, 32, 32);
+	animation->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
+	animation->SetHotSpot(7,7);
 }
 void PacMan::FreeResources()
 {
@@ -48,7 +53,7 @@ void PacMan::FreeResources()
 PacMan::~PacMan()
 {
 	FreeResources();
-	delete sprite;
+	delete animation;
 	sprite = NULL;
 	
 }
