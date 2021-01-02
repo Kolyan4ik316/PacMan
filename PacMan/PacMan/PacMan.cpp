@@ -18,19 +18,24 @@ void PacMan::Update(const float& dt)
 	// Do some movement calculations
 	if(dir.y == -1)
 	{
-		angle = 1.5708f;
+		angle = 4.71239f;
+		animation.back()->SetFlip(true, false, true);
 	}
 	if(dir.x == -1)
 	{
 		angle = 0.0f;
+		animation.back()->SetFlip(false, false, true);
+		
 	}
 	if(dir.y == 1)
 	{
 		angle = 4.71239f;
+		animation.back()->SetFlip(false, false, true);
 	}
 	if(dir.x == 1)
 	{
-		angle = 3.14159f;
+		angle = 0.0f;
+		animation.back()->SetFlip(true, false, true);	
 	}
 	pos.x+=dir.x * speed * dt;
 	pos.y+=dir.y * speed * dt;

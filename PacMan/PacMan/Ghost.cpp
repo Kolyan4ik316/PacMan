@@ -16,19 +16,18 @@ void Ghost::LoadResources()
 		throw(std::exception("Can't find pacman.png"));
 	}
 	animation.push_back(new hgeAnimation(tex, 2, 6, 2, 17, 16, 16)); 
-	//sprite = new hgeSprite(tex, 2, 2, 14, 14);
-	//sprite=new hgeSprite(tex, 96, 64, 32, 32);
-	//animation->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
 	animation.back()->SetHotSpot(7,7);
 }
 void Ghost::MoveTo(const hgeVector& pos_in, const float& dt)
 {
 	if(pos.x < pos_in.x)
 	{
+		animation.back()->SetFlip(true, false, true);	
 		pos.x += speed * dt;
 	}
 	if(pos.x > pos_in.x)
 	{
+		animation.back()->SetFlip(false, false, true);
 		pos.x -= speed * dt;
 	}
 	if(pos.y < pos_in.y)
