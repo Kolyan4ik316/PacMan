@@ -24,6 +24,7 @@
 #include <map>
 #include <fstream>
 #include <string>
-#include <list>
+#include <vector>
+#include <cmath>
 
 #endif

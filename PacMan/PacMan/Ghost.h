@@ -15,6 +15,7 @@ public:
 	virtual void MoveTo(const hgeVector& pos_in, const float& dt);
 	virtual ~Ghost();
 private:
-
+	unsigned int currAnim;
+	unsigned int prevAnim;
 };
 #endif

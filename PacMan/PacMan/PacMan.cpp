@@ -8,7 +8,7 @@ PacMan::PacMan(HGE* hge_in)
 	:
 	DynamicEntity(hge_in)
 {
-	speed = 90.0f;
+	speed = 170.0f;
 	LoadResources();
 	angle = 0.0f;
 	animation.back()->Play();
