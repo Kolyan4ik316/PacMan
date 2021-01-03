@@ -22,6 +22,10 @@ void GameState::Update(const float& dt)
 	UpdateInput(dt);
 	// Updating player state
 	player->Update(dt);
+	if(player->IsColiding(ghost->Rectangle()))
+	{
+		ghost->SetPosition(hgeVector(originX, originY));
+	}
 	ghost->MoveTo(player->GetPosition(), dt);
 	ghost->Update(dt);
 	

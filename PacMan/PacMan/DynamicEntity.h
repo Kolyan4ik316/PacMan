@@ -5,7 +5,7 @@ class DynamicEntity : public Entity
 {
 public:
 	DynamicEntity(HGE* hge_in);
-
+	virtual void ChoseAnimation() = 0;
 	virtual ~DynamicEntity();
 protected:
 	float speed;

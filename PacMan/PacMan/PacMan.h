@@ -1,6 +1,6 @@
 #ifndef PACMAN_H
 #define PACMAN_H
-#include "DynamicEntity.h"
+#include "Ghost.h"
 
 class PacMan : public DynamicEntity
 {
@@ -11,6 +11,7 @@ public:
 	//Render
 	virtual void Render() override;
 	virtual void Render(const float& sizeX, const float& sizeY) override;
+	virtual void ChoseAnimation() override{};
 	virtual void LoadResources() override;
 	virtual void FreeResources() override;
 	virtual ~PacMan();

@@ -39,6 +39,7 @@ void PacMan::Update(const float& dt)
 	}
 	pos.x+=dir.x * speed * dt;
 	pos.y+=dir.y * speed * dt;
+	rect.Set(pos.x, pos.y, pos.x+30.0f, pos.y + 30.0f);
 	animation.back()->Update(dt);
 }
 void PacMan::Render()

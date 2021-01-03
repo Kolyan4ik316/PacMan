@@ -32,6 +32,14 @@ public:
 	{
 		return pos;
 	};
+	virtual const bool IsColiding(hgeRect* rect_in) const
+	{
+		return rect.Intersect(rect_in);
+	}
+	virtual hgeRect* Rectangle()
+	{
+		return &rect;
+	}
 	// Loading and releasing resources
 	virtual void LoadResources() = 0;
 	virtual void FreeResources() = 0;
