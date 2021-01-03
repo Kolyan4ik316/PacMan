@@ -5,6 +5,7 @@
 #include "MainMenu.h"
 #include "Ghost.h"
 #include "Obstacles.h"
+#include "Tiles.h"
 
 class GameState : public State
 {
@@ -25,6 +26,7 @@ private:
 	PacMan* player;
 	Ghost* ghost;
 	Obstacles* obst;
+	std::vector<Tiles*> tiles;
 
 };
 

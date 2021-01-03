@@ -4,6 +4,16 @@ bool GameState::isLoadedResources = false;
 GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
 {
 	// We are gonna latter add option class and we will can switch for resolution 4:3 16:9 16:10 etc
+	const float offset = 31.0f;
+	float prevX = 0.0f;
+	float prevY = 0.0f;
+	for(unsigned int i = 0; i < 25; i++)
+	{
+		tiles.push_back(new Tiles(hge));
+		tiles.back()->SetPosition(hgeVector(prevX, prevY));
+		prevX += offset;
+	}
+	
 	LoadResources();
 	quit = false;
 	// Setting position of player;
@@ -61,6 +71,10 @@ void GameState::UpdateEnemies()
 }
 void GameState::Update(const float& dt)
 {	
+	for(unsigned int i = 0; i < tiles.size(); i++)
+	{
+		tiles.at(i)->Update(dt);
+	}
 	// Process keys
 	UpdateInput(dt);
 	// Updating player state
@@ -77,6 +91,10 @@ void GameState::Update(const float& dt)
 }
 void GameState::Render()
 {
+	for(unsigned int i = 0; i < tiles.size(); i++)
+	{
+		tiles.at(i)->Render();
+	}
 	// rendering player
 	player->Render(scaleX, scaleY);
 	ghost->Render(scaleX, scaleY);
@@ -147,4 +165,9 @@ void GameState::FreeResources()
 GameState::~GameState()
 {
 	FreeResources();
+	while(!tiles.empty())
+	{
+		delete tiles.back();
+		tiles.pop_back();
+	}
 }

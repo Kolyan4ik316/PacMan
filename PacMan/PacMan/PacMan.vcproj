@@ -277,6 +277,10 @@
 					RelativePath=".\Obstacles.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Tiles.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
