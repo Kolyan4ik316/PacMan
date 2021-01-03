@@ -16,7 +16,7 @@ public:
 	};
 	virtual void Update(const float& dt)
 	{
-		rect.Set(pos.x, pos.y, pos.x + 30.0f, pos.y + 30.0f);
+		rect.Set(pos.x, pos.y, pos.x + 36.0f, pos.y + 36.0f);
 	}
 	virtual void Render()
 	{

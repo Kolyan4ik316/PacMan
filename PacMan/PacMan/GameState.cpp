@@ -4,14 +4,23 @@ bool GameState::isLoadedResources = false;
 GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
 {
 	// We are gonna latter add option class and we will can switch for resolution 4:3 16:9 16:10 etc
-	const float offset = 30.0f;
+	const float offset = 36.0f;
 	float prevX = 0.0f;
 	float prevY = 0.0f;
-	for(unsigned int i = 0; i < 26; i++)
+	for(unsigned int i = 0; i < 16; i++)
 	{
+		for (unsigned int j = 0; j < 20; j++)
+		{
+			tiles.push_back(new Tiles(hge));
+			tiles.back()->SetPosition(hgeVector(prevX, prevY));
+			prevX += offset;
+			
+		}
+		prevX = 0;
 		tiles.push_back(new Tiles(hge));
 		tiles.back()->SetPosition(hgeVector(prevX, prevY));
-		prevX += offset;
+		prevY += offset;
+		
 	}
 	
 	LoadResources();
