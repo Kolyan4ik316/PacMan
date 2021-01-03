@@ -16,17 +16,40 @@ void GameState::LoadResources()
 	ghost = new Ghost(hge);
 	//player->LoadResources();
 }
+void GameState::UpdateEnemies()
+{
+	hgeVector dir = hgeVector(0.0f, 0.0f);
+	ghost->SetDestination(player->GetPosition());
+	if(ghost->GetPosition().x > player->GetPosition().x)
+	{
+		dir -= hgeVector(1.0f, 0.0f);
+	}
+	if(ghost->GetPosition().x < player->GetPosition().x)
+	{
+		dir += hgeVector(1.0f, 0.0f);
+	}
+	if(ghost->GetPosition().y < player->GetPosition().y)
+	{
+		dir += hgeVector(0.0f, 1.0f);
+	}
+	if(ghost->GetPosition().y > player->GetPosition().y)
+	{
+		dir -= hgeVector(0.0f, 1.0f);
+	}
+	ghost->SetDirection(dir);
+}
 void GameState::Update(const float& dt)
 {	
 	// Process keys
 	UpdateInput(dt);
 	// Updating player state
 	player->Update(dt);
+	UpdateEnemies();
 	if(player->IsColiding(ghost->Rectangle()))
 	{
 		ghost->SetPosition(hgeVector(originX, originY));
 	}
-	ghost->MoveTo(player->GetPosition(), dt);
+	//ghost->MoveTo(player->GetPosition(), dt);
 	ghost->Update(dt);
 	
 }

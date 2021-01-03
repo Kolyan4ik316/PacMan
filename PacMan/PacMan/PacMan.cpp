@@ -39,7 +39,7 @@ void PacMan::Update(const float& dt)
 	}
 	pos.x+=dir.x * speed * dt;
 	pos.y+=dir.y * speed * dt;
-	rect.Set(pos.x, pos.y, pos.x+30.0f, pos.y + 30.0f);
+	rect.Set(pos.x - 14.0f, pos.y - 14.0f, pos.x+ 14.0f, pos.y + 14.0f);
 	animation.back()->Update(dt);
 }
 void PacMan::Render()
@@ -48,6 +48,11 @@ void PacMan::Render()
 }
 void PacMan::Render(const float& sizeX, const float& sizeY)
 {
+	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x1 + 40.0f, rect.y1);
+	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x1, rect.y1 + 40.0f);
+	//hge->Gfx_RenderLine(rect.x1  + 40.0f, rect.y1, rect.x1 + 40.0f, rect.y1 + 40.0f);
+	//hge->Gfx_RenderLine(rect.x1, rect.y1  + 40.0f, rect.x1 + 40.0f, rect.y1 + 40.0f);
+	
 	animation.back()->RenderEx(pos.x, pos.y, angle, sizeX * 2.0f, sizeY * 2.0f);
 	//sprite->RenderEx(pos.x, pos.y, 0.0f, sizeX * 2.0f, sizeY * 2.0f);
 }
@@ -71,11 +76,5 @@ void PacMan::FreeResources()
 }
 PacMan::~PacMan()
 {
-	FreeResources();
-	while(!animation.empty())
-	{
-		delete animation.back();
-		animation.pop_back();
-	}
-	
+	FreeResources();	
 }

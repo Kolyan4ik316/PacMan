@@ -18,6 +18,7 @@ public:
 	void FreeResources() override;
 	virtual ~GameState();
 private:
+	void UpdateEnemies();
 	static bool isLoadedResources;
 	// Player variable
 	PacMan* player;

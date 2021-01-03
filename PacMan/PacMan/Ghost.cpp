@@ -9,6 +9,7 @@ Ghost::Ghost(HGE* hge_in)
 	animation.back()->Play();
 	currAnim = GhostAnimation::LeftRight;
 	prevAnim = currAnim;
+	//destination = hgeVector(0.0f, 0.0f);
 }
 void Ghost::LoadResources()
 {
@@ -26,13 +27,13 @@ void Ghost::LoadResources()
 }
 void Ghost::ChoseAnimation()
 {
-	if(std::abs(dest.x) > std::abs(dest.y))
+	if(std::abs(destination.x) > std::abs(destination.y))
 	{
 		currAnim = GhostAnimation::LeftRight;
 	}
 	else
 	{
-		if(dest.y > 0.0f)
+		if(destination.y > 0.0f)
 		{
 			currAnim = GhostAnimation::Top;
 		}
@@ -47,34 +48,39 @@ void Ghost::ChoseAnimation()
 		animation.at(unsigned int(currAnim))->Play();
 	}
 }
-void Ghost::MoveTo(const hgeVector& pos_in, const float& dt)
+void Ghost::SetDestination(const hgeVector& pos_in)
 {
-	dest.x = std::abs(pos.x) - std::abs(pos_in.x);
-	dest.y =  std::abs(pos.y) - std::abs(pos_in.y);
+
+	destination.x = std::abs(pos.x) - std::abs(pos_in.x);
+	destination.y =  std::abs(pos.y) - std::abs(pos_in.y);
+
 	ChoseAnimation();
 	if(pos.x < pos_in.x)
 	{
 		animation.at(0)->SetFlip(true, false, true);	
-		pos.x += speed * dt;
+		//pos.x += speed * dt;
 	}
 	if(pos.x > pos_in.x)
 	{
 		animation.at(0)->SetFlip(false, false, true);
-		pos.x -= speed * dt;
+		//pos.x -= speed * dt;
 	}
 	if(pos.y < pos_in.y)
 	{
-		pos.y += speed * dt;
+		//pos.y += speed * dt;
 	}
 	if(pos.y > pos_in.y)
 	{
-		pos.y -= speed * dt;
+		//pos.y -= speed * dt;
 	}
 	
 }
 void Ghost::Update(const float& dt)
 {
-	rect.Set(pos.x, pos.y, pos.x+30.0f, pos.y + 30.0f);
+	pos.x+=dir.x * speed * dt;
+	pos.y+=dir.y * speed * dt;
+
+	rect.Set(pos.x - 14.0f, pos.y - 14.0f, pos.x+ 14.0f, pos.y + 14.0f);
 	animation.at(unsigned int(currAnim))->Update(dt);
 	prevAnim = currAnim;
 }
@@ -89,9 +95,4 @@ void Ghost::FreeResources()
 Ghost::~Ghost()
 {
 	FreeResources();
-	while(!animation.empty())
-	{
-		delete animation.back();
-		animation.pop_back();
-	}
 }

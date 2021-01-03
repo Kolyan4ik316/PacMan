@@ -7,4 +7,9 @@ DynamicEntity::DynamicEntity(HGE *hge_in)
 }
 DynamicEntity::~DynamicEntity()
 {
+	while(!animation.empty())
+	{
+		delete animation.back();
+		animation.pop_back();
+	}
 }

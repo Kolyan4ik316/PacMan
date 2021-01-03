@@ -13,7 +13,7 @@ public:
 	virtual void ChoseAnimation() override;
 	virtual void LoadResources() override;
 	virtual void FreeResources() override;
-	virtual void MoveTo(const hgeVector& pos_in, const float& dt);
+	virtual void SetDestination(const hgeVector& pos_in);
 	virtual ~Ghost();
 protected:
 	enum GhostAnimation : unsigned int
@@ -24,7 +24,7 @@ protected:
 	};
 	GhostAnimation currAnim;
 	GhostAnimation prevAnim;
-private:
-	hgeVector dest;
+	hgeVector destination;
+	
 };
 #endif
