@@ -269,6 +269,14 @@
 			<Filter
 				Name="StaticEntities"
 				>
+				<File
+					RelativePath=".\Obstacles.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Obstacles.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

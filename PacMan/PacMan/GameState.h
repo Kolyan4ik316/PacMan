@@ -4,6 +4,7 @@
 #include "PacMan.h"
 #include "MainMenu.h"
 #include "Ghost.h"
+#include "Obstacles.h"
 
 class GameState : public State
 {
@@ -23,6 +24,8 @@ private:
 	// Player variable
 	PacMan* player;
 	Ghost* ghost;
+	Obstacles* obst;
+
 };
 
 #endif

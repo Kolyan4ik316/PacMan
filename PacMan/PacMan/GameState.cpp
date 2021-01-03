@@ -9,11 +9,13 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	// Setting position of player;
 	player->SetPosition(hgeVector(originX, originY));
 	ghost->SetPosition(hgeVector(originX + 100.0f, originY + 100.0f));
+	obst->SetPosition(hgeVector(originX + 200.0f, originY + 200.0f));
 }
 void GameState::LoadResources()
 {
 	player = new PacMan(hge);
 	ghost = new Ghost(hge);
+	obst = new Obstacles(hge);
 	//player->LoadResources();
 }
 void GameState::UpdateEnemies()
@@ -36,6 +38,25 @@ void GameState::UpdateEnemies()
 	{
 		dir -= hgeVector(0.0f, 1.0f);
 	}
+	if(ghost->IsColiding(obst->Rectangle()))
+	{
+		if(ghost->Rectangle()->x1 < obst->Rectangle()->x1)
+		{
+			dir -= hgeVector(1.0f, 0.0f);
+		}
+		if(ghost->Rectangle()->x2 > obst->Rectangle()->x2)
+		{
+			dir += hgeVector(1.0f, 0.0f);
+		}
+		if(ghost->Rectangle()->y1 < obst->Rectangle()->y1)
+		{
+			dir -= hgeVector(0.0f, 1.0f);
+		}
+		if(ghost->Rectangle()->y2 > obst->Rectangle()->y2)
+		{
+			dir += hgeVector(0.0f, 1.0f);
+		}
+	}
 	ghost->SetDirection(dir);
 }
 void GameState::Update(const float& dt)
@@ -51,6 +72,7 @@ void GameState::Update(const float& dt)
 	}
 	//ghost->MoveTo(player->GetPosition(), dt);
 	ghost->Update(dt);
+	obst->Update(dt);
 	
 }
 void GameState::Render()
@@ -58,6 +80,7 @@ void GameState::Render()
 	// rendering player
 	player->Render(scaleX, scaleY);
 	ghost->Render(scaleX, scaleY);
+	obst->Render();
 }
 void GameState::UpdateInput(const float& dt)
 {	
@@ -90,6 +113,27 @@ void GameState::UpdateInput(const float& dt)
 	{
 		EndState();
 	};
+
+	if(player->IsColiding(obst->Rectangle()))
+	{
+		if(player->Rectangle()->x1 < obst->Rectangle()->x1)
+		{
+			dir -= hgeVector(1.0f, 0.0f);
+		}
+		if(player->Rectangle()->x2 > obst->Rectangle()->x2)
+		{
+			dir += hgeVector(1.0f, 0.0f);
+		}
+		if(player->Rectangle()->y1 < obst->Rectangle()->y1)
+		{
+			dir -= hgeVector(0.0f, 1.0f);
+		}
+		if(player->Rectangle()->y2 > obst->Rectangle()->y2)
+		{
+			dir += hgeVector(0.0f, 1.0f);
+		}
+	}
+
 	player->SetDirection(dir);
 
 }
@@ -98,6 +142,7 @@ void GameState::FreeResources()
 	//player->FreeResources();
 	delete ghost;
 	delete player;
+	delete obst;
 }
 GameState::~GameState()
 {
