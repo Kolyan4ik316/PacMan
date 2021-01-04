@@ -10,6 +10,7 @@ public:
 	//Render
 	virtual void Render() override;
 	virtual void Render(const float& sizeX, const float& sizeY) override;
+	virtual void RenderLineToGoal();
 	virtual void ChoseAnimation() override;
 	virtual void LoadResources() override;
 	virtual void FreeResources() override;
@@ -25,6 +26,7 @@ protected:
 	GhostAnimation currAnim;
 	GhostAnimation prevAnim;
 	hgeVector destination;
+	hgeVector goal;
 	
 };
 #endif

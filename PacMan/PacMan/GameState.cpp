@@ -121,6 +121,7 @@ void GameState::Render()
 	// rendering player
 	player->Render();
 	ghost->Render();
+	ghost->RenderLineToGoal();
 	obst->Render();
 }
 void GameState::UpdateInput(const float& dt)

@@ -50,7 +50,8 @@ void Ghost::ChoseAnimation()
 }
 void Ghost::SetDestination(const hgeVector& pos_in)
 {
-
+	goal = pos_in;
+	//RenderLineToGoal();
 	destination.x = std::abs(pos.x) - std::abs(pos_in.x);
 	destination.y =  std::abs(pos.y) - std::abs(pos_in.y);
 
@@ -83,6 +84,10 @@ void Ghost::Render()
 void Ghost::Render(const float& sizeX, const float& sizeY)
 {
 	animation.at(unsigned int(currAnim))->RenderEx(pos.x, pos.y, angle, sizeX * 2.0f, sizeY * 2.0f);
+}
+void Ghost::RenderLineToGoal()
+{
+	hge->Gfx_RenderLine(rect.x1, rect.y1, goal.x, goal.y);
 }
 void Ghost::FreeResources()
 {
