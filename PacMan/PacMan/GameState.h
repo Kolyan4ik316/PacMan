@@ -21,7 +21,6 @@ public:
 	virtual ~GameState();
 private:
 	void UpdateEnemies();
-	static bool isLoadedResources;
 	// Player variable
 	PacMan* player;
 	Ghost* ghost;

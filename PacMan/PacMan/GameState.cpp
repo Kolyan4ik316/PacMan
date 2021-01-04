@@ -1,5 +1,4 @@
 #include "GameState.h"
-bool GameState::isLoadedResources = false;
 //PacMan GameState::player = PacMan();
 GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
 {
@@ -40,7 +39,7 @@ void GameState::UpdateEnemies()
 	hgeVector dir = hgeVector(0.0f, 0.0f);
 	for (unsigned int i = 0; i < tiles.size(); i++)
 	{
-		if(tiles.at(i)->IsInside(player->GetPosition()))
+		if(tiles.at(i)->GoalInside())
 		{
 			ghost->SetDestination(tiles.at(i)->GetOrigin());
 			if(ghost->GetPosition().x > tiles.at(i)->GetOrigin().x)
@@ -89,6 +88,15 @@ void GameState::Update(const float& dt)
 	for(unsigned int i = 0; i < tiles.size(); i++)
 	{
 		tiles.at(i)->Update(dt);
+		if(tiles.at(i)->IsInside(player->GetPosition()))
+		{
+			tiles.at(i)->HaveGoal(true);
+		}
+		else
+		{
+			tiles.at(i)->HaveGoal(false);
+		}
+		
 	}
 	// Process keys
 	UpdateInput(dt);
@@ -97,7 +105,7 @@ void GameState::Update(const float& dt)
 	UpdateEnemies();
 	if(player->IsColiding(ghost->Rectangle()))
 	{
-		ghost->SetPosition(hgeVector(originX, originY));
+		ghost->SetPosition(hgeVector(tiles.at(20 * 9 - 2)->GetOrigin()));
 	}
 	//ghost->MoveTo(player->GetPosition(), dt);
 	ghost->Update(dt);
@@ -139,7 +147,7 @@ void GameState::UpdateInput(const float& dt)
 	};
 	if(hge->Input_GetKeyState(HGEK_SPACE))
 	{
-		player->SetPosition(hgeVector(originX, originY));
+		player->SetPosition(hgeVector(tiles.at(20 * 9 - 2)->GetOrigin()));
 	};
 	// Input to back to main menu
 	if(hge->Input_GetKeyState(HGEK_ESCAPE))

@@ -11,6 +11,8 @@ public:
 	scaleX(scaleX_in),
 	scaleY(scaleY_in)
 	{
+		haveObstacles = false;
+		haveGoal = false;
 		rect.Set(pos.x * scaleX, pos.y * scaleY, (pos.x + 36.0f) * scaleX, (pos.y + 36.0f) * scaleY);
 	}
 	virtual void SetPosition(const hgeVector& pos_in)
@@ -43,13 +45,21 @@ public:
 	{
 		return rect.TestPoint(pos_in.x, pos_in.y); 
 	}
-	virtual void HavaObstacles(const bool& doHave)
+	virtual void HaveObstacles(const bool& doHave)
 	{
 		haveObstacles = doHave;
 	}
 	virtual const bool ObstaclesInside() const
 	{
 		return haveObstacles;
+	}
+	virtual void HaveGoal(const bool& doHave)
+	{
+		haveGoal = doHave;
+	}
+	virtual const bool GoalInside() const
+	{
+		return haveGoal;
 	}
 	/*virtual void Render(const float& sizeX, const float& sizeY)
 	{
@@ -72,5 +82,6 @@ private:
 	bool haveObstacles;
 	float scaleX;
 	float scaleY;
+	bool haveGoal;
 };
 #endif
