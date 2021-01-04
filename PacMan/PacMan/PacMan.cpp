@@ -44,7 +44,7 @@ void PacMan::Update(const float& dt)
 }
 void PacMan::Render()
 {
-	//sprite->Render(pos.x, pos.y);
+	animation.back()->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY * 1.7f);
 }
 void PacMan::Render(const float& sizeX, const float& sizeY)
 {

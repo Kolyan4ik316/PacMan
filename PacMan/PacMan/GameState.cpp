@@ -3,32 +3,30 @@ bool GameState::isLoadedResources = false;
 //PacMan GameState::player = PacMan();
 GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
 {
-	// We are gonna latter add option class and we will can switch for resolution 4:3 16:9 16:10 etc
+	// Setting place for our tiles
 	const float offset = 36.0f;
-	float prevX = 0.0f;
-	float prevY = 0.0f;
+	float prevX = originX / scaleX - 360.0f;
+	float prevY = originY / scaleY - 285.0f;
+	
 	for(unsigned int i = 0; i < 16; i++)
 	{
 		for (unsigned int j = 0; j < 20; j++)
 		{
-			tiles.push_back(new Tiles(hge));
-			tiles.back()->SetPosition(hgeVector(prevX, prevY));
+			tiles.push_back(new Tiles(hge, hgeVector(prevX , prevY), scaleX, scaleY));
 			prevX += offset;
 			
 		}
-		prevX = 0;
-		tiles.push_back(new Tiles(hge));
-		tiles.back()->SetPosition(hgeVector(prevX, prevY));
+		prevX = originX / scaleX - 360.0f;
+		tiles.push_back(new Tiles(hge, hgeVector(prevX, prevY), scaleX, scaleY));
 		prevY += offset;
-		
 	}
-	
 	LoadResources();
 	quit = false;
 	// Setting position of player;
-	player->SetPosition(hgeVector(originX, originY));
-	ghost->SetPosition(hgeVector(originX + 100.0f, originY + 100.0f));
-	obst->SetPosition(hgeVector(originX + 200.0f, originY + 200.0f));
+	player->SetPosition(hgeVector(tiles.at(20 * 9 - 2)->GetOrigin()));
+	player->SetSize(scaleX, scaleY);
+	ghost->SetPosition(hgeVector(tiles.at(20 * 3 + 6)->GetOrigin()));
+	obst->SetPosition(hgeVector(tiles.at(4 * 12 + 16)->GetPosition()));
 }
 void GameState::LoadResources()
 {
@@ -40,23 +38,31 @@ void GameState::LoadResources()
 void GameState::UpdateEnemies()
 {
 	hgeVector dir = hgeVector(0.0f, 0.0f);
-	ghost->SetDestination(player->GetPosition());
-	if(ghost->GetPosition().x > player->GetPosition().x)
+	for (unsigned int i = 0; i < tiles.size(); i++)
 	{
-		dir -= hgeVector(1.0f, 0.0f);
+		if(tiles.at(i)->IsInside(player->GetPosition()))
+		{
+			ghost->SetDestination(tiles.at(i)->GetOrigin());
+			if(ghost->GetPosition().x > tiles.at(i)->GetOrigin().x)
+			{
+				dir -= hgeVector(1.0f, 0.0f);
+			}
+			if(ghost->GetPosition().x < tiles.at(i)->GetOrigin().x)
+			{
+				dir += hgeVector(1.0f, 0.0f);
+			}
+			if(ghost->GetPosition().y < tiles.at(i)->GetOrigin().y)
+			{
+				dir += hgeVector(0.0f, 1.0f);
+			}
+			if(ghost->GetPosition().y > tiles.at(i)->GetOrigin().y)
+			{
+				dir -= hgeVector(0.0f, 1.0f);
+			}
+			break;
+		}
 	}
-	if(ghost->GetPosition().x < player->GetPosition().x)
-	{
-		dir += hgeVector(1.0f, 0.0f);
-	}
-	if(ghost->GetPosition().y < player->GetPosition().y)
-	{
-		dir += hgeVector(0.0f, 1.0f);
-	}
-	if(ghost->GetPosition().y > player->GetPosition().y)
-	{
-		dir -= hgeVector(0.0f, 1.0f);
-	}
+	
 	if(ghost->IsColiding(obst->Rectangle()))
 	{
 		if(ghost->Rectangle()->x1 < obst->Rectangle()->x1)
@@ -105,8 +111,8 @@ void GameState::Render()
 		tiles.at(i)->Render();
 	}
 	// rendering player
-	player->Render(scaleX, scaleY);
-	ghost->Render(scaleX, scaleY);
+	player->Render();
+	ghost->Render();
 	obst->Render();
 }
 void GameState::UpdateInput(const float& dt)

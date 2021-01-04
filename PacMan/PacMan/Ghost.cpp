@@ -65,14 +65,6 @@ void Ghost::SetDestination(const hgeVector& pos_in)
 		animation.at(0)->SetFlip(false, false, true);
 		//pos.x -= speed * dt;
 	}
-	if(pos.y < pos_in.y)
-	{
-		//pos.y += speed * dt;
-	}
-	if(pos.y > pos_in.y)
-	{
-		//pos.y -= speed * dt;
-	}
 	
 }
 void Ghost::Update(const float& dt)
@@ -83,6 +75,10 @@ void Ghost::Update(const float& dt)
 	rect.Set(pos.x - 14.0f, pos.y - 14.0f, pos.x+ 14.0f, pos.y + 14.0f);
 	animation.at(unsigned int(currAnim))->Update(dt);
 	prevAnim = currAnim;
+}
+void Ghost::Render()
+{
+	animation.at(unsigned int(currAnim))->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY* 1.7f);
 }
 void Ghost::Render(const float& sizeX, const float& sizeY)
 {

@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 #include "EntryHeader.h"
-
+#include "Tiles.h"
 class Entity
 {
 public:
@@ -41,6 +41,11 @@ public:
 	{
 		return &rect;
 	}
+	virtual void SetSize(const float& sizeX, const float& sizeY)
+	{
+		scaleX = sizeX;
+		scaleY = sizeY;
+	}
 	// Loading and releasing resources
 	virtual void LoadResources() = 0;
 	virtual void FreeResources() = 0;
@@ -49,6 +54,7 @@ public:
 		sprite = NULL;
 		tex = NULL;
 		snd = NULL;
+		tile = NULL;
 	};
 protected:
 	HGE* hge;
@@ -59,6 +65,9 @@ protected:
 	HTEXTURE	 tex;
 	HEFFECT snd;
 	hgeRect rect;
+	Tiles* tile;
+	static float scaleX;
+	static float scaleY;
 };
 
 

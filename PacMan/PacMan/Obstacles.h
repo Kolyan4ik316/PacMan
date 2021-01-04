@@ -10,8 +10,8 @@ public:
 	//Update
 	virtual void Update(const float& dt) override;
 	//Render
-	virtual void Render();
-	virtual void Render(const float& sizeX, const float& sizeY){};
+	virtual void Render() override;
+	virtual void Render(const float& sizeX, const float& sizeY) override;
 	virtual ~Obstacles();
 };
 #endif
