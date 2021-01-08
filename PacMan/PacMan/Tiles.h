@@ -14,6 +14,7 @@ public:
 		haveObstacles = false;
 		haveGoal = false;
 		rect.Set(pos.x * scaleX, pos.y * scaleY, (pos.x + 36.0f) * scaleX, (pos.y + 36.0f) * scaleY);
+		bVisited = false;
 	}
 	virtual void SetPosition(const hgeVector& pos_in)
 	{
@@ -78,10 +79,16 @@ public:
 private:
 	hgeRect rect;
 	HGE* hge;
-	hgeVector pos;
 	bool haveObstacles;
 	float scaleX;
 	float scaleY;
 	bool haveGoal;
+public:
+	float fGlobalGoal;				// Distance to goal so far
+	float fLocalGoal;
+	hgeVector pos;
+	bool bVisited;			// Have we searched this node before?
+	std::vector<Tiles*> vecNeighbours;	// Connections to neighbours
+	Tiles* parent;					// Node connecting to this node that offers shortest parent
 };
 #endif

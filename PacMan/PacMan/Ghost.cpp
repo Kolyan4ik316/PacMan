@@ -9,6 +9,8 @@ Ghost::Ghost(HGE* hge_in)
 	animation.back()->Play();
 	currAnim = GhostAnimation::LeftRight;
 	prevAnim = currAnim;
+	nodeStart = NULL;
+	nodeEnd = NULL;
 	//destination = hgeVector(0.0f, 0.0f);
 }
 void Ghost::LoadResources()

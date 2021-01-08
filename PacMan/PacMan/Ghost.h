@@ -27,6 +27,9 @@ protected:
 	GhostAnimation prevAnim;
 	hgeVector destination;
 	hgeVector goal;
-	
+public:
+	std::list<Tiles*> listToVisit;
+	Tiles* nodeStart;
+	Tiles* nodeEnd;
 };
 #endif
