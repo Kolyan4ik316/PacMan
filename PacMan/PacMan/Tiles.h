@@ -12,7 +12,6 @@ public:
 	scaleY(scaleY_in)
 	{
 		haveObstacles = false;
-		haveGoal = false;
 		rect.Set(pos.x * scaleX, pos.y * scaleY, (pos.x + 36.0f) * scaleX, (pos.y + 36.0f) * scaleY);
 		bVisited = false;
 	}
@@ -62,27 +61,6 @@ public:
 	{
 		return haveObstacles;
 	}
-	virtual void HaveGoal(const bool& doHave)
-	{
-		haveGoal = doHave;
-	}
-	virtual const bool GoalInside() const
-	{
-		return haveGoal;
-	}
-	/*virtual void Render(const float& sizeX, const float& sizeY)
-	{
-		hgeColor color(255.0f, 0.0f, 255.0f, 0.0f);
-		const hgeU32 tempColor = color.GetHWColor();
-		float offset = 3.0f;
-		for(float i = 0.0f; i < offset; i++)
-		{
-			hge->Gfx_RenderLine(rect.x1 * sizeX, (rect.y1 + i) * sizeY, rect.x2 * sizeX, (rect.y1 + i) * sizeY, tempColor);
-			hge->Gfx_RenderLine((rect.x1 + i) * sizeX, rect.y1 * sizeY, (rect.x1 + i) * sizeX, rect.y2 * sizeY, tempColor);
-			hge->Gfx_RenderLine(rect.x1 * sizeX, (rect.y2 - i) * sizeY, rect.x2 * sizeX, (rect.y2 - i) * sizeY, tempColor);
-			hge->Gfx_RenderLine((rect.x2 - i) * sizeX, rect.y1 * sizeY, (rect.x2 - i) * sizeX, rect.y2 * sizeY, tempColor);
-		}
-	}*/
 	virtual ~Tiles(){};
 private:
 	hgeRect rect;
@@ -90,7 +68,6 @@ private:
 	bool haveObstacles;
 	float scaleX;
 	float scaleY;
-	bool haveGoal;
 public:
 	float fGlobalGoal;				// Distance to goal so far
 	float fLocalGoal;

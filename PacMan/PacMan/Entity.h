@@ -17,7 +17,7 @@ public:
 	virtual void Update(const float& dt) = 0;
 	//Render
 	virtual void Render() = 0;
-	virtual void Render(const float& sizeX, const float& sizeY) = 0;
+	//virtual void Render(const float& sizeX, const float& sizeY) = 0;
 	// Changing position
 	virtual void SetPosition(const hgeVector& pos_in)
 	{

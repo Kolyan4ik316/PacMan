@@ -46,7 +46,7 @@ void PacMan::Render()
 {
 	animation.back()->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY * 1.7f);
 }
-void PacMan::Render(const float& sizeX, const float& sizeY)
+/*void PacMan::Render(const float& sizeX, const float& sizeY)
 {
 	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x1 + 40.0f, rect.y1);
 	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x1, rect.y1 + 40.0f);
@@ -55,7 +55,7 @@ void PacMan::Render(const float& sizeX, const float& sizeY)
 	
 	animation.back()->RenderEx(pos.x, pos.y, angle, sizeX * 2.0f, sizeY * 2.0f);
 	//sprite->RenderEx(pos.x, pos.y, 0.0f, sizeX * 2.0f, sizeY * 2.0f);
-}
+}*/
 void PacMan::LoadResources()
 {
 	tex=hge->Texture_Load("pacman.png");

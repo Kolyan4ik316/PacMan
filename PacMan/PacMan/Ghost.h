@@ -9,7 +9,7 @@ public:
 	virtual void Update(const float& dt) override;
 	//Render
 	virtual void Render() override;
-	virtual void Render(const float& sizeX, const float& sizeY) override;
+	//virtual void Render(const float& sizeX, const float& sizeY) override;
 	virtual void RenderLineToGoal();
 	virtual void ChoseAnimation() override;
 	virtual void LoadResources() override;

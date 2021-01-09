@@ -282,6 +282,10 @@
 				Name="StaticEntities"
 				>
 				<File
+					RelativePath=".\Food.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Obstacles.cpp"
 					>
 				</File>

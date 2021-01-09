@@ -64,12 +64,14 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	//ghost->nodeStart = tiles.at(nMapHeight / 2 * nMapWidth / 2 + 1);
 	obst->SetPosition(hgeVector(tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->GetPosition()));
 	tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->HaveObstacles(true);
+	food->SetPosition(tiles.at(nMapHeight / 2 * nMapWidth / 2 + 11)->GetOrigin());
 }
 void GameState::LoadResources()
 {
 	player = new PacMan(hge);
 	ghost = new Ghost(hge);
 	obst = new Obstacles(hge);
+	food = new Food(hge);
 	pathfinder = new PathFinder(nMapWidth, nMapHeight, &tiles);
 }
 
@@ -173,6 +175,25 @@ void GameState::UpdateEnemies()
 			}
 		}
 	}
+	else
+	{
+		if(ghost->GetPosition().x > ghost->nodeEnd->GetOrigin().x)
+		{
+			dir -= hgeVector(1.0f, 0.0f);
+		}
+		if(ghost->GetPosition().x < ghost->nodeEnd->GetOrigin().x)
+		{
+			dir += hgeVector(1.0f, 0.0f);
+		}
+		if(ghost->GetPosition().y < ghost->nodeEnd->GetOrigin().y)
+		{
+			dir += hgeVector(0.0f, 1.0f);
+		}
+		if(ghost->GetPosition().y > ghost->nodeEnd->GetOrigin().y)
+		{
+			dir -= hgeVector(0.0f, 1.0f);
+		}
+	}
 	
 	
 	
@@ -183,7 +204,6 @@ void GameState::Update(const float& dt)
 
 	for(unsigned int i = 0; i < tiles.size(); i++)
 	{
-		tiles.at(i)->Update(dt);
 		if(tiles.at(i)->IsInside(player->GetPosition()))
 		{
 			ghost->nodeEnd = tiles.at(i);
@@ -205,9 +225,18 @@ void GameState::Update(const float& dt)
 	{
 		ghost->SetPosition(hgeVector(tiles.at(20 * 9 - 2)->GetOrigin()));
 	}
+	if(player->IsColiding(food->Rectangle()))
+	{
+		food->EatFood();
+	}
 	//ghost->MoveTo(player->GetPosition(), dt);
 	ghost->Update(dt);
 	obst->Update(dt);
+	if(!food->IsEaten())
+	{
+		food->Update(dt);
+	}
+	
 	
 }
 void GameState::Render()
@@ -221,6 +250,10 @@ void GameState::Render()
 	ghost->Render();
 	ghost->RenderLineToGoal();
 	obst->Render();
+	if(!food->IsEaten())
+	{
+		food->Render();
+	}
 }
 void GameState::UpdateInput(const float& dt)
 {	
@@ -283,6 +316,7 @@ void GameState::FreeResources()
 	delete ghost;
 	delete player;
 	delete obst;
+	delete food;
 	delete pathfinder;
 }
 GameState::~GameState()

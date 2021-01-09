@@ -85,10 +85,10 @@ void Ghost::Render()
 {
 	animation.at(unsigned int(currAnim))->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY* 1.7f);
 }
-void Ghost::Render(const float& sizeX, const float& sizeY)
+/*void Ghost::Render(const float& sizeX, const float& sizeY)
 {
 	animation.at(unsigned int(currAnim))->RenderEx(pos.x, pos.y, angle, sizeX * 2.0f, sizeY * 2.0f);
-}
+}*/
 void Ghost::RenderLineToGoal()
 {
 	hge->Gfx_RenderLine(rect.x1, rect.y1, goal.x, goal.y);

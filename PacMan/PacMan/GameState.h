@@ -7,6 +7,7 @@
 #include "Obstacles.h"
 #include "Tiles.h"
 #include "PathFinder.h"
+#include "Food.h"
 
 class GameState : public State
 {
@@ -30,6 +31,7 @@ private:
 	PathFinder* pathfinder;
 	unsigned int nMapWidth;
 	unsigned int nMapHeight;
+	Food* food;
 };
 
 #endif
