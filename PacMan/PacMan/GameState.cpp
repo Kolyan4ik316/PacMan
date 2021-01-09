@@ -32,7 +32,8 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 				if (x < nMapWidth - 1)
 					tiles[y * nMapWidth + x]->vecNeighbours.push_back(tiles[(y + 0) * nMapWidth + (x + 1)]);
 				
-				if (y>0 && x>0)
+				//remove this because ghost trying to go diagnoly thru obstacles
+				/*if (y>0 && x>0)
 					tiles[y*nMapWidth + x]->vecNeighbours.push_back(tiles[(y - 1) * nMapWidth + (x - 1)]);
 				if (y<nMapHeight-1 && x>0)
 					tiles[y*nMapWidth + x]->vecNeighbours.push_back(tiles[(y + 1) * nMapWidth + (x - 1)]);
@@ -40,7 +41,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 					tiles[y*nMapWidth + x]->vecNeighbours.push_back(tiles[(y - 1) * nMapWidth + (x + 1)]);
 				if (y<nMapHeight - 1 && x<nMapWidth-1)
 					tiles[y*nMapWidth + x]->vecNeighbours.push_back(tiles[(y + 1) * nMapWidth + (x + 1)]);
-					
+				*/	
 			}
 	}
 

@@ -35,26 +35,26 @@ void State::SetReoslution(const std::string& resolution)
 	{
 		for(int x = 0; x <screenWidth; x += 16)
 		{
-			scaleX += 0.01f;
+			scaleX += 0.015f;
 		
 		}
 		
 		for(int y = 0; y <screenHeight; y += 9)
 		{
-			scaleY += 0.01f;
+			scaleY += 0.015f;
 		}
 	}
 	else if(resolution.compare("16:10") == 0)
 	{
 		for(int x = 0; x <screenWidth; x += 16)
 		{
-			scaleX += 0.01f;
+			scaleX += 0.015f;
 		
 		}
 		
 		for(int y = 0; y <screenHeight; y += 10)
 		{
-			scaleY += 0.01f;
+			scaleY += 0.015f;
 		}
 	}
 	else
