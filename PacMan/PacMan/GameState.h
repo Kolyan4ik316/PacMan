@@ -6,6 +6,7 @@
 #include "Ghost.h"
 #include "Obstacles.h"
 #include "Tiles.h"
+#include "PathFinder.h"
 
 class GameState : public State
 {
@@ -20,23 +21,13 @@ public:
 	void FreeResources() override;
 	virtual ~GameState();
 private:
-	static float Distance(Tiles* a, Tiles* b);
-	static float Heuristic(Tiles* a, Tiles* b);
-	void SolveA_Star();
-	static bool LessfGlobalGoal(const Tiles* lhs, const Tiles* rhs)
-	{
-		return lhs->fGlobalGoal < rhs->fGlobalGoal;
-	}
-	static bool LessfLocalGoal(const Tiles* lhs, const Tiles* rhs)
-	{
-		return std::fabs(lhs->fLocalGoal)< std::fabs(rhs->fLocalGoal);
-	}
 	void UpdateEnemies();
 	// Player variable
 	PacMan* player;
 	Ghost* ghost;
 	Obstacles* obst;
 	std::vector<Tiles*> tiles;
+	PathFinder* pathfinder;
 	unsigned int nMapWidth;
 	unsigned int nMapHeight;
 };

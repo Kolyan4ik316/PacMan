@@ -7,11 +7,19 @@ public:
 	DynamicEntity(HGE* hge_in);
 	virtual void ChoseAnimation() = 0;
 	virtual ~DynamicEntity();
+	virtual bool TimeForSolvingWasReached();
+	virtual void ResetTimeForSolving();
+	float givenTimeForSolving;
 protected:
 	float speed;
 	std::vector<hgeAnimation*> animation;
 	float angle;
-private:
+	hgeVector destination;
+	hgeVector goal;
+	float canSolve;
+public:
+	Tiles* nodeStart;
+	Tiles* nodeEnd;
 
 };
 #endif

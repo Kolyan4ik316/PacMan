@@ -25,13 +25,5 @@ protected:
 	};
 	GhostAnimation currAnim;
 	GhostAnimation prevAnim;
-	hgeVector destination;
-	hgeVector goal;
-public:
-	std::list<Tiles*> listToVisit;
-	Tiles* nodeStart;
-	Tiles* nodeEnd;
-	Tiles* prevNodeEnd;
-	float canSolve;
 };
 #endif

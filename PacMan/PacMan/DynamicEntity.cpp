@@ -6,6 +6,16 @@ DynamicEntity::DynamicEntity(HGE *hge_in)
 	Entity(hge_in)
 {
 	speed = 0.0f;
+	canSolve = 0.0f;
+	givenTimeForSolving = 0.4f;
+}
+bool DynamicEntity::TimeForSolvingWasReached()
+{
+	return canSolve >= givenTimeForSolving;
+}
+void DynamicEntity::ResetTimeForSolving()
+{
+	canSolve = 0.0f;
 }
 DynamicEntity::~DynamicEntity()
 {
