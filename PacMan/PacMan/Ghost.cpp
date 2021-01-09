@@ -11,6 +11,7 @@ Ghost::Ghost(HGE* hge_in)
 	prevAnim = currAnim;
 	nodeStart = NULL;
 	nodeEnd = NULL;
+	canSolve = 0.0f;
 	//destination = hgeVector(0.0f, 0.0f);
 }
 void Ghost::LoadResources()
@@ -78,6 +79,7 @@ void Ghost::Update(const float& dt)
 	rect.Set(pos.x - 14.0f, pos.y - 14.0f, pos.x+ 14.0f, pos.y + 14.0f);
 	animation.at(unsigned int(currAnim))->Update(dt);
 	prevAnim = currAnim;
+	canSolve += dt;
 }
 void Ghost::Render()
 {

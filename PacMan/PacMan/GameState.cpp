@@ -17,7 +17,6 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 			
 		}
 		prevX = originX / scaleX - 360.0f;
-		tiles.push_back(new Tiles(hge, hgeVector(prevX, prevY), scaleX, scaleY));
 		prevY += offset;
 	}
 	for (unsigned int x = 0; x < nMapWidth; x++)
@@ -52,15 +51,18 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 		for (unsigned int y = 0; y < nMapHeight; y++)
 		{
 			tiles[y * nMapWidth + x]->parent = NULL;
+			tiles[y * nMapWidth + x]->fGlobalGoal = std::numeric_limits<float>::infinity();
+			tiles[y * nMapWidth + x]->fLocalGoal = std::numeric_limits<float>::infinity();
 			tiles[y * nMapWidth + x]->bVisited = false;
 		}
 	}
 	// Setting position of player;
-	player->SetPosition(hgeVector(tiles.at(20 * 9 - 2)->GetOrigin()));
+	player->SetPosition(hgeVector(tiles.at(nMapHeight /2 * nMapWidth + nMapWidth/2)->GetOrigin()));
 	player->SetSize(scaleX, scaleY);
-	ghost->SetPosition(hgeVector(tiles.at(20 * 3 + 6)->GetOrigin()));
-	ghost->nodeStart = tiles.at(20 * 3 + 6);
-	obst->SetPosition(hgeVector(tiles.at(10 * 9 - 2)->GetPosition()));
+	ghost->SetPosition(hgeVector(tiles.at(nMapHeight * nMapWidth / 2)->GetOrigin()));
+	ghost->canSolve = 0.3f;
+	//ghost->nodeStart = tiles.at(nMapHeight / 2 * nMapWidth / 2 + 1);
+	obst->SetPosition(hgeVector(tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->GetPosition()));
 }
 void GameState::LoadResources()
 {
@@ -79,59 +81,69 @@ float GameState::Heuristic(Tiles* a, Tiles* b)
 }
 void GameState::SolveA_Star()
 {
-	// Reset Navigation Graph - default all node states
-	for (unsigned int x = 0; x < nMapWidth; x++)
+	if(ghost->canSolve >= 0.3f) 
 	{
-		for (unsigned int y = 0; y < nMapHeight; y++)
+		// Reset Navigation Graph - default all node states
+		for (unsigned int x = 0; x < nMapWidth; x++)
 		{
-			tiles[y * nMapWidth + x]->bVisited = false;
-			tiles[y * nMapWidth + x]->fGlobalGoal = std::numeric_limits<float>::infinity();
-			tiles[y * nMapWidth + x]->fLocalGoal = std::numeric_limits<float>::infinity();
-			tiles[y * nMapWidth + x]->parent = NULL;	// No parents
+			for (unsigned int y = 0; y < nMapHeight; y++)
+			{
+				tiles[y * nMapWidth + x]->bVisited = false;
+				tiles[y * nMapWidth + x]->fGlobalGoal = FLT_MAX;
+				tiles[y * nMapWidth + x]->fLocalGoal = FLT_MAX;
+				tiles[y * nMapWidth + x]->parent = NULL;	// No parents
+			}
 		}
+		Tiles* nodeCurrent = ghost->nodeStart;
+		ghost->nodeStart->fLocalGoal = 0.0f;
+		ghost->nodeStart->fGlobalGoal = Heuristic(ghost->nodeStart, ghost->nodeEnd);
+
+		std::list<Tiles*> listNotTestedNodes;
+		listNotTestedNodes.push_back(ghost->nodeStart);
+		while (!listNotTestedNodes.empty() && nodeCurrent != ghost->nodeEnd)// Find absolutely shortest path // && nodeCurrent != nodeEnd)
+		{
+			listNotTestedNodes.sort(LessfGlobalGoal);
+		
+			while (!listNotTestedNodes.empty() && listNotTestedNodes.front()->bVisited)
+			{
+				listNotTestedNodes.pop_front();
+			}
+			if (listNotTestedNodes.empty())
+			{
+				break;
+			}
+			nodeCurrent = listNotTestedNodes.front();
+			nodeCurrent->bVisited = true; // We only explore a node once	
+			for (unsigned int i = 0; i <nodeCurrent->vecNeighbours.size(); i++)
+			{
+				if (!nodeCurrent->vecNeighbours.at(i)->bVisited && nodeCurrent->vecNeighbours.at(i)->ObstaclesInside() == false)
+				{
+					listNotTestedNodes.push_back(nodeCurrent->vecNeighbours.at(i));
+				}
+				float fPossiblyLowerGoal = nodeCurrent->fLocalGoal + Distance(nodeCurrent, nodeCurrent->vecNeighbours.at(i));
+				if (fPossiblyLowerGoal < nodeCurrent->vecNeighbours.at(i)->fLocalGoal)
+				{
+					nodeCurrent->vecNeighbours.at(i)->parent = nodeCurrent;
+					nodeCurrent->vecNeighbours.at(i)->fLocalGoal = fPossiblyLowerGoal;
+					
+					
+					nodeCurrent->vecNeighbours.at(i)->fGlobalGoal = nodeCurrent->vecNeighbours.at(i)->fLocalGoal + Heuristic(nodeCurrent->vecNeighbours.at(i), ghost->nodeEnd);
+					
+				}
+			}
+		}
+		ghost->canSolve = 0.0f;
 	}
-	Tiles* nodeCurrent = ghost->nodeStart;
-	ghost->nodeStart->fLocalGoal = 0.0f;
-	ghost->nodeStart->fGlobalGoal = Heuristic(ghost->nodeStart, ghost->nodeEnd);
-
-	std::list<Tiles*> listNotTestedNodes;
-	listNotTestedNodes.push_back(ghost->nodeStart);
-	while (!listNotTestedNodes.empty() && nodeCurrent != ghost->nodeEnd)// Find absolutely shortest path // && nodeCurrent != nodeEnd)
-	{
-		listNotTestedNodes.sort(LessfGlobalGoal);
 	
-		while (!listNotTestedNodes.empty() && listNotTestedNodes.front()->bVisited)
-		{
-			listNotTestedNodes.pop_front();
-		}
-		if (listNotTestedNodes.empty())
-		{
-			break;
-		}
-		nodeCurrent = listNotTestedNodes.front();
-		nodeCurrent->bVisited = true; // We only explore a node once	
-		for (unsigned int i = 0; i <nodeCurrent->vecNeighbours.size(); i++)
-		{
-			if (!nodeCurrent->vecNeighbours.at(i)->bVisited && nodeCurrent->vecNeighbours.at(i)->ObstaclesInside() == false)
-			{
-				listNotTestedNodes.push_back(nodeCurrent->vecNeighbours.at(i));
-			}
-			float fPossiblyLowerGoal = nodeCurrent->fLocalGoal + Distance(nodeCurrent, nodeCurrent->vecNeighbours.at(i));
-			if (fPossiblyLowerGoal < nodeCurrent->vecNeighbours.at(i)->fLocalGoal)
-			{
-				nodeCurrent->vecNeighbours.at(i)->parent = nodeCurrent;
-				nodeCurrent->vecNeighbours.at(i)->fLocalGoal = fPossiblyLowerGoal;
-
-				nodeCurrent->vecNeighbours.at(i)->fGlobalGoal = nodeCurrent->vecNeighbours.at(i)->fLocalGoal + Heuristic(nodeCurrent->vecNeighbours.at(i), ghost->nodeEnd);
-			}
-		}
-	}	
 
 }
 void GameState::UpdateEnemies()
 {
 	hgeVector dir = hgeVector(0.0f, 0.0f);
+	
 	SolveA_Star();
+	
+	
 	std::list<Tiles*> chooseList;
 	for(unsigned int i = 0; i < ghost->nodeStart->vecNeighbours.size(); i++)
 	{
@@ -144,90 +156,95 @@ void GameState::UpdateEnemies()
 			
 		}
 	}
-	chooseList.sort(LessfGlobalGoal);
-	if(ghost->IsColiding(obst->Rectangle()))
+	if(!chooseList.empty())
 	{
-		if(ghost->Rectangle()->x1 < obst->Rectangle()->x1)
+		chooseList.sort(LessfGlobalGoal);
+		if(ghost->IsColiding(obst->Rectangle()))
 		{
-			
-			if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
+			if(ghost->Rectangle()->x1 < obst->Rectangle()->x1)
 			{
-				dir = hgeVector(0.0f, 1.0f);
-			}
-			else
-			{
-				dir = hgeVector(0.0f, -1.0f);
-			}
-			dir -= hgeVector(1.0f, 0.0f);
-		}
-		if(ghost->Rectangle()->x2 > obst->Rectangle()->x2)
-		{
-			
-			if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
-			{
-				dir = hgeVector(0.0f, 1.0f);
-			}
-			else
-			{
-				dir = hgeVector(0.0f, -1.0f);
-			}
-			dir += hgeVector(1.0f, 0.0f);
-		}
-		if(ghost->Rectangle()->y1 < obst->Rectangle()->y1)
-		{
-			
-			if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
-			{
-				dir = hgeVector(1.0f, 0.0f);
-			}
-			else
-			{
-				dir = hgeVector(-1.0f, 0.0f);
-			}
-			dir -= hgeVector(0.0f, 1.0f);
-		}
-		if(ghost->Rectangle()->y2 > obst->Rectangle()->y2)
-		{
-			
-			if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
-			{
-				dir = hgeVector(1.0f, 0.0f);
-			}
-			else
-			{
-				dir = hgeVector(-1.0f, 0.0f);
-			}
-			dir += hgeVector(0.0f, 1.0f);
-		}
-	}
-	else
-	{
-		{
-			ghost->SetDestination(chooseList.front()->GetOrigin());
-			if(ghost->GetPosition().x > chooseList.front()->GetOrigin().x)
-			{
+				
+				if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
+				{
+					dir = hgeVector(0.0f, 1.0f);
+				}
+				else
+				{
+					dir = hgeVector(0.0f, -1.0f);
+				}
 				dir -= hgeVector(1.0f, 0.0f);
 			}
-			if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
+			if(ghost->Rectangle()->x2 > obst->Rectangle()->x2)
 			{
+				
+				if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
+				{
+					dir = hgeVector(0.0f, 1.0f);
+				}
+				else
+				{
+					dir = hgeVector(0.0f, -1.0f);
+				}
 				dir += hgeVector(1.0f, 0.0f);
 			}
-			if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
+			if(ghost->Rectangle()->y1 < obst->Rectangle()->y1)
 			{
+				
+				if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
+				{
+					dir = hgeVector(1.0f, 0.0f);
+				}
+				else
+				{
+					dir = hgeVector(-1.0f, 0.0f);
+				}
+				dir -= hgeVector(0.0f, 1.0f);
+			}
+			if(ghost->Rectangle()->y2 > obst->Rectangle()->y2)
+			{
+				
+				if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
+				{
+					dir = hgeVector(1.0f, 0.0f);
+				}
+				else
+				{
+					dir = hgeVector(-1.0f, 0.0f);
+				}
 				dir += hgeVector(0.0f, 1.0f);
 			}
-			if(ghost->GetPosition().y > chooseList.front()->GetOrigin().y)
+		}
+		else
+		{
 			{
-				dir -= hgeVector(0.0f, 1.0f);
+				ghost->SetDestination(chooseList.front()->GetOrigin());
+				if(ghost->GetPosition().x > chooseList.front()->GetOrigin().x)
+				{
+					dir -= hgeVector(1.0f, 0.0f);
+				}
+				if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
+				{
+					dir += hgeVector(1.0f, 0.0f);
+				}
+				if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
+				{
+					dir += hgeVector(0.0f, 1.0f);
+				}
+				if(ghost->GetPosition().y > chooseList.front()->GetOrigin().y)
+				{
+					dir -= hgeVector(0.0f, 1.0f);
+				}
 			}
 		}
 	}
+	
 	
 	
 	ghost->SetDirection(dir);
 }
 void GameState::Update(const float& dt)
 {	
+
 	for(unsigned int i = 0; i < tiles.size(); i++)
 	{
 		tiles.at(i)->Update(dt);

@@ -29,7 +29,7 @@ private:
 	}
 	static bool LessfLocalGoal(const Tiles* lhs, const Tiles* rhs)
 	{
-		return lhs->fLocalGoal< rhs->fLocalGoal;
+		return std::fabs(lhs->fLocalGoal)< std::fabs(rhs->fLocalGoal);
 	}
 	void UpdateEnemies();
 	// Player variable

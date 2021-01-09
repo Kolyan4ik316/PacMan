@@ -26,8 +26,16 @@ public:
 	}
 	virtual void Render()
 	{
-		hgeColor color(255.0f, 0.0f, 255.0f, 0.0f);
-		const hgeU32 tempColor = color.GetHWColor();
+		hgeColor* color;
+		if(bVisited)
+		{
+			color = &hgeColor(255.0f, 0.0f, 255.0f, 0.0f);
+		}
+		else
+		{
+			color = &hgeColor(155.0f, 0.0f, 155.0f, 0.0f);
+		}
+		const hgeU32 tempColor = color->GetHWColor();
 		hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y1, tempColor);
 		hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x1, rect.y2, tempColor);
 		hge->Gfx_RenderLine(rect.x1, rect.y2, rect.x2, rect.y2, tempColor);
