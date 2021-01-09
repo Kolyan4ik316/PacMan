@@ -46,16 +46,6 @@ void PacMan::Render()
 {
 	animation.back()->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY * 1.7f);
 }
-/*void PacMan::Render(const float& sizeX, const float& sizeY)
-{
-	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x1 + 40.0f, rect.y1);
-	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x1, rect.y1 + 40.0f);
-	//hge->Gfx_RenderLine(rect.x1  + 40.0f, rect.y1, rect.x1 + 40.0f, rect.y1 + 40.0f);
-	//hge->Gfx_RenderLine(rect.x1, rect.y1  + 40.0f, rect.x1 + 40.0f, rect.y1 + 40.0f);
-	
-	animation.back()->RenderEx(pos.x, pos.y, angle, sizeX * 2.0f, sizeY * 2.0f);
-	//sprite->RenderEx(pos.x, pos.y, 0.0f, sizeX * 2.0f, sizeY * 2.0f);
-}*/
 void PacMan::LoadResources()
 {
 	tex=hge->Texture_Load("pacman.png");
@@ -63,7 +53,7 @@ void PacMan::LoadResources()
 	{
 		throw(std::exception("Can't find pacman.png"));
 	}
-	animation.push_back(new hgeAnimation(tex, 3, 6, 2, 2, 16, 16)); 
+	animation.push_back(new hgeAnimation(tex, 3, 12, 2, 2, 16, 16)); 
 	//sprite = new hgeSprite(tex, 2, 2, 14, 14);
 	//sprite=new hgeSprite(tex, 96, 64, 32, 32);
 	//animation->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);

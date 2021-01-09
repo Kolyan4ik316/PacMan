@@ -11,19 +11,18 @@ public:
 		isEaten = false;
 		LoadResources();
 	}
-	virtual void LoadResources()
+	virtual void LoadResources() override
 	{
 		tex=hge->Texture_Load("pacman.png");
 		if(!tex)
 		{
 			throw(std::exception("Can't find pacman.png"));
 		}
-		sprite = new hgeSprite(tex, 223, 52, 14, 14);
+		sprite = new hgeSprite(tex, 223, 52, 16, 16);
 		sprite->SetHotSpot(8.0f,8.0f);
 	}
-	virtual void FreeResources()
+	virtual void FreeResources() override
 	{
-		delete sprite;
 		hge->Texture_Free(tex);
 	}
 	virtual void EatFood()
@@ -45,7 +44,8 @@ public:
 
 	virtual ~Food()
 	{
-		FreeResources();
+		//FreeResources();
+		delete sprite;
 	}
 private:
 	bool isEaten;

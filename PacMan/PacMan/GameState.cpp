@@ -65,6 +65,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	obst->SetPosition(hgeVector(tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->GetPosition()));
 	tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->HaveObstacles(true);
 	food->SetPosition(tiles.at(nMapHeight / 2 * nMapWidth / 2 + 11)->GetOrigin());
+	holyFood->SetPosition(tiles.at(nMapHeight / 2 * nMapWidth / 2 + 13)->GetOrigin());
 }
 void GameState::LoadResources()
 {
@@ -72,6 +73,7 @@ void GameState::LoadResources()
 	ghost = new Ghost(hge);
 	obst = new Obstacles(hge);
 	food = new Food(hge);
+	holyFood = new HolyFood(hge);
 	pathfinder = new PathFinder(nMapWidth, nMapHeight, &tiles);
 }
 
@@ -214,7 +216,6 @@ void GameState::Update(const float& dt)
 			ghost->nodeStart = tiles.at(i);
 		}
 		
-		
 	}
 	// Process keys
 	UpdateInput(dt);
@@ -229,6 +230,10 @@ void GameState::Update(const float& dt)
 	{
 		food->EatFood();
 	}
+	if(player->IsColiding(holyFood->Rectangle()))
+	{
+		holyFood->EatFood();
+	}
 	//ghost->MoveTo(player->GetPosition(), dt);
 	ghost->Update(dt);
 	obst->Update(dt);
@@ -236,7 +241,10 @@ void GameState::Update(const float& dt)
 	{
 		food->Update(dt);
 	}
-	
+	if(!holyFood->IsEaten())
+	{
+		holyFood->Update(dt);
+	}
 	
 }
 void GameState::Render()
@@ -253,6 +261,10 @@ void GameState::Render()
 	if(!food->IsEaten())
 	{
 		food->Render();
+	}
+	if(!holyFood->IsEaten())
+	{
+		holyFood->Render();
 	}
 }
 void GameState::UpdateInput(const float& dt)
@@ -312,11 +324,14 @@ void GameState::UpdateInput(const float& dt)
 }
 void GameState::FreeResources()
 {
-	//player->FreeResources();
 	delete ghost;
 	delete player;
 	delete obst;
+	food->FreeResources();
 	delete food;
+	holyFood->FreeResources();
+	delete holyFood;
+	
 	delete pathfinder;
 }
 GameState::~GameState()

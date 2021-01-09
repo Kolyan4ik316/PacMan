@@ -11,7 +11,7 @@ public:
 	{
 		sprite = NULL;
 		tex = NULL;
-		snd = NULL;
+
 	};
 	//Update
 	virtual void Update(const float& dt) = 0;
@@ -53,8 +53,6 @@ public:
 	{
 		sprite = NULL;
 		tex = NULL;
-		snd = NULL;
-		tile = NULL;
 	};
 protected:
 	HGE* hge;
@@ -63,9 +61,7 @@ protected:
 	hgeVector dir;
 	hgeSprite* sprite;
 	HTEXTURE	 tex;
-	HEFFECT snd;
 	hgeRect rect;
-	Tiles* tile;
 	static float scaleX;
 	static float scaleY;
 };
