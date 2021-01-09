@@ -62,7 +62,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	player->SetSize(scaleX, scaleY);
 	ghost->SetPosition(hgeVector(tiles.at(nMapHeight * nMapWidth / 2)->GetOrigin()));
 	//ghost->nodeStart = tiles.at(nMapHeight / 2 * nMapWidth / 2 + 1);
-	obst->SetPosition(hgeVector(tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->GetPosition()));
+	obst->SetPosition(hgeVector(tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->GetOrigin()));
 	tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->HaveObstacles(true);
 	food->SetPosition(tiles.at(nMapHeight / 2 * nMapWidth / 2 + 11)->GetOrigin());
 	holyFood->SetPosition(tiles.at(nMapHeight / 2 * nMapWidth / 2 + 13)->GetOrigin());

@@ -37,14 +37,15 @@ void PacMan::Update(const float& dt)
 		angle = 0.0f;
 		animation.back()->SetFlip(true, false, true);	
 	}
-	pos.x+=dir.x * speed * dt;
-	pos.y+=dir.y * speed * dt;
-	rect.Set(pos.x - 14.0f, pos.y - 14.0f, pos.x+ 14.0f, pos.y + 14.0f);
+	pos.x+=dir.x * speed * scaleX * dt;
+	pos.y+=dir.y * speed * scaleY * dt;
+	rect.Set(pos.x - (12.0f * scaleX), pos.y - (12.0f * scaleY), pos.x + (12.0f * scaleX), pos.y + (12.0f * scaleY));
 	animation.back()->Update(dt);
 }
 void PacMan::Render()
 {
 	animation.back()->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY * 1.7f);
+	hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
 }
 void PacMan::LoadResources()
 {

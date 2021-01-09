@@ -8,7 +8,7 @@ Obstacles::Obstacles(HGE* hge_in)
 }
 void Obstacles::Update(const float& dt)
 {
-	rect.Set(pos.x * scaleX , pos.y * scaleY , (pos.x + 32.0f) * scaleX , (pos.y + 32.0f) * scaleY);
+	rect.Set(pos.x - (16.0f * scaleX) , pos.y - (16.0f * scaleY), pos.x + (16.0f * scaleX) , pos.y + ( 16.0f * scaleY));
 }
 void Obstacles::Render()
 {

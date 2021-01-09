@@ -24,11 +24,12 @@ public:
 	virtual void Update(const float& dt) override
 	{
 		animation->Update(dt);
-		rect.Set(pos.x * scaleX , pos.y * scaleY , (pos.x + 24.0f) * scaleX , (pos.y + 24.0f) * scaleY);
+		rect.Set(pos.x - (8.0f * scaleX) , pos.y - (8.0f * scaleY) , pos.x +(8.0f * scaleX) , pos.y + (8.0f * scaleY));
 	}
 	virtual void Render() override
 	{
 		animation->RenderEx(pos.x, pos.y, 0.0f, scaleX * 2.0f, scaleY * 2.0f);
+		hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
 	}
 	virtual void FreeResources() override
 	{

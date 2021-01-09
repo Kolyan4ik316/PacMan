@@ -286,6 +286,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\GHStartPoint.h"
+					>
+				</File>
+				<File
 					RelativePath=".\HolyFood.h"
 					>
 				</File>
@@ -295,6 +299,10 @@
 				</File>
 				<File
 					RelativePath=".\Obstacles.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PMStartPoint.h"
 					>
 				</File>
 			</Filter>
