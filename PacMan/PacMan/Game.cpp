@@ -163,6 +163,22 @@ bool Game::Update()
 		//We are gonna to use timer from a lib, becouse in this version of c++
 		//chrono is not exist :)
 		states.top()->Update(hge->Timer_GetDelta());
+		
+		if(states.top()->CloseGame())
+		{
+			QuitFromApplication();
+			return true;
+		}
+		if(states.top()->ToMainMenu())
+		{
+			while(states.size() != 1)
+			{
+				delete states.top();
+				states.pop();
+			}
+			return false;
+		}
+
 		if(states.top()->GetQuit())
 		{
 			delete states.top();

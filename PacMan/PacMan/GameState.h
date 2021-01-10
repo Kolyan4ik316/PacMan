@@ -9,6 +9,7 @@
 #include "PathFinder.h"
 #include "Food.h"
 #include "HolyFood.h"
+#include "GamePause.h"
 
 class GameState : public State
 {

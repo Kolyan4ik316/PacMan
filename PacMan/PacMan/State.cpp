@@ -14,6 +14,8 @@ State::State(std::stack<State*>* states_in, HGE* hge_in)
 	screenHeight =  hge->System_GetState(HGE_SCREENHEIGHT);
 	originX = float(screenWidth / 2);
 	originY = float(screenHeight / 2);
+	toMainMenu = false;
+	closeGame = false;
 
 }
 void State::SetReoslution(const std::string& resolution)

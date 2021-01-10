@@ -28,8 +28,18 @@ public:
 		return quit;
 	}
 	//Dtor (need to be virtual for base class, for preventing memory leak)
+	const bool& ToMainMenu()const
+	{
+		return toMainMenu;
+	}
+	const bool& CloseGame()const
+	{
+		return closeGame;
+	}
 	virtual ~State(){};
 protected:
+	bool toMainMenu;
+	bool closeGame;
 	// variable for quiting
 	bool quit;
 	// Pointer to stack of pointer of states

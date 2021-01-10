@@ -296,6 +296,10 @@ void GameState::UpdateInput(const float& dt)
 	// Input to back to main menu
 	if(hge->Input_GetKeyState(HGEK_ESCAPE))
 	{
+		states->push(new GamePause(states, hge));
+	};
+	if(hge->Input_GetKeyState(HGEK_BACKSPACE))
+	{
 		EndState();
 	};
 

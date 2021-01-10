@@ -227,6 +227,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GamePause.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GamePause.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GameState.cpp"
 				>
 			</File>
@@ -256,10 +264,6 @@
 			</File>
 			<File
 				RelativePath=".\Options.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Pause.h"
 				>
 			</File>
 			<File

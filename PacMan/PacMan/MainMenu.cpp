@@ -55,7 +55,7 @@ void MainMenu::Render()
 }
 void MainMenu::UpdateInput(const float& dt)
 {
-	if(hge->Input_GetKeyState(HGEK_BACKSPACE))
+	if(hge->Input_GetKeyState(HGEK_ESCAPE))
 	{
 		gui->Leave();
 		EndState();
