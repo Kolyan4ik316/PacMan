@@ -24,7 +24,7 @@ public:
 	virtual void Update(const float& dt) override
 	{
 		animation->Update(dt);
-		rect.Set(pos.x - (8.0f * scaleX) , pos.y - (8.0f * scaleY) , pos.x +(8.0f * scaleX) , pos.y + (8.0f * scaleY));
+		rect.Set(pos.x - (10.0f * scaleX) , pos.y - (10.0f * scaleY) , pos.x +(10.0f * scaleX) , pos.y + (10.0f * scaleY));
 	}
 	virtual void Render() override
 	{

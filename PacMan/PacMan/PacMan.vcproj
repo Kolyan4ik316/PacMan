@@ -219,6 +219,14 @@
 			Name="States"
 			>
 			<File
+				RelativePath=".\Credits.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Credits.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GameState.cpp"
 				>
 			</File>
@@ -232,6 +240,26 @@
 			</File>
 			<File
 				RelativePath=".\MainMenu.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Options.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Options.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Pause.h"
 				>
 			</File>
 			<File

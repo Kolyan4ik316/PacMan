@@ -1,34 +1,6 @@
 #include "MainMenu.h"
-//MenuManager MainMenu::manager = MenuManager(hge);
-MainMenu::MainMenu(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
+MainMenu::MainMenu(std::stack<State*>* states_in, HGE* hge_in) : Menu(states_in, hge_in)
 {
-	//manager = new MenuManager(0, 300.0f, 300.0f, "Sosi pisos");
-	quit = false;
-	LoadResources();
-
-	
-	// Set up the quad we will use for background animation
-	quad.blend=BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_NOZWRITE;
-
-	for(int i=0;i<4;i++)
-	{
-		// Set up z-coordinate of vertices
-		quad.v[i].z=0.5f;
-		// Set up color. The format of DWORD col is 0xAARRGGBB
-		quad.v[i].col=0xFFFFFFFF;
-	}
-	/*screenWidth =  hge->System_GetState(HGE_SCREENWIDTH);
-	screenHeight =  hge->System_GetState(HGE_SCREENHEIGHT);
-
-	const float originX = float(screenWidth / 2);
-	const float originY = float(screenHeight / 2);*/
-
-	quad.v[0].x=0; quad.v[0].y=0; 
-	quad.v[1].x=(float)screenWidth; quad.v[1].y=0; 
-	quad.v[2].x=(float)screenWidth; quad.v[2].y = (float)screenHeight; 
-	quad.v[3].x=0; quad.v[3].y=(float)screenHeight; 
-	
-	gui=new hgeGUI();
 
 	gui->AddCtrl(new Button(1,fnt, snd, originX, originY - 100.0f, 0.0f, "Play"));
 	gui->AddCtrl(new Button(2,fnt, snd, originX, originY - 60.0f, 0.1f, "Options"));
@@ -43,13 +15,9 @@ MainMenu::MainMenu(std::stack<State*>* states_in, HGE* hge_in) : State(states_in
 }
 void MainMenu::Update(const float& dt)
 {
-	static float t=0.0f;
-	float tx,ty;
 	int id;
 	static int lastid=0;
 
-	// If ESCAPE was pressed, tell the GUI to finish
-	//if(hge->Input_GetKeyState(HGEK_ESCAPE)) { lastid=5; gui->Leave(); }
 	
 	// We update the GUI and take an action if
 	// one of the menu items was selected
@@ -73,17 +41,7 @@ void MainMenu::Update(const float& dt)
 		}
 	}
 	else if(id) { lastid=id; gui->Leave(); }
-
-	// Here we update our background animation
-	t+=dt;
-	tx=50*cosf(t/60);
-	ty=50*sinf(t/60);
-
-	quad.v[0].tx=tx;        quad.v[0].ty=ty;
-	quad.v[1].tx=tx+screenWidth/64; quad.v[1].ty=ty;
-	quad.v[2].tx=tx+screenWidth/64; quad.v[2].ty=ty+screenHeight/64;
-	quad.v[3].tx=tx;        quad.v[3].ty=ty+screenHeight/64;
-
+	UpdateBG(dt);
 
 
 	UpdateInput(dt);
@@ -97,48 +55,14 @@ void MainMenu::Render()
 }
 void MainMenu::UpdateInput(const float& dt)
 {
-	/*if(hge->Input_GetKeyState(HGEK_SPACE))
-	{
-		MouseLButton(true);
-	};*/
 	if(hge->Input_GetKeyState(HGEK_BACKSPACE))
 	{
 		gui->Leave();
 		EndState();
 	};
 }
-void MainMenu::LoadResources()
-{
-	quad.tex=hge->Texture_Load("bg.png");
-	if(!quad.tex)
-	{
-		throw(std::exception("Can't find bg.png"));
-	}
-	tex=hge->Texture_Load("cursor.png");
-	snd=hge->Effect_Load("menu.wav");
-	if(!tex || !snd)
-	{
-		throw(std::exception("Can't find cursor.png or menu.wav"));
-	}
-	fnt = 0;
-	fnt=new hgeFont("font1.fnt");
-	if(!fnt)
-	{
-		throw(std::exception("Can't find font1.fnt"));
-	}
-	spr=new hgeSprite(tex,0,0,32,32);
-}
-void MainMenu::FreeResources()
-{
-	delete gui;
-	delete fnt;
-	delete spr;
-	hge->Effect_Free(snd);
-	hge->Texture_Free(tex);
-}
 MainMenu::~MainMenu()
 {
-	FreeResources();
 	//FreeResources();
 	//delete gui;
 	//delete manager;

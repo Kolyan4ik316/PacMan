@@ -35,7 +35,7 @@ public:
 	}
 	virtual void Update(const float& dt) override
 	{
-		rect.Set(pos.x - (4.0f* scaleX) , pos.y - (4.0f* scaleY) , pos.x +(4.0f * scaleX) , pos.y +( 4.0f * scaleY));
+		rect.Set(pos.x - (6.0f* scaleX) , pos.y - (6.0f* scaleY) , pos.x +(6.0f * scaleX) , pos.y +( 6.0f * scaleY));
 	}
 	virtual void Render() override
 	{
