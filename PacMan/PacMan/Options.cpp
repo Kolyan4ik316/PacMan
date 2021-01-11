@@ -4,8 +4,8 @@ Options::Options(std::stack<State*>* states_in, HGE* hge_in) : Menu(states_in, h
 
 	gui->AddCtrl(new Button(1,fnt, snd, originX, originY - 100.0f, 0.0f, "Resolution"));
 	gui->AddCtrl(new Button(2,fnt, snd, originX, originY - 60.0f, 0.1f, "Difficult"));
-	gui->AddCtrl(new Button(4,fnt, snd, originX, originY + 20.0f, 0.3f, "Return to MainMenu"));
-	gui->AddCtrl(new Button(5,fnt, snd, originX, originY + 60.0f, 0.4f, "Exit"));
+	gui->AddCtrl(new Button(3,fnt, snd, originX, originY + 20.0f, 0.3f, "Return to MainMenu"));
+	gui->AddCtrl(new Button(4,fnt, snd, originX, originY + 60.0f, 0.4f, "Exit"));
 
 	gui->SetNavMode(HGEGUI_UPDOWN | HGEGUI_CYCLED);
 	gui->SetCursor(spr);
@@ -30,13 +30,14 @@ void Options::Update(const float& dt)
 				states->push(new ResolutionOption(states, hge));
 				break;
 			case 2:
+				gui->Enter();
+				states->push(new DiffOption(states, hge));
+				break;
 			case 3:
-			case 4:
 				gui->Enter();
 				EndState();
 				break;
-
-			case 5: 
+			case 4: 
 				gui->Enter();
 				closeGame = true;
 				break;

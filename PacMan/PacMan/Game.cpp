@@ -86,10 +86,157 @@ void Game::InitWindow()
 	ifs.close();
 	
 }
+void Game::InitDiff()
+{
+	std::string path = "Configs\\difficult.ini";
+	std::ifstream ifs;
+	ifs.open(path.c_str());
+	// if file is already exist
+	if(ifs.is_open())
+	{
+		//Reading variables
+		std::string tempStr;
+		while(!ifs.eof())
+		{
+			ifs>> tempStr;
+			if(tempStr.compare("[Easy]") == 0)
+			{
+				ifs>> tempStr;
+				State::DiffAtributes tempAttr;
+				while(!tempStr.compare("[End]") == 0)
+				{
+					if(tempStr.compare("[Num_of_ghosts]") == 0)
+					{
+						ifs>>tempAttr.num_of_ghosts;
+					}
+					if(tempStr.compare("[Speed_of_ghosts]") == 0)
+					{
+						ifs>>tempAttr.speed_of_ghosts;
+					}
+					if(tempStr.compare("[Release_delay]") == 0)
+					{
+						ifs>>tempAttr.release_delay;
+					}
+					if(tempStr.compare("[PacMan_speed]") == 0)
+					{
+						ifs>>tempAttr.pacMan_speed;
+					}
+					ifs>> tempStr;
+				}
+				states.top()->LoadDifficults(tempAttr);
+			}
+			if(tempStr.compare("[Normal]") == 0)
+			{
+				ifs>> tempStr;
+				State::DiffAtributes tempAttr;
+				while(!tempStr.compare("[End]") == 0)
+				{
+					ifs>> tempStr;
+					if(tempStr.compare("[Num_of_ghosts]") == 0)
+					{
+						ifs>>tempAttr.num_of_ghosts;
+					}
+					if(tempStr.compare("[Speed_of_ghosts]") == 0)
+					{
+						ifs>>tempAttr.speed_of_ghosts;
+					}
+					if(tempStr.compare("[Release_delay]") == 0)
+					{
+						ifs>>tempAttr.release_delay;
+					}
+					if(tempStr.compare("[PacMan_speed]") == 0)
+					{
+						ifs>>tempAttr.pacMan_speed;
+					}
+					ifs>> tempStr;
+				}
+				states.top()->LoadDifficults(tempAttr);
+			}
+			if(!tempStr.compare("[Hard]") == 0)
+			{
+				ifs>> tempStr;
+				State::DiffAtributes tempAttr;
+				while(!tempStr.compare("[End]") == 0)
+				{
+					ifs>> tempStr;
+					if(tempStr.compare("[Num_of_ghosts]") == 0)
+					{
+						ifs>>tempAttr.num_of_ghosts;
+					}
+					if(tempStr.compare("[Speed_of_ghosts]") == 0)
+					{
+						ifs>>tempAttr.speed_of_ghosts;
+					}
+					if(tempStr.compare("[Release_delay]") == 0)
+					{
+						ifs>>tempAttr.release_delay;
+					}
+					if(tempStr.compare("[PacMan_speed]") == 0)
+					{
+						ifs>>tempAttr.pacMan_speed;
+					}
+					ifs>> tempStr;
+				}
+				states.top()->LoadDifficults(tempAttr);
+				
+			}
+
+		}
+	}
+	else
+	{
+		//if not exist creating new file in same path
+		std::ofstream ofs;
+		ofs.open(path.c_str());
+		if(ofs.is_open())
+		{
+			//Writing variables
+			ofs<<"[Easy]\n"
+				<<"[Num_of_ghosts]\n"
+				<<3<<"\n"
+				<<"[Speed_of_ghosts]\n"
+				<<50.0<<"\n"
+				<<"[Release_delay]\n"
+				<<10.0<<"\n"
+				<<"[PacMan_speed]\n"
+				<<110.0<<"\n"
+				<<"[End]\n"
+				<<"[Normal]\n"
+				<<"[Num_of_ghosts]\n"
+				<<4<<"\n"
+				<<"[Speed_of_ghosts]\n"
+				<<60.0<<"\n"
+				<<"[Release_delay]\n"
+				<<10.0<<"\n"
+				<<"[PacMan_speed]\n"
+				<<100.0<<"\n"
+				<<"[End]\n"
+				<<"[Hard]\n"
+				<<"[Num_of_ghosts]\n"
+				<<5<<"\n"
+				<<"[Speed_of_ghosts]\n"
+				<<70.0<<"\n"
+				<<"[Release_delay]\n"
+				<<7.0<<"\n"
+				<<"[PacMan_speed]\n"
+				<<100.0<<"\n"
+				<<"[End]\n";
+		}
+		else
+		{
+			// if can't create
+			throw(std::exception("Unknown error while writing to file difficult.ini"));
+		}
+		ofs.close();
+	}
+	ifs.close();
+}
 void Game::InitStates()
 {
 	// Pushing main menu
 	states.push(new MainMenu(&states, hge));
+	InitDiff();
+	//states.top()->SetDifficult(2);
 }
 void Game::ChangePreference()
 {

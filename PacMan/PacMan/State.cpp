@@ -6,6 +6,8 @@ float State::originY = 0.0f;
 float State::scaleX = 0.0f;
 float State::scaleY = 0.0f;
 std::string State::resolut = "";
+State::Difficult State::difficult = State::Difficult::Normal;
+std::vector<State::DiffAtributes> State::diffs = std::vector<State::DiffAtributes>();
 State::State(std::stack<State*>* states_in, HGE* hge_in) 
 	: 
 	states(states_in),
@@ -66,4 +68,8 @@ void State::SetReoslution(const std::string& resolution)
 		std::string error = std::string("Couldn't use your resolution " + resolution + ".\nPlease try to use 4:3, or 16:9, or 16:10");
 		throw(std::exception(error.c_str()));
 	}
+}
+void State::LoadDifficults(State::DiffAtributes attr)
+{
+	diffs.push_back(attr);
 }

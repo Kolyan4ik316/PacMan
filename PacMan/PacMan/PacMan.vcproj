@@ -227,6 +227,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DiffOption.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DiffOption.h"
 				>
 			</File>

@@ -22,6 +22,8 @@ private:
 	void InitWindow();
 	// For initialize state of game
 	void InitStates();
+	// For initialize difficults
+	void InitDiff();
 private:
 	// Container of states
 	static std::stack<State*> states;

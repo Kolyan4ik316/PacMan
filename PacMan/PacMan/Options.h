@@ -2,6 +2,7 @@
 #define OPTIONS_H
 #include "Menu.h"
 #include "ResolutionOption.h"
+#include "DiffOption.h"
 class Options : public Menu
 {
 public:

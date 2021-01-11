@@ -4,6 +4,21 @@
 class State
 {
 public:
+	struct DiffAtributes
+	{
+		unsigned int num_of_ghosts;
+		float speed_of_ghosts;
+		float release_delay;
+		float pacMan_speed;
+	};
+public:
+	enum Difficult : unsigned int
+	{
+		Easy,
+		Normal,
+		Hard
+	};
+public:
 	//Ctor(takes paramaters, i'm gonna add more paramaters later)
 	State(std::stack<State*>* states_in, HGE* hge_in);
 	//Update
@@ -36,8 +51,13 @@ public:
 	{
 		return closeGame;
 	}
+	static void LoadDifficults(State::DiffAtributes attr);
 	virtual ~State(){};
 protected:
+	void SetDifficult(Difficult diff)
+	{
+		difficult = diff;
+	}
 	bool toMainMenu;
 	bool closeGame;
 	// variable for quiting
@@ -57,6 +77,10 @@ protected:
 
 	static std::string resolut;
 
+protected:
+	static Difficult difficult;
+	static std::vector<State::DiffAtributes> diffs;
+
 };
-//
+
 #endif
