@@ -35,12 +35,15 @@ void MainMenu::Update(const float& dt)
 				states->push(new Options(states, hge));
 				break;
 			case 3:
-			case 4:
 				gui->SetFocus(1);
+				break;
+			case 4:
 				gui->Enter();
+				states->push(new Credits(states, hge));
 				break;
 
 			case 5: 
+				gui->Enter();
 				EndState();
 				break;
 		}
