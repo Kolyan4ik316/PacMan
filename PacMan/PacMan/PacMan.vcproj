@@ -183,6 +183,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MapManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PathFinder.cpp"
 				>
 			</File>
@@ -198,6 +202,10 @@
 			</File>
 			<File
 				RelativePath=".\Game.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MapManager.h"
 				>
 			</File>
 			<File

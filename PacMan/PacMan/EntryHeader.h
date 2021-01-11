@@ -29,5 +29,6 @@
 #include <cmath>
 #include <limits>
 #include <algorithm>
+#include <typeinfo.h>
 
 #endif

@@ -4,8 +4,8 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 {
 	// Setting place for our tiles
 	const float offset = 36.0f;
-	float prevX = originX / scaleX - 360.0f;
-	float prevY = originY / scaleY - 285.0f;
+	float prevX = originX / scaleX - 400.0f;
+	float prevY = originY / scaleY - 300.0f;
 	nMapWidth = 20;
 	nMapHeight = 16;
 	for(unsigned int i = 0; i < nMapHeight; i++)
@@ -16,7 +16,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 			prevX += offset;
 			
 		}
-		prevX = originX / scaleX - 360.0f;
+		prevX = originX / scaleX - 400.0f;
 		prevY += offset;
 	}
 	for (unsigned int x = 0; x < nMapWidth; x++)
@@ -61,7 +61,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	player->SetPosition(hgeVector(tiles.at(nMapHeight /2 * nMapWidth + nMapWidth/2)->GetOrigin()));
 	player->SetSize(scaleX, scaleY);
 	ghost->SetPosition(hgeVector(tiles.at(nMapHeight * nMapWidth / 2)->GetOrigin()));
-	//ghost->nodeStart = tiles.at(nMapHeight / 2 * nMapWidth / 2 + 1);
+	ghost->nodeStart = tiles.at(nMapHeight / 2 * nMapWidth / 2 + 1);
 	obst->SetPosition(hgeVector(tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->GetOrigin()));
 	tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->HaveObstacles(true);
 	food->SetPosition(tiles.at(nMapHeight / 2 * nMapWidth / 2 + 11)->GetOrigin());
@@ -74,6 +74,8 @@ void GameState::LoadResources()
 	obst = new Obstacles(hge);
 	food = new Food(hge);
 	holyFood = new HolyFood(hge);
+	mapManager = new MapManager(hge, &mapItems, &tiles, nMapWidth, nMapHeight);
+	mapManager->LoadMap();
 	pathfinder = new PathFinder(nMapWidth, nMapHeight, &tiles);
 }
 
@@ -203,7 +205,10 @@ void GameState::UpdateEnemies()
 }
 void GameState::Update(const float& dt)
 {	
-
+	for(unsigned int i = 0; i < mapItems.size(); i++)
+	{
+		mapItems.at(i)->Update(dt);
+	}
 	for(unsigned int i = 0; i < tiles.size(); i++)
 	{
 		if(tiles.at(i)->IsInside(player->GetPosition()))
@@ -249,6 +254,10 @@ void GameState::Update(const float& dt)
 }
 void GameState::Render()
 {
+	for(unsigned int i = 0; i < mapItems.size(); i++)
+	{
+		mapItems.at(i)->Render();
+	}
 	for(unsigned int i = 0; i < tiles.size(); i++)
 	{
 		tiles.at(i)->Render();
@@ -337,6 +346,12 @@ void GameState::FreeResources()
 	delete holyFood;
 	
 	delete pathfinder;
+	delete mapManager;
+	while(!mapItems.empty())
+	{
+		delete mapItems.back();
+		mapItems.pop_back();
+	}
 }
 GameState::~GameState()
 {

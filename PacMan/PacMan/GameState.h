@@ -10,6 +10,7 @@
 #include "Food.h"
 #include "HolyFood.h"
 #include "GamePause.h"
+#include "MapManager.h"
 
 class GameState : public State
 {
@@ -35,6 +36,8 @@ private:
 	unsigned int nMapHeight;
 	Food* food;
 	HolyFood* holyFood;
+	MapManager* mapManager;
+	std::vector<Entity*> mapItems;
 };
 
 #endif
