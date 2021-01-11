@@ -220,7 +220,7 @@ void Game::InitDiff()
 				<<7.0<<"\n"
 				<<"[PacMan_speed]\n"
 				<<100.0<<"\n"
-				<<"[End]\n";
+				<<"[End]";
 		}
 		else
 		{
