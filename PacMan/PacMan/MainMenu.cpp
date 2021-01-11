@@ -27,8 +27,13 @@ void MainMenu::Update(const float& dt)
 		switch(lastid)
 		{
 			case 1:
+				gui->Enter();
 				states->push(new GameState(states, hge));
+				break;
 			case 2:
+				gui->Enter();
+				states->push(new Options(states, hge));
+				break;
 			case 3:
 			case 4:
 				gui->SetFocus(1);

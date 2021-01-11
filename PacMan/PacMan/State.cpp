@@ -5,6 +5,7 @@ float State::originX = 0.0f;
 float State::originY = 0.0f;
 float State::scaleX = 0.0f;
 float State::scaleY = 0.0f;
+std::string State::resolut = "";
 State::State(std::stack<State*>* states_in, HGE* hge_in) 
 	: 
 	states(states_in),
@@ -20,6 +21,7 @@ State::State(std::stack<State*>* states_in, HGE* hge_in)
 }
 void State::SetReoslution(const std::string& resolution)
 {
+	resolut = resolution;
 	if(resolution.compare("4:3") == 0)
 	{
 		for(int x = 0; x <screenWidth; x += 4)

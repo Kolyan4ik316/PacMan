@@ -227,6 +227,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DiffOption.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GamePause.cpp"
 				>
 			</File>
@@ -264,6 +268,14 @@
 			</File>
 			<File
 				RelativePath=".\Options.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ResolutionOption.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ResolutionOption.h"
 				>
 			</File>
 			<File

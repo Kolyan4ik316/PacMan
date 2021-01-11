@@ -70,4 +70,5 @@ void Menu::FreeResources()
 }
 Menu::~Menu()
 {
+	FreeResources();
 }

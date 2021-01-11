@@ -55,6 +55,8 @@ protected:
 	static float scaleX;
 	static float scaleY;
 
+	static std::string resolut;
+
 };
 //
 #endif

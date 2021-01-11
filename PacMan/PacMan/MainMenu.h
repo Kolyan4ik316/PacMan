@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "Button.h"
 #include "Menu.h"
+#include "Options.h"
 class MainMenu : public Menu
 {
 public:
