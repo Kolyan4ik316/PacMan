@@ -24,6 +24,7 @@ private:
 	void InitStates();
 	// For initialize difficults
 	void InitDiff();
+
 private:
 	// Container of states
 	static std::stack<State*> states;

@@ -3,6 +3,7 @@
 GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
 {
 	// Setting place for our tiles
+	eatenFood = 0;
 	const float offset = 36.0f;
 	float prevX = originX / scaleX - 400.0f;
 	float prevY = originY / scaleY - 300.0f;
@@ -58,28 +59,54 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 		}
 	}
 	// Setting position of player;
+	for(unsigned int i = 0; i <mapItems.size(); i++)
+	{
+		if(typeid(Obstacles) == typeid(*mapItems.at(i)))
+		{
+			obsts.push_back((Obstacles*)mapItems.at(i));
+		}
+		if(typeid(Food) == typeid(*mapItems.at(i)))
+		{
+			foods.push_back((Food*)mapItems.at(i));
+		}
+	}
 	player->SetPosition(hgeVector(tiles.at(nMapHeight /2 * nMapWidth + nMapWidth/2)->GetOrigin()));
 	player->SetSize(scaleX, scaleY);
-	ghost->SetPosition(hgeVector(tiles.at(nMapHeight * nMapWidth / 2)->GetOrigin()));
-	ghost->nodeStart = tiles.at(nMapHeight / 2 * nMapWidth / 2 + 1);
-	obst->SetPosition(hgeVector(tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->GetOrigin()));
-	tiles.at(nMapHeight / 2 * nMapWidth / 2 - 11)->HaveObstacles(true);
-	food->SetPosition(tiles.at(nMapHeight / 2 * nMapWidth / 2 + 11)->GetOrigin());
-	holyFood->SetPosition(tiles.at(nMapHeight / 2 * nMapWidth / 2 + 13)->GetOrigin());
 }
 void GameState::LoadResources()
 {
 	player = new PacMan(hge);
-	ghost = new Ghost(hge);
-	obst = new Obstacles(hge);
-	food = new Food(hge);
-	holyFood = new HolyFood(hge);
 	mapManager = new MapManager(hge, &mapItems, &tiles, nMapWidth, nMapHeight);
 	mapManager->LoadMap();
 	pathfinder = new PathFinder(nMapWidth, nMapHeight, &tiles);
 }
-
-void GameState::UpdateEnemies()
+const bool GameState::CheckForColiding(DynamicEntity* checker, Entity* colisior) const
+{
+	return checker->IsColiding(colisior->Rectangle());
+}
+void GameState::Colision(DynamicEntity* checker, Entity* colisior)
+{
+	hgeVector dir = hgeVector(0.0f, 0.0f);
+	if(checker->Rectangle()->x1 < colisior->Rectangle()->x1)
+	{
+		dir -= hgeVector(8.0f, 0.0f);
+	}
+	if(checker->Rectangle()->x2 > colisior->Rectangle()->x2)
+	{
+		dir += hgeVector(8.0f, 0.0f);
+	}
+	if(checker->Rectangle()->y1 < colisior->Rectangle()->y1)
+	{
+		dir -= hgeVector(0.0f, 8.0f);
+	}
+	if(checker->Rectangle()->y2 > colisior->Rectangle()->y2)
+	{
+		dir += hgeVector(0.0f, 8.0f);
+	}
+	checker->SetDirection(dir);
+	
+}
+void GameState::UpdateEnemies(Ghost* ghost)
 {
 	hgeVector dir = hgeVector(0.0f, 0.0f);
 	
@@ -101,83 +128,25 @@ void GameState::UpdateEnemies()
 	if(!chooseList.empty())
 	{
 		chooseList.sort(pathfinder->LessfGlobalGoal);
-		if(ghost->IsColiding(obst->Rectangle()))
+			
+		ghost->SetDestination(chooseList.front()->GetOrigin());
+		if(ghost->GetPosition().x > chooseList.front()->GetOrigin().x)
 		{
-			if(ghost->Rectangle()->x1 < obst->Rectangle()->x1)
-			{
-				
-				if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
-				{
-					dir = hgeVector(0.0f, 1.0f);
-				}
-				else
-				{
-					dir = hgeVector(0.0f, -1.0f);
-				}
-				dir -= hgeVector(1.0f, 0.0f);
-			}
-			if(ghost->Rectangle()->x2 > obst->Rectangle()->x2)
-			{
-				
-				if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
-				{
-					dir = hgeVector(0.0f, 1.0f);
-				}
-				else
-				{
-					dir = hgeVector(0.0f, -1.0f);
-				}
-				dir += hgeVector(1.0f, 0.0f);
-			}
-			if(ghost->Rectangle()->y1 < obst->Rectangle()->y1)
-			{
-				
-				if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
-				{
-					dir = hgeVector(1.0f, 0.0f);
-				}
-				else
-				{
-					dir = hgeVector(-1.0f, 0.0f);
-				}
-				dir -= hgeVector(0.0f, 1.0f);
-			}
-			if(ghost->Rectangle()->y2 > obst->Rectangle()->y2)
-			{
-				
-				if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
-				{
-					dir = hgeVector(1.0f, 0.0f);
-				}
-				else
-				{
-					dir = hgeVector(-1.0f, 0.0f);
-				}
-				dir += hgeVector(0.0f, 1.0f);
-			}
+			dir -= hgeVector(1.0f, 0.0f);
 		}
-		else
+		if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
 		{
-			{
-				ghost->SetDestination(chooseList.front()->GetOrigin());
-				if(ghost->GetPosition().x > chooseList.front()->GetOrigin().x)
-				{
-					dir -= hgeVector(1.0f, 0.0f);
-				}
-				if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
-				{
-					dir += hgeVector(1.0f, 0.0f);
-				}
-				if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
-				{
-					dir += hgeVector(0.0f, 1.0f);
-				}
-				if(ghost->GetPosition().y > chooseList.front()->GetOrigin().y)
-				{
-					dir -= hgeVector(0.0f, 1.0f);
-				}
-			}
+			dir += hgeVector(1.0f, 0.0f);
 		}
+		if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
+		{
+			dir += hgeVector(0.0f, 1.0f);
+		}
+		if(ghost->GetPosition().y > chooseList.front()->GetOrigin().y)
+		{
+			dir -= hgeVector(0.0f, 1.0f);
+		}	
+		
 	}
 	else
 	{
@@ -205,29 +174,43 @@ void GameState::UpdateEnemies()
 }
 void GameState::Update(const float& dt)
 {	
-	for(unsigned int i = 0; i < mapItems.size(); i++)
+	/*for(unsigned int i = 0; i < mapItems.size(); i++)
 	{
 		mapItems.at(i)->Update(dt);
-	}
-	for(unsigned int i = 0; i < tiles.size(); i++)
-	{
-		if(tiles.at(i)->IsInside(player->GetPosition()))
-		{
-			ghost->nodeEnd = tiles.at(i);
-		}
-		
-		if(tiles.at(i)->IsInside(ghost->GetPosition()))
-		{
-			ghost->nodeStart = tiles.at(i);
-		}
-		
-	}
-	// Process keys
+	}*/
 	UpdateInput(dt);
-	// Updating player state
+	
+	for(unsigned int i = 0; i < obsts.size(); i++)
+	{
+		if(CheckForColiding(player, obsts.at(i)))
+		{
+			Colision(player, obsts.at(i));
+			break;
+		}
+		obsts.at(i)->Update(dt);
+	}
+	for(unsigned int i = 0; i < foods.size(); i++)
+	{
+		if(!foods.at(i)->IsEaten())
+		{
+			foods.at(i)->Update(dt);
+			if(CheckForColiding(player, foods.at(i)))
+			{
+				foods.at(i)->EatFood();
+				eatenFood++;
+			}
+		}
+	}
+	if(eatenFood == foods.size())
+	{
+		EndState();
+	}
 	player->Update(dt);
-	UpdateEnemies();
-	if(player->IsColiding(ghost->Rectangle()))
+	tiles.at(0)->
+	// Process keys
+	// Updating player state
+	
+	/*if(player->IsColiding(ghost->Rectangle()))
 	{
 		ghost->SetPosition(hgeVector(tiles.at(20 * 9 - 2)->GetOrigin()));
 	}
@@ -249,14 +232,25 @@ void GameState::Update(const float& dt)
 	if(!holyFood->IsEaten())
 	{
 		holyFood->Update(dt);
-	}
+	}*/
 	
 }
 void GameState::Render()
 {
-	for(unsigned int i = 0; i < mapItems.size(); i++)
+	/*for(unsigned int i = 0; i < mapItems.size(); i++)
 	{
 		mapItems.at(i)->Render();
+	}*/
+	for(unsigned int i = 0; i <obsts.size(); i++)
+	{
+		obsts.at(i)->Render();
+	}
+	for(unsigned int i = 0; i <foods.size(); i++)
+	{
+		if(!foods.at(i)->IsEaten())
+		{
+			foods.at(i)->Render();
+		}
 	}
 	for(unsigned int i = 0; i < tiles.size(); i++)
 	{
@@ -264,17 +258,6 @@ void GameState::Render()
 	}
 	// rendering player
 	player->Render();
-	ghost->Render();
-	ghost->RenderLineToGoal();
-	obst->Render();
-	if(!food->IsEaten())
-	{
-		food->Render();
-	}
-	if(!holyFood->IsEaten())
-	{
-		holyFood->Render();
-	}
 }
 void GameState::UpdateInput(const float& dt)
 {	
@@ -312,7 +295,7 @@ void GameState::UpdateInput(const float& dt)
 		EndState();
 	};
 
-	if(player->IsColiding(obst->Rectangle()))
+	/*if(player->IsColiding(obst->Rectangle()))
 	{
 		if(player->Rectangle()->x1 < obst->Rectangle()->x1)
 		{
@@ -330,23 +313,21 @@ void GameState::UpdateInput(const float& dt)
 		{
 			dir += hgeVector(0.0f, 1.0f);
 		}
-	}
+	}*/
 
 	player->SetDirection(dir);
 
 }
 void GameState::FreeResources()
 {
-	delete ghost;
 	delete player;
-	delete obst;
-	food->FreeResources();
-	delete food;
-	holyFood->FreeResources();
-	delete holyFood;
 	
 	delete pathfinder;
 	delete mapManager;
+	for (unsigned int i = 0; i < foods.size(); i++)
+	{
+		foods.at(i)->FreeResources();
+	}
 	while(!mapItems.empty())
 	{
 		delete mapItems.back();

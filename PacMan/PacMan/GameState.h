@@ -25,19 +25,21 @@ public:
 	void FreeResources() override;
 	virtual ~GameState();
 private:
-	void UpdateEnemies();
+	void UpdateEnemies(Ghost* ghost);
+	const bool CheckForColiding(DynamicEntity* checker, Entity* colisior) const;
+	void Colision(DynamicEntity* checker, Entity* colisior);
 	// Player variable
 	PacMan* player;
-	Ghost* ghost;
-	Obstacles* obst;
 	std::vector<Tiles*> tiles;
 	PathFinder* pathfinder;
 	unsigned int nMapWidth;
 	unsigned int nMapHeight;
-	Food* food;
-	HolyFood* holyFood;
 	MapManager* mapManager;
 	std::vector<Entity*> mapItems;
+	std::vector<Obstacles*> obsts;
+	std::vector<Food*> foods;
+	int eatenFood;
+	int numOfTry;
 };
 
 #endif

@@ -29,6 +29,7 @@ void MapManager::LoadMap()
 				{
 					mapItems->push_back(new Obstacles(hge));
 					mapItems->back()->SetPosition(tiles->at(nOfTile)->GetOrigin());
+					tiles->at(nOfTile)->HaveObstacles(true);
 					nOfTile++;
 				}
 				

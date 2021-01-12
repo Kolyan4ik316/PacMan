@@ -33,7 +33,7 @@ void Credits::Render()
 {
 	hge->Gfx_RenderQuad(&quad);
 	gui->Render();
-	fnt->printf(originX, originY - 200.0f, HGETEXT_CENTER, "Game was created by Kolyan4ik316\ngithub.com\kolyan4ik316");
+	fnt->printf(originX, originY - 200.0f, HGETEXT_CENTER, "Game was created by Kolyan4ik316\ngithub.com/kolyan4ik316");
 }
 void Credits::UpdateInput(const float& dt)
 {
