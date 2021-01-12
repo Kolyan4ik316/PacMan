@@ -7,15 +7,27 @@ DynamicEntity::DynamicEntity(HGE *hge_in)
 {
 	speed = 0.0f;
 	canSolve = 0.0f;
-	givenTimeForSolving = 0.4f;
+	givenTimeForSolving = 1.0f;
 }
 bool DynamicEntity::TimeForSolvingWasReached()
 {
 	return canSolve >= givenTimeForSolving;
 }
+void DynamicEntity::SetSpeed(const float& speed_in)
+{
+	speed = speed_in;
+}
 void DynamicEntity::ResetTimeForSolving()
 {
 	canSolve = 0.0f;
+}
+void DynamicEntity::SetStartPoint(Tiles* tile)
+{
+	startPoint = tile;
+}
+Tiles* DynamicEntity::GetStartPoint()
+{
+	return startPoint;
 }
 DynamicEntity::~DynamicEntity()
 {

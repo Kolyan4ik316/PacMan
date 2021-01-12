@@ -243,6 +243,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GameOver.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GameOver.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GamePause.cpp"
 				>
 			</File>
@@ -296,6 +304,14 @@
 			</File>
 			<File
 				RelativePath=".\State.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WinMenu.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WinMenu.h"
 				>
 			</File>
 		</Filter>

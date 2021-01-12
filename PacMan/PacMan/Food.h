@@ -40,12 +40,12 @@ public:
 	virtual void Render() override
 	{
 		sprite->RenderEx(pos.x, pos.y, 0.0f, scaleX * 2.0f, scaleY * 2.0f);
-		hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
+		//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
 	}
 
 	virtual ~Food()
 	{
-		//FreeResources();
+		FreeResources();
 		delete sprite;
 	}
 private:

@@ -12,7 +12,9 @@ Ghost::Ghost(HGE* hge_in)
 	nodeStart = NULL;
 	nodeEnd = NULL;
 	canSolve = 0.0f;
-	//destination = hgeVector(0.0f, 0.0f);
+	releaseTime = 0.0f;
+	canBeAtacket = false;
+	wasAtattacked = false;
 }
 void Ghost::LoadResources()
 {
@@ -81,10 +83,26 @@ void Ghost::Update(const float& dt)
 	prevAnim = currAnim;
 	canSolve += dt;
 }
+void Ghost::SwitchAtacked()
+{
+	canBeAtacket = !canBeAtacket;
+}
+const bool Ghost::WasAttacked() const
+{
+	return wasAtattacked;
+}
+void Ghost::SwitchWasAtacked()
+{
+	wasAtattacked = !wasAtattacked;
+}
+const bool Ghost::CanBeAtacket() const
+{
+	return canBeAtacket;
+}
 void Ghost::Render()
 {
 	animation.at(unsigned int(currAnim))->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY* 1.7f);
-	hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
+	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
 }
 /*void Ghost::Render(const float& sizeX, const float& sizeY)
 {

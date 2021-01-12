@@ -15,13 +15,23 @@ public:
 	virtual void LoadResources() override;
 	virtual void FreeResources() override;
 	virtual void SetDestination(const hgeVector& pos_in);
+	virtual void SwitchAtacked();
+	virtual const  bool CanBeAtacket() const;
+	virtual const bool WasAttacked() const;
+	virtual void SwitchWasAtacked();
 	virtual ~Ghost();
+	float releaseTime;
+private:
+	bool canBeAtacket;
+	bool wasAtattacked;
 protected:
 	enum GhostAnimation : unsigned int
 	{
 		LeftRight,
 		Top,
-		Bottom
+		Bottom,
+		Scary,
+		Attacked
 	};
 	GhostAnimation currAnim;
 	GhostAnimation prevAnim;

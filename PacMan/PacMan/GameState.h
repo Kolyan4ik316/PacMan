@@ -1,16 +1,12 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 #include "State.h"
-#include "PacMan.h"
 #include "MainMenu.h"
-#include "Ghost.h"
-#include "Obstacles.h"
-#include "Tiles.h"
 #include "PathFinder.h"
-#include "Food.h"
-#include "HolyFood.h"
 #include "GamePause.h"
 #include "MapManager.h"
+#include "WinMenu.h"
+#include "GameOver.h"
 
 class GameState : public State
 {
@@ -38,8 +34,14 @@ private:
 	std::vector<Entity*> mapItems;
 	std::vector<Obstacles*> obsts;
 	std::vector<Food*> foods;
+	std::vector<HolyFood*> hFoods;
+	std::vector<Ghost*> ghosts;
 	int eatenFood;
 	int numOfTry;
+	float ReleaseTimer;
+	float attackTimer;
+	PMStartPoint* pmstart;
+	GHStartPoint* ghstart;
 };
 
 #endif

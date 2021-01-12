@@ -131,7 +131,6 @@ void Game::InitDiff()
 				State::DiffAtributes tempAttr;
 				while(!tempStr.compare("[End]") == 0)
 				{
-					ifs>> tempStr;
 					if(tempStr.compare("[Num_of_ghosts]") == 0)
 					{
 						ifs>>tempAttr.num_of_ghosts;
@@ -152,13 +151,12 @@ void Game::InitDiff()
 				}
 				states.top()->LoadDifficults(tempAttr);
 			}
-			if(!tempStr.compare("[Hard]") == 0)
+			if(tempStr.compare("[Hard]") == 0)
 			{
 				ifs>> tempStr;
 				State::DiffAtributes tempAttr;
 				while(!tempStr.compare("[End]") == 0)
 				{
-					ifs>> tempStr;
 					if(tempStr.compare("[Num_of_ghosts]") == 0)
 					{
 						ifs>>tempAttr.num_of_ghosts;

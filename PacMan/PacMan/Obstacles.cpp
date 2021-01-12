@@ -15,7 +15,7 @@ void Obstacles::Render()
 	hgeColor color(88.0f, 147.0f, 25.0f, 0.0f);
 	const hgeU32 tempColor = color.GetHWColor();
 	const float offset = 5.0f;
-	for(float i = 0.0f; i < offset; i++)
+	for(float i = 0.0f; i < offset * scaleX; i++)
 	{
 		hge->Gfx_RenderLine(rect.x1, rect.y1 + i, rect.x2, rect.y1 + i, tempColor);
 		hge->Gfx_RenderLine(rect.x1 + i, rect.y1, rect.x1 + i, rect.y2, tempColor);

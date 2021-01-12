@@ -42,7 +42,32 @@ void MapManager::LoadMap()
 					nOfTile++;
 				}
 				break;
+			case 72:
+				if(nOfTile < width * height)
+				{
+					mapItems->push_back(new HolyFood(hge));
+					mapItems->back()->SetPosition(tiles->at(nOfTile)->GetOrigin());
+					nOfTile++;
+				}
+				break;
+			case 80:
+				if(nOfTile < width * height)
+				{
+					mapItems->push_back(new PMStartPoint(hge));
+					mapItems->back()->SetPosition(tiles->at(nOfTile)->GetOrigin());
+					nOfTile++;
+				}
+				break;
+			case 71:
+				if(nOfTile < width * height)
+				{
+					mapItems->push_back(new GHStartPoint(hge));
+					mapItems->back()->SetPosition(tiles->at(nOfTile)->GetOrigin());
+					nOfTile++;
+				}
+				break;
 			default:
+				tempNumItem = tempNumItem;
 				break;
 
 			};

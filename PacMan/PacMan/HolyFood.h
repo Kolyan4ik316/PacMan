@@ -1,13 +1,14 @@
 #ifndef HOLYFOOD_H
 #define HOLYFOOD_H
 #include "Food.h"
-class HolyFood : public Food
+class HolyFood : public Entity
 {
 public:
 	HolyFood(HGE* hge_in)
 		:
-	Food(hge_in)
+	Entity(hge_in)
 	{
+		isEaten = false;
 		LoadResources();
 	}
 	virtual void LoadResources() override
@@ -21,6 +22,14 @@ public:
 		animation->SetHotSpot(8.0f,8.0f);
 		animation->Play();
 	}
+	virtual void EatFood()
+	{
+		isEaten = true;
+	}
+	virtual const bool IsEaten() const
+	{
+		return isEaten;
+	}
 	virtual void Update(const float& dt) override
 	{
 		animation->Update(dt);
@@ -29,7 +38,7 @@ public:
 	virtual void Render() override
 	{
 		animation->RenderEx(pos.x, pos.y, 0.0f, scaleX * 2.0f, scaleY * 2.0f);
-		hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
+		//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
 	}
 	virtual void FreeResources() override
 	{
@@ -37,9 +46,11 @@ public:
 	}
 	virtual ~HolyFood()
 	{
+		FreeResources();
 		delete animation;
 	}
 private:
 	hgeAnimation* animation;
+	bool isEaten;
 };
 #endif

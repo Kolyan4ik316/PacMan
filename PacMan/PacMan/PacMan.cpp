@@ -45,7 +45,7 @@ void PacMan::Update(const float& dt)
 void PacMan::Render()
 {
 	animation.back()->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY * 1.7f);
-	hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
+	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
 }
 void PacMan::LoadResources()
 {

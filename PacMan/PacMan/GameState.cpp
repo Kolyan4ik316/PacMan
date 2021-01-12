@@ -9,6 +9,8 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	float prevY = originY / scaleY - 300.0f;
 	nMapWidth = 20;
 	nMapHeight = 16;
+	ReleaseTimer = diffs.at(unsigned int(difficult)).release_delay;
+	attackTimer = 5.0f;
 	for(unsigned int i = 0; i < nMapHeight; i++)
 	{
 		for (unsigned int j = 0; j < nMapWidth; j++)
@@ -69,9 +71,46 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 		{
 			foods.push_back((Food*)mapItems.at(i));
 		}
+		if(typeid(HolyFood) == typeid(*mapItems.at(i)))
+		{
+			hFoods.push_back((HolyFood*)mapItems.at(i));
+		}
+		if(typeid(PMStartPoint) == typeid(*mapItems.at(i)))
+		{
+			pmstart = (PMStartPoint*)mapItems.at(i);
+			player->SetPosition(mapItems.at(i)->GetPosition());
+			for (unsigned int i = 0; i < tiles.size(); i++)
+			{
+				if(tiles.at(i)->IsInside(player->GetPosition()))
+				{
+					player->SetStartPoint(tiles.at(i));
+					player->SetPosition(tiles.at(i)->GetOrigin());
+				}
+			}
+		}
+		if(typeid(GHStartPoint) == typeid(*mapItems.at(i)))
+		{
+			ghstart = (GHStartPoint*)mapItems.at(i);
+			for (unsigned int j = 0; j < diffs.at(unsigned int(difficult)).num_of_ghosts; j++)
+			{
+				ghosts.push_back(new Ghost(hge));
+				ghosts.back()->SetPosition(mapItems.at(i)->GetPosition());
+				for (unsigned int i = 0; i < tiles.size(); i++)
+				{
+					if(tiles.at(i)->IsInside(ghosts.back()->GetPosition()))
+					{
+						ghosts.back()->SetStartPoint(tiles.at(i));
+						ghosts.back()->SetPosition(tiles.at(i)->GetOrigin());
+						ghstart->SetPosition(tiles.at(i)->GetOrigin());
+						break;
+					}
+				}
+			}
+			
+		}
 	}
-	player->SetPosition(hgeVector(tiles.at(nMapHeight /2 * nMapWidth + nMapWidth/2)->GetOrigin()));
 	player->SetSize(scaleX, scaleY);
+	//player->SetPosition(hgeVector(tiles.at(nMapHeight /2 * nMapWidth + nMapWidth/2)->GetOrigin()));
 }
 void GameState::LoadResources()
 {
@@ -89,19 +128,19 @@ void GameState::Colision(DynamicEntity* checker, Entity* colisior)
 	hgeVector dir = hgeVector(0.0f, 0.0f);
 	if(checker->Rectangle()->x1 < colisior->Rectangle()->x1)
 	{
-		dir -= hgeVector(8.0f, 0.0f);
+		dir -= hgeVector(1.25f, 0.0f);
 	}
 	if(checker->Rectangle()->x2 > colisior->Rectangle()->x2)
 	{
-		dir += hgeVector(8.0f, 0.0f);
+		dir += hgeVector(1.25f, 0.0f);
 	}
 	if(checker->Rectangle()->y1 < colisior->Rectangle()->y1)
 	{
-		dir -= hgeVector(0.0f, 8.0f);
+		dir -= hgeVector(0.0f, 1.25f);
 	}
 	if(checker->Rectangle()->y2 > colisior->Rectangle()->y2)
 	{
-		dir += hgeVector(0.0f, 8.0f);
+		dir += hgeVector(0.0f, 1.25f);
 	}
 	checker->SetDirection(dir);
 	
@@ -174,14 +213,53 @@ void GameState::UpdateEnemies(Ghost* ghost)
 }
 void GameState::Update(const float& dt)
 {	
-	/*for(unsigned int i = 0; i < mapItems.size(); i++)
-	{
-		mapItems.at(i)->Update(dt);
-	}*/
+	// Process keys
 	UpdateInput(dt);
-	
+	for(unsigned int i = 0; i < tiles.size(); i++)
+	{
+		for(unsigned int j = 0; j < ghosts.size(); j++)
+		{
+			if(tiles.at(i)->IsInside(ghosts.at(j)->GetPosition()))
+			{
+				ghosts.at(j)->nodeStart = tiles.at(i);
+			}
+		for(unsigned int j = 0; j < ghosts.size(); j++)
+		{
+			if(attackTimer > 7.0f)
+			{
+				if(tiles.at(i)->IsInside(player->GetPosition()))
+				{
+					ghosts.at(j)->nodeEnd = tiles.at(i);
+				}
+			}
+			else
+			{
+				if(tiles.at(i)->IsInside(ghstart->GetPosition()))
+				{
+					ghosts.at(j)->nodeEnd = tiles.at(i);
+				}
+			}
+		}
+				
+
+			
+		}
+	}
 	for(unsigned int i = 0; i < obsts.size(); i++)
 	{
+		if(CheckForColiding(player, obsts.at(i)))
+		{
+			Colision(player, obsts.at(i));
+			break;
+		}
+		for (unsigned int j = 0; j < ghosts.size(); j++)
+		{
+			if(CheckForColiding(ghosts.at(j), obsts.at(i)))
+			{
+				Colision(ghosts.at(j), obsts.at(i));
+				break;
+			}
+		}
 		if(CheckForColiding(player, obsts.at(i)))
 		{
 			Colision(player, obsts.at(i));
@@ -201,13 +279,48 @@ void GameState::Update(const float& dt)
 			}
 		}
 	}
-	if(eatenFood == foods.size())
+	for(unsigned int i = 0; i < hFoods.size(); i++)
 	{
-		EndState();
+		if(!hFoods.at(i)->IsEaten())
+		{
+			hFoods.at(i)->Update(dt);
+			if(CheckForColiding(player, hFoods.at(i)))
+			{
+				hFoods.at(i)->EatFood();
+				eatenFood++;
+				for (unsigned int j = 0; j <ghosts.size(); j++)
+				{
+					ghosts.at(j)->SwitchAtacked();
+					attackTimer = 0.0f;
+				}
+			}
+		}
+	}
+	if(eatenFood == foods.size() + hFoods.size())
+	{
+		states->push(new WinMenu(states, hge));
+	}
+	for(unsigned int i = 0; i < ghosts.size(); i++)
+	{
+		if(ghosts.at(i)->releaseTime <= ReleaseTimer)
+		{
+			ghosts.at(i)->releaseTime += dt;
+			break;
+		}
+		
+	}
+	for(unsigned int i = 0; i < ghosts.size(); i++)
+	{
+		if(ghosts.at(i)->releaseTime >= ReleaseTimer)
+		{
+			UpdateEnemies(ghosts.at(i));
+			ghosts.at(i)->Update(dt);
+		}
+		
 	}
 	player->Update(dt);
-	tiles.at(0)->
-	// Process keys
+	attackTimer += dt;
+	
 	// Updating player state
 	
 	/*if(player->IsColiding(ghost->Rectangle()))
@@ -252,9 +365,20 @@ void GameState::Render()
 			foods.at(i)->Render();
 		}
 	}
-	for(unsigned int i = 0; i < tiles.size(); i++)
+	for(unsigned int i = 0; i <hFoods.size(); i++)
+	{
+		if(!hFoods.at(i)->IsEaten())
+		{
+			hFoods.at(i)->Render();
+		}
+	}
+	/*for(unsigned int i = 0; i < tiles.size(); i++)
 	{
 		tiles.at(i)->Render();
+	}*/
+	for(unsigned int i = 0; i < ghosts.size(); i++)
+	{
+		ghosts.at(i)->Render();
 	}
 	// rendering player
 	player->Render();
@@ -324,10 +448,6 @@ void GameState::FreeResources()
 	
 	delete pathfinder;
 	delete mapManager;
-	for (unsigned int i = 0; i < foods.size(); i++)
-	{
-		foods.at(i)->FreeResources();
-	}
 	while(!mapItems.empty())
 	{
 		delete mapItems.back();

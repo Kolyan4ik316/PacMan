@@ -12,6 +12,12 @@ public:
 	{
 		rect.Set(pos.x - (12.0f* scaleX) , pos.y - (12.0f* scaleY) , pos.x +(12.0f * scaleX) , pos.y +( 12.0f * scaleY));
 	}
+	virtual void LoadResources() override
+	{
+	}
+	virtual void FreeResources() override
+	{
+	}
 	virtual void Render() override
 	{
 	}
