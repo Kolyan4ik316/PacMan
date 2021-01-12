@@ -43,6 +43,7 @@ private:
 	PMStartPoint* pmstart;
 	GHStartPoint* ghstart;
 	float playerPunchedTimer;
+	unsigned int numOfLife;
 };
 
 #endif

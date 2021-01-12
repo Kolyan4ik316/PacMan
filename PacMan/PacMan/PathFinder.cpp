@@ -17,7 +17,7 @@ float PathFinder::Heuristic(Tiles* a, Tiles* b)
 }
 void PathFinder::SolveA_Star(DynamicEntity* explorer)
 {
-	if(explorer->TimeForSolvingWasReached() && explorer->prevNodeEnd !=  explorer->nodeEnd) 
+	if(explorer->TimeForSolvingWasReached()) 
 	{
 		// Reset Navigation Graph - default all node states
 		for (unsigned int x = 0; x < nMapWidth; x++)

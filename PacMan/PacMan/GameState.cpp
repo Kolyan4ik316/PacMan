@@ -12,6 +12,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	ReleaseTimer = diffs.at(unsigned int(difficult)).release_delay;
 	attackTimer = 7.0f;
 	playerPunchedTimer = 0.0f;
+	numOfLife = 3;
 	for(unsigned int i = 0; i < nMapHeight; i++)
 	{
 		for (unsigned int j = 0; j < nMapWidth; j++)
@@ -85,6 +86,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 				if(tiles.at(i)->IsInside(player->GetPosition()))
 				{
 					player->SetStartPoint(tiles.at(i));
+					player->SetSpeed(diffs.at(unsigned int(difficult)).pacMan_speed);
 					player->SetPosition(tiles.at(i)->GetOrigin());
 					pmstart->SetPosition(tiles.at(i)->GetOrigin());
 				}
@@ -97,6 +99,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 			{
 				ghosts.push_back(new Ghost(hge));
 				ghosts.back()->SetPosition(mapItems.at(i)->GetPosition());
+				ghosts.back()->SetSpeed(diffs.at(unsigned int(difficult)).speed_of_ghosts);
 				for (unsigned int i = 0; i < tiles.size(); i++)
 				{
 					if(tiles.at(i)->IsInside(ghosts.back()->GetPosition()))
@@ -189,25 +192,6 @@ void GameState::UpdateEnemies(Ghost* ghost)
 		}	
 		
 	}
-	else
-	{
-		if(ghost->GetPosition().x > ghost->nodeEnd->GetOrigin().x)
-		{
-			dir -= hgeVector(1.0f, 0.0f);
-		}
-		if(ghost->GetPosition().x < ghost->nodeEnd->GetOrigin().x)
-		{
-			dir += hgeVector(1.0f, 0.0f);
-		}
-		if(ghost->GetPosition().y < ghost->nodeEnd->GetOrigin().y)
-		{
-			dir += hgeVector(0.0f, 1.0f);
-		}
-		if(ghost->GetPosition().y > ghost->nodeEnd->GetOrigin().y)
-		{
-			dir -= hgeVector(0.0f, 1.0f);
-		}
-	}
 	
 	
 	
@@ -271,7 +255,7 @@ void GameState::Update(const float& dt)
 		{
 			if(playerPunchedTimer > 1.2f)
 			{
-				
+				numOfLife--;
 				player->SwitchWasAttacked();
 				player->SetPosition(pmstart->GetPosition());
 				playerPunchedTimer = 0.0f;
@@ -292,7 +276,6 @@ void GameState::Update(const float& dt)
 			if(CheckForColiding(ghosts.at(j), obsts.at(i)))
 			{
 				Colision(ghosts.at(j), obsts.at(i));
-				break;
 			}
 		}
 		if(CheckForColiding(player, obsts.at(i)))
@@ -323,17 +306,19 @@ void GameState::Update(const float& dt)
 			{
 				hFoods.at(i)->EatFood();
 				eatenFood++;
-				for (unsigned int j = 0; j <ghosts.size(); j++)
-				{
-					//ghosts.at(j)->SwitchAtacked();
-					attackTimer = 0.0f;
-				}
+				
+				attackTimer = 0.0f;
+				
 			}
 		}
 	}
 	if(eatenFood == foods.size() + hFoods.size())
 	{
 		states->push(new WinMenu(states, hge));
+	}
+	if(numOfLife == 0)
+	{
+		states->push(new GameOver(states, hge));
 	}
 	for(unsigned int i = 0; i < ghosts.size(); i++)
 	{
@@ -382,38 +367,13 @@ void GameState::Update(const float& dt)
 	player->Update(dt);
 	attackTimer += dt;
 	playerPunchedTimer += dt;
-	// Updating player state
-	
-	/*if(player->IsColiding(ghost->Rectangle()))
-	{
-		ghost->SetPosition(hgeVector(tiles.at(20 * 9 - 2)->GetOrigin()));
-	}
-	if(player->IsColiding(food->Rectangle()))
-	{
-		food->EatFood();
-	}
-	if(player->IsColiding(holyFood->Rectangle()))
-	{
-		holyFood->EatFood();
-	}
-	//ghost->MoveTo(player->GetPosition(), dt);
-	ghost->Update(dt);
-	obst->Update(dt);
-	if(!food->IsEaten())
-	{
-		food->Update(dt);
-	}
-	if(!holyFood->IsEaten())
-	{
-		holyFood->Update(dt);
-	}*/
 	
 }
 void GameState::Render()
 {
-	/*for(unsigned int i = 0; i < mapItems.size(); i++)
+	/*for(unsigned int i = 0; i < tiles.size(); i++)
 	{
-		mapItems.at(i)->Render();
+		tiles.at(i)->Render();
 	}*/
 	for(unsigned int i = 0; i <obsts.size(); i++)
 	{
@@ -479,26 +439,6 @@ void GameState::UpdateInput(const float& dt)
 	{
 		EndState();
 	};
-
-	/*if(player->IsColiding(obst->Rectangle()))
-	{
-		if(player->Rectangle()->x1 < obst->Rectangle()->x1)
-		{
-			dir -= hgeVector(1.0f, 0.0f);
-		}
-		if(player->Rectangle()->x2 > obst->Rectangle()->x2)
-		{
-			dir += hgeVector(1.0f, 0.0f);
-		}
-		if(player->Rectangle()->y1 < obst->Rectangle()->y1)
-		{
-			dir -= hgeVector(0.0f, 1.0f);
-		}
-		if(player->Rectangle()->y2 > obst->Rectangle()->y2)
-		{
-			dir += hgeVector(0.0f, 1.0f);
-		}
-	}*/
 
 	player->SetDirection(dir);
 
