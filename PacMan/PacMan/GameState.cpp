@@ -10,7 +10,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	nMapWidth = 20;
 	nMapHeight = 16;
 	ReleaseTimer = diffs.at(unsigned int(difficult)).release_delay;
-	attackTimer = 5.0f;
+	attackTimer = 7.0f;
 	for(unsigned int i = 0; i < nMapHeight; i++)
 	{
 		for (unsigned int j = 0; j < nMapWidth; j++)
@@ -225,19 +225,20 @@ void GameState::Update(const float& dt)
 			}
 		for(unsigned int j = 0; j < ghosts.size(); j++)
 		{
-			if(attackTimer > 7.0f)
+			if(ghosts.at(j)->CanBeAtacket() || ghosts.at(j)->WasAttacked())
 			{
-				if(tiles.at(i)->IsInside(player->GetPosition()))
+				if(tiles.at(i)->IsInside(ghstart->GetPosition()))
 				{
 					ghosts.at(j)->nodeEnd = tiles.at(i);
 				}
 			}
 			else
 			{
-				if(tiles.at(i)->IsInside(ghstart->GetPosition()))
+				if(tiles.at(i)->IsInside(player->GetPosition()))
 				{
 					ghosts.at(j)->nodeEnd = tiles.at(i);
 				}
+				
 			}
 		}
 				
@@ -290,7 +291,7 @@ void GameState::Update(const float& dt)
 				eatenFood++;
 				for (unsigned int j = 0; j <ghosts.size(); j++)
 				{
-					ghosts.at(j)->SwitchAtacked();
+					//ghosts.at(j)->SwitchAtacked();
 					attackTimer = 0.0f;
 				}
 			}
@@ -315,6 +316,18 @@ void GameState::Update(const float& dt)
 		{
 			UpdateEnemies(ghosts.at(i));
 			ghosts.at(i)->Update(dt);
+			if(attackTimer < 7.0f && !ghosts.at(i)->CanBeAtacket() && !ghosts.at(i)->WasAttacked())
+			{
+				ghosts.at(i)->SwitchAtacked();
+			}
+			if(ghosts.at(i)->CanBeAtacket() && !ghosts.at(i)->WasAttacked())
+			{
+				ghosts.at(i)->SwitchWasAtacked();
+			}
+			if(!ghosts.at(i)->CanBeAtacket() && ghosts.at(i)->WasAttacked())
+			{
+				ghosts.at(i)->SwitchWasAtacked();
+			}
 		}
 		
 	}
