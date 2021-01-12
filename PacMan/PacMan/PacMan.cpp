@@ -11,37 +11,19 @@ PacMan::PacMan(HGE* hge_in)
 	speed = 170.0f;
 	LoadResources();
 	angle = 0.0f;
-	animation.back()->Play();
+	curAnim = PacManAnimation::Common;
+	prevAnim = curAnim; 
+	animation.at(unsigned int(curAnim))->Play();
 	wasAttacked = false;
 }
 void PacMan::Update(const float& dt)
 {
-	// Do some movement calculations
-	if(dir.y == -1)
-	{
-		angle = 4.71239f;
-		animation.back()->SetFlip(true, false, true);
-	}
-	if(dir.x == -1)
-	{
-		angle = 0.0f;
-		animation.back()->SetFlip(false, false, true);
-		
-	}
-	if(dir.y == 1)
-	{
-		angle = 4.71239f;
-		animation.back()->SetFlip(false, false, true);
-	}
-	if(dir.x == 1)
-	{
-		angle = 0.0f;
-		animation.back()->SetFlip(true, false, true);	
-	}
+	ChoseAnimation();
 	pos.x+=dir.x * speed * scaleX * dt;
 	pos.y+=dir.y * speed * scaleY * dt;
 	rect.Set(pos.x - (12.0f * scaleX), pos.y - (12.0f * scaleY), pos.x + (12.0f * scaleX), pos.y + (12.0f * scaleY));
-	animation.back()->Update(dt);
+	prevAnim = curAnim; 
+	animation.at(unsigned int(curAnim))->Update(dt);
 }
 const bool PacMan::WasAttacked() const
 {
@@ -53,7 +35,7 @@ void PacMan::SwitchWasAttacked()
 }
 void PacMan::Render()
 {
-	animation.back()->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY * 1.7f);
+	animation.at(unsigned int(curAnim))->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY * 1.7f);
 	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
 }
 void PacMan::LoadResources()
@@ -63,11 +45,54 @@ void PacMan::LoadResources()
 	{
 		throw(std::exception("Can't find pacman.png"));
 	}
-	animation.push_back(new hgeAnimation(tex, 3, 12, 2, 2, 16, 16)); 
+	animation.push_back(new hgeAnimation(tex, 3, 12, 2, 2, 16, 16));
+	animation.back()->SetHotSpot(7,7);
+	animation.push_back(new hgeAnimation(tex, 13, 12, 52, 2, 17, 15));
+	animation.back()->SetHotSpot(8,8);
 	//sprite = new hgeSprite(tex, 2, 2, 14, 14);
 	//sprite=new hgeSprite(tex, 96, 64, 32, 32);
-	//animation->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);
-	animation.back()->SetHotSpot(7,7);
+	
+	//animation.back()->SetBlendMode(BLEND_COLORMUL |BLEND_ALPHABLEND | BLEND_NOZWRITE);
+	//animation.back()->SetColor(00000000, BLEND_ALPHABLEND);
+	
+}
+void PacMan::ChoseAnimation()
+{
+	// Do some movement calculations
+	if(!WasAttacked())
+	{
+		curAnim = PacManAnimation::Common;
+		if(dir.y == -1)
+		{
+			angle = 4.71239f;
+			animation.at(unsigned int(Common))->SetFlip(true, false, true);
+		}
+		if(dir.x == -1)
+		{
+			angle = 0.0f;
+			animation.at(unsigned int(Common))->SetFlip(false, false, true);
+			
+		}
+		if(dir.y == 1)
+		{
+			angle = 4.71239f;
+			animation.at(unsigned int(Common))->SetFlip(false, false, true);
+		}
+		if(dir.x == 1)
+		{
+			angle = 0.0f;
+			animation.at(unsigned int(Common))->SetFlip(true, false, true);	
+		}
+	}
+	else
+	{
+		curAnim = PacManAnimation::Attacked;
+	}
+	if(prevAnim != curAnim)
+	{
+		animation.at(unsigned int(prevAnim))->Stop();
+		animation.at(unsigned int(curAnim))->Play();
+	}
 }
 void PacMan::FreeResources()
 {

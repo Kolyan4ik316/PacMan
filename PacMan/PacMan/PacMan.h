@@ -11,7 +11,7 @@ public:
 	//Render
 	virtual void Render() override;
 	//virtual void Render(const float& sizeX, const float& sizeY) override;
-	virtual void ChoseAnimation() override{};
+	virtual void ChoseAnimation() override;
 	virtual void LoadResources() override;
 	virtual void FreeResources() override;
 	virtual const bool WasAttacked() const;
@@ -24,6 +24,8 @@ private:
 		Attacked
 	};
 	bool wasAttacked;
+	PacManAnimation curAnim;
+	PacManAnimation prevAnim;
 
 };
 #endif

@@ -11,6 +11,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	nMapHeight = 16;
 	ReleaseTimer = diffs.at(unsigned int(difficult)).release_delay;
 	attackTimer = 7.0f;
+	playerPunchedTimer = 0.0f;
 	for(unsigned int i = 0; i < nMapHeight; i++)
 	{
 		for (unsigned int j = 0; j < nMapWidth; j++)
@@ -235,7 +236,7 @@ void GameState::Update(const float& dt)
 							ghosts.at(j)->nodeEnd = tiles.at(i);
 							if(ghosts.at(j)->nodeEnd == ghosts.at(j)->nodeStart)
 							{
-								if(ghosts.at(j)->CanBeAtacket())
+								if(ghosts.at(j)->CanBeAtacket() && !ghosts.at(j)->WasAttacked())
 								{
 									ghosts.at(j)->SwitchAtacked();
 								}
@@ -259,22 +260,23 @@ void GameState::Update(const float& dt)
 				
 				else
 				{
-					if(tiles.at(i)->IsInside(ghstart->GetPosition()))
-					{
-						ghosts.at(j)->nodeStart = tiles.at(i);
-						ghosts.at(j)->nodeEnd = tiles.at(i);
-						ghosts.at(j)->SetPosition(tiles.at(i)->GetOrigin());
-						ghosts.at(j)->releaseTime = 0.0f;
-					}
+
+					ghosts.at(j)->SetPosition(ghstart->GetPosition());
+					ghosts.at(j)->releaseTime = 0.0f;
+
 				}
 			}
 		}
 		if(player->WasAttacked())
 		{
-			if(tiles.at(i)->IsInside(pmstart->GetPosition()))
+			if(playerPunchedTimer > 1.2f)
 			{
+				
 				player->SwitchWasAttacked();
-				player->SetPosition(tiles.at(i)->GetOrigin());
+				player->SetPosition(pmstart->GetPosition());
+				playerPunchedTimer = 0.0f;
+					
+
 			}
 		}
 	}
@@ -357,6 +359,7 @@ void GameState::Update(const float& dt)
 			{
 				if(ghosts.at(i)->IsColiding(player->Rectangle()))
 				{
+					playerPunchedTimer = 0.0f;
 					player->SwitchWasAttacked();
 				}
 			}
@@ -378,7 +381,7 @@ void GameState::Update(const float& dt)
 	
 	player->Update(dt);
 	attackTimer += dt;
-	
+	playerPunchedTimer += dt;
 	// Updating player state
 	
 	/*if(player->IsColiding(ghost->Rectangle()))

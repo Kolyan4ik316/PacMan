@@ -42,6 +42,7 @@ private:
 	float attackTimer;
 	PMStartPoint* pmstart;
 	GHStartPoint* ghstart;
+	float playerPunchedTimer;
 };
 
 #endif
