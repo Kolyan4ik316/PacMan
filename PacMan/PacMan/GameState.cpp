@@ -57,8 +57,8 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 		for (unsigned int y = 0; y < nMapHeight; y++)
 		{
 			tiles[y * nMapWidth + x]->parent = NULL;
-			tiles[y * nMapWidth + x]->fGlobalGoal = std::numeric_limits<float>::infinity();
-			tiles[y * nMapWidth + x]->fLocalGoal = std::numeric_limits<float>::infinity();
+			tiles[y * nMapWidth + x]->fGlobalGoal = FLT_MAX;
+			tiles[y * nMapWidth + x]->fLocalGoal = FLT_MAX;
 			tiles[y * nMapWidth + x]->bVisited = false;
 		}
 	}
@@ -217,21 +217,31 @@ void GameState::Update(const float& dt)
 					{
 						if(tiles.at(i)->IsInside(ghstart->GetPosition()))
 						{
-							ghosts.at(j)->nodeEnd = tiles.at(i);
-							if(ghosts.at(j)->nodeEnd == ghosts.at(j)->nodeStart)
+							
+							if(ghosts.at(j)->WasAttacked())
 							{
-								if(ghosts.at(j)->CanBeAtacket() && !ghosts.at(j)->WasAttacked())
+								ghosts.at(j)->SetPosition(ghstart->GetPosition());
+								
+								ghosts.at(j)->SwitchWasAtacked();
+								
+							}
+							if(ghosts.at(j)->CanBeAtacket())
+							{
+								ghosts.at(j)->nodeEnd = tiles.at(i);
+								if(ghosts.at(j)->nodeEnd == ghosts.at(j)->nodeStart && ghosts.at(j)->CanBeAtacket())
 								{
 									ghosts.at(j)->SwitchAtacked();
 								}
-								else if(ghosts.at(j)->WasAttacked())
-								{
-									ghosts.at(j)->SwitchWasAtacked();
-								}
 							}
+
+
+
 						}
 						
+							
+							
 					}
+						
 					else
 					{
 						if(tiles.at(i)->IsInside(player->GetPosition()))
@@ -371,10 +381,6 @@ void GameState::Update(const float& dt)
 }
 void GameState::Render()
 {
-	/*for(unsigned int i = 0; i < tiles.size(); i++)
-	{
-		tiles.at(i)->Render();
-	}*/
 	for(unsigned int i = 0; i <obsts.size(); i++)
 	{
 		obsts.at(i)->Render();
