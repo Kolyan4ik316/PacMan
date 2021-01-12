@@ -35,6 +35,7 @@ void MainMenu::Update(const float& dt)
 				states->push(new Options(states, hge));
 				break;
 			case 3:
+				gui->Enter();
 				gui->SetFocus(1);
 				break;
 			case 4:
