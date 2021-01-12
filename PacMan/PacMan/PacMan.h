@@ -14,9 +14,16 @@ public:
 	virtual void ChoseAnimation() override{};
 	virtual void LoadResources() override;
 	virtual void FreeResources() override;
+	virtual const bool WasAttacked() const;
+	virtual void SwitchWasAttacked();
 	virtual ~PacMan();
 private:
-
+	enum PacManAnimation : unsigned int
+	{
+		Common,
+		Attacked
+	};
+	bool wasAttacked;
 
 };
 #endif

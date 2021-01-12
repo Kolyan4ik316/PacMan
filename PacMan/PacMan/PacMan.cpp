@@ -12,6 +12,7 @@ PacMan::PacMan(HGE* hge_in)
 	LoadResources();
 	angle = 0.0f;
 	animation.back()->Play();
+	wasAttacked = false;
 }
 void PacMan::Update(const float& dt)
 {
@@ -41,6 +42,14 @@ void PacMan::Update(const float& dt)
 	pos.y+=dir.y * speed * scaleY * dt;
 	rect.Set(pos.x - (12.0f * scaleX), pos.y - (12.0f * scaleY), pos.x + (12.0f * scaleX), pos.y + (12.0f * scaleY));
 	animation.back()->Update(dt);
+}
+const bool PacMan::WasAttacked() const
+{
+	return wasAttacked;
+}
+void PacMan::SwitchWasAttacked()
+{
+	wasAttacked = !wasAttacked;
 }
 void PacMan::Render()
 {
