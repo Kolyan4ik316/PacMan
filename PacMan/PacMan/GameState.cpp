@@ -233,7 +233,19 @@ void GameState::Update(const float& dt)
 						if(tiles.at(i)->IsInside(ghstart->GetPosition()))
 						{
 							ghosts.at(j)->nodeEnd = tiles.at(i);
+							if(ghosts.at(j)->nodeEnd == ghosts.at(j)->nodeStart)
+							{
+								if(ghosts.at(j)->CanBeAtacket())
+								{
+									ghosts.at(j)->SwitchAtacked();
+								}
+								else if(ghosts.at(j)->WasAttacked())
+								{
+									ghosts.at(j)->SwitchWasAtacked();
+								}
+							}
 						}
+						
 					}
 					else
 					{
@@ -340,19 +352,23 @@ void GameState::Update(const float& dt)
 			{
 				ghosts.at(i)->SwitchAtacked();
 			}
-			if(ghosts.at(i)->CanBeAtacket() && !ghosts.at(i)->WasAttacked())
-			{
-				ghosts.at(i)->SwitchWasAtacked();
-			}
-			if(!ghosts.at(i)->CanBeAtacket() && ghosts.at(i)->WasAttacked() && attackTimer > 7.0f)
-			{
-				ghosts.at(i)->SwitchWasAtacked();
-			}
+
 			if(attackTimer > 7.0f && !ghosts.at(i)->CanBeAtacket() && !ghosts.at(i)->WasAttacked())
 			{
 				if(ghosts.at(i)->IsColiding(player->Rectangle()))
 				{
 					player->SwitchWasAttacked();
+				}
+			}
+			else if (ghosts.at(i)->CanBeAtacket())
+			{
+				if(ghosts.at(i)->IsColiding(player->Rectangle()))
+				{
+					if(!ghosts.at(i)->WasAttacked())
+					{
+						ghosts.at(i)->SwitchWasAtacked();
+					}
+					
 				}
 			}
 				

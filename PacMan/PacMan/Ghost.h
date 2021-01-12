@@ -16,8 +16,8 @@ public:
 	virtual void FreeResources() override;
 	virtual void SetDestination(const hgeVector& pos_in);
 	virtual void SwitchAtacked();
-	virtual const  bool CanBeAtacket() const;
-	virtual const bool WasAttacked() const;
+	virtual bool CanBeAtacket();
+	virtual bool WasAttacked();
 	virtual void SwitchWasAtacked();
 	virtual ~Ghost();
 	float releaseTime;

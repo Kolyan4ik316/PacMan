@@ -29,24 +29,42 @@ void Ghost::LoadResources()
 	animation.back()->SetHotSpot(7,7);
 	animation.push_back(new hgeAnimation(tex, 2, 6, 70, 17, 16, 16)); 
 	animation.back()->SetHotSpot(7,7);
+	animation.push_back(new hgeAnimation(tex, 2, 6, 206, 17, 16, 16)); 
+	animation.back()->SetHotSpot(7,7);
+	animation.push_back(new hgeAnimation(tex, 1, 6, 256, 17, 16, 16)); 
+	animation.back()->SetHotSpot(7,7);
 }
 void Ghost::ChoseAnimation()
 {
-	if(std::abs(destination.x) > std::abs(destination.y))
+	
+	if(!CanBeAtacket() && !WasAttacked())
 	{
-		currAnim = GhostAnimation::LeftRight;
-	}
-	else
-	{
-		if(destination.y > 0.0f)
+		if(std::abs(destination.x) > std::abs(destination.y))
 		{
-			currAnim = GhostAnimation::Top;
+			currAnim = GhostAnimation::LeftRight;
 		}
 		else
 		{
-			currAnim = GhostAnimation::Bottom;
+			if(destination.y > 0.0f)
+			{
+				currAnim = GhostAnimation::Top;
+			}
+			else
+			{
+				currAnim = GhostAnimation::Bottom;
+			}
 		}
+		
 	}
+	else if (CanBeAtacket() && !WasAttacked())
+	{
+		currAnim = GhostAnimation::Scary;
+	}
+	else if(WasAttacked())
+	{
+		currAnim = GhostAnimation::Attacked;
+	}
+	
 	if(prevAnim != currAnim)
 	{
 		animation.at(unsigned int(prevAnim))->Stop();
@@ -87,7 +105,7 @@ void Ghost::SwitchAtacked()
 {
 	canBeAtacket = !canBeAtacket;
 }
-const bool Ghost::WasAttacked() const
+bool Ghost::WasAttacked()
 {
 	return wasAtattacked;
 }
@@ -95,7 +113,7 @@ void Ghost::SwitchWasAtacked()
 {
 	wasAtattacked = !wasAtattacked;
 }
-const bool Ghost::CanBeAtacket() const
+bool Ghost::CanBeAtacket()
 {
 	return canBeAtacket;
 }
