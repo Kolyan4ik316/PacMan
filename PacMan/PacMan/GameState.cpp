@@ -130,7 +130,12 @@ void GameState::UpdateEnemies(Ghost* ghost)
 				ghost->SetGloabalGoal(tiles.at(i));
 			}
 		}*/
-		Tiles* tempTile = tiles.at(unsigned int(ghost->pathToTarget.front().y * nMapWidth + ghost->pathToTarget.front().x));
+		Tiles* tempTile = tiles.at(unsigned int(ghost->pathToTarget.back().y * nMapWidth + ghost->pathToTarget.back().x));
+		if(tempTile->IsInside(ghost->GetPosition()))
+		{
+			ghost->pathToTarget.pop_back();
+		}
+		tempTile = tiles.at(unsigned int(ghost->pathToTarget.back().y * nMapWidth + ghost->pathToTarget.back().x));
 		ghost->SetDestination(tempTile->GetOrigin());
 		if(ghost->GetPosition().x > tempTile->GetOrigin().x)
 		{
@@ -165,7 +170,7 @@ void GameState::Update(const float& dt)
 		{
 			if(tiles.at(i)->IsInside(ghosts.at(j)->GetPosition()))
 			{
-				ghosts.at(j)->SetGloabalStart(tiles.at(i)->GetPosition());
+				//ghosts.at(j)->SetGloabalStart(tiles.at(i)->GetPosition());
 				ghosts.at(j)->SetPosTile(tiles.at(i)->GetPosition());
 			}
 			for(unsigned int j = 0; j < ghosts.size(); j++)
@@ -237,17 +242,6 @@ void GameState::Update(const float& dt)
 	}
 	for(unsigned int i = 0; i < obsts.size(); i++)
 	{
-		for(unsigned int j = 0; j < tiles.size(); j++)
-		{
-			if(tiles.at(j)->IsInside(obsts.at(i)->GetPosition()))
-			{
-				tiles.at(j)->HaveObstacles(true);
-			}
-			else
-			{
-				tiles.at(j)->HaveObstacles(false);
-			}
-		}
 		if(CheckForColiding(player, obsts.at(i)))
 		{
 			Colision(player, obsts.at(i));
@@ -372,13 +366,18 @@ void GameState::Render()
 			hFoods.at(i)->Render();
 		}
 	}
-	for(unsigned int i = 0; i < tiles.size(); i++)
+	/*for(unsigned int i = 0; i < tiles.size(); i++)
 	{
 		tiles.at(i)->Render();
-	}
+	}*/
 	for(unsigned int i = 0; i < ghosts.size(); i++)
 	{
 		ghosts.at(i)->Render();
+		for(unsigned int j = 0; j <ghosts.at(i)->pathToTarget.size(); j++)
+		{
+			tiles.at(unsigned int (ghosts.at(i)->pathToTarget.at(j).y * nMapWidth + ghosts.at(i)->pathToTarget.at(j).x))->Render();
+		}
+		
 	}
 	// rendering player
 	player->Render();

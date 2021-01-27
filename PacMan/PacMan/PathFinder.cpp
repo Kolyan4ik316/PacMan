@@ -101,12 +101,12 @@ std::vector<hgeVector> PathFinder::CalculatePathFromNode(Node* node)
 		calcPath.push_back(tempPos);
 		curNode = curNode->parent;
 	}
-	while(!checkedNodes.empty())
+	/*while(!checkedNodes.empty())
 	{
 		delete checkedNodes.back();
 		checkedNodes.back() = NULL;
 		checkedNodes.pop_back();
-	}
+	}*/
 	return calcPath;
 	
 }
@@ -137,15 +137,15 @@ std::vector<Node*> PathFinder::GetNeighbourNodes(Node* node)
 }
 void PathFinder::Render()
 {
-	for(unsigned int i = 0; i < checkedNodes.size(); i++)
+	for(unsigned int i = 0; i < pathToTarget.size(); i++)
 	{
-		(*tiles).at(unsigned int(checkedNodes.at(i)->pos.y * nMapWidth  + checkedNodes.at(i)->pos.x))->RenderChosen();
+		(*tiles).at(unsigned int(pathToTarget.at(i).y * nMapWidth  + pathToTarget.at(i).x))->RenderChosen();
 	}
 }
 
 PathFinder::~PathFinder()
 {
-	/*while(!checkedNodes.empty())
+	while(!checkedNodes.empty())
 	{
 		if(checkedNodes.back())
 		{
@@ -153,5 +153,5 @@ PathFinder::~PathFinder()
 			checkedNodes.back() = NULL;
 		}
 		checkedNodes.pop_back();
-	}*/
+	}
 }
