@@ -4,36 +4,53 @@
 class Tiles
 {
 public:
-	Tiles(HGE* hge_in, const hgeVector& pos_in, float scaleX_in, float scaleY_in)
+	Tiles(HGE* hge_in, const hgeVector& pos_in)
 		:
 	hge(hge_in),
-	pos(pos_in),
-	scaleX(scaleX_in),
-	scaleY(scaleY_in)
+	pos(pos_in)
 	{
 		haveObstacles = false;
-		rect.Set(pos.x * scaleX, pos.y * scaleY, (pos.x + 36.0f) * scaleX, (pos.y + 36.0f) * scaleY);
-		bVisited = false;
+		float posX = originX / scaleX - 400.0f + (36.0f * pos.x);
+		float posY = originY / scaleY - 300.0f + (36.0f * pos.y);
+		worldPos = hgeVector(posX, posY);
+		rect.Set(worldPos.x * scaleX, worldPos.y * scaleY, (worldPos.x + 36.0f) * scaleX, (worldPos.y + 36.0f) * scaleY);
+		
 	}
 	virtual void SetPosition(const hgeVector& pos_in)
 	{
 		pos = pos_in;
 	};
+	const hgeVector GetWorldPos() const 
+	{
+		return worldPos;
+	};
+	virtual void SetTargetPosition(const hgeVector& pos_in)
+	{
+		targetPos = pos_in;
+	};
 	virtual void Update(const float& dt)
 	{
-		rect.Set(pos.x * scaleX, pos.y * scaleY, (pos.x + 36.0f) * scaleX, (pos.y + 36.0f) * scaleY);
+		//rect.Set(worldPos.x * scaleX, worldPos.y * scaleY, (worldPos.x + 36.0f) * scaleX, (worldPos.y + 36.0f) * scaleY);
 	}
 	virtual void Render()
 	{
 		hgeColor* color;
-		if(bVisited)
-		{
-			color = &hgeColor(255.0f, 0.0f, 255.0f, 0.0f);
-		}
-		else
-		{
-			color = &hgeColor(155.0f, 0.0f, 155.0f, 0.0f);
-		}
+		//color = &hgeColor(255.0f, 0.0f, 255.0f, 0.0f);
+	
+
+		color = &hgeColor(155.0f, 0.0f, 155.0f, 0.0f);
+
+		const hgeU32 tempColor = color->GetHWColor();
+		hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y1, tempColor);
+		hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x1, rect.y2, tempColor);
+		hge->Gfx_RenderLine(rect.x1, rect.y2, rect.x2, rect.y2, tempColor);
+		hge->Gfx_RenderLine(rect.x2, rect.y1, rect.x2, rect.y2, tempColor);
+		hge->Gfx_RenderLine(rect.x1, rect.y1, GetOrigin().x, GetOrigin().y, tempColor);
+	}
+	virtual void RenderChosen()
+	{
+		hgeColor* color;
+		color = &hgeColor(255.0f, 0.0f, 255.0f, 0.0f);
 		const hgeU32 tempColor = color->GetHWColor();
 		hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y1, tempColor);
 		hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x1, rect.y2, tempColor);
@@ -62,18 +79,29 @@ public:
 		return haveObstacles;
 	}
 	virtual ~Tiles(){};
+public:
+	static void SetScale(const float& scaleX_in, const float& scaleY_in)
+	{
+		scaleX = scaleX_in;
+		scaleY = scaleY_in;
+	}
+	static void SetOrigin(const float& originX_in, const float& originY_in)
+	{
+		originX = originX_in;
+		originY = originY_in;
+	}
 private:
+	hgeVector worldPos;
 	hgeRect rect;
 	HGE* hge;
 	bool haveObstacles;
-	float scaleX;
-	float scaleY;
+	static float scaleX;
+	static float scaleY;
+	static float originX;
+	static float originY;
 public:
-	float fGlobalGoal;				// Distance to goal so far
-	float fLocalGoal;
 	hgeVector pos;
-	bool bVisited;			// Have we searched this node before?
-	std::vector<Tiles*> vecNeighbours;	// Connections to neighbours
-	Tiles* parent;					// Node connecting to this node that offers shortest parent
+	hgeVector targetPos;
+
 };
 #endif

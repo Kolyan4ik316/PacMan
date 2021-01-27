@@ -1,6 +1,7 @@
 #ifndef GHOST_H
 #define GHOST_H
 #include "DynamicEntity.h"
+#include "PathFinder.h"
 class Ghost : public DynamicEntity
 {
 public:
@@ -15,6 +16,8 @@ public:
 	virtual void LoadResources() override;
 	virtual void FreeResources() override;
 	virtual void SetDestination(const hgeVector& pos_in);
+	virtual void SetPathTo(const hgeVector& target);
+	virtual void SetPathFinder(class PathFinder* pathFinder_in);
 	virtual void SwitchAtacked();
 	virtual bool CanBeAtacket();
 	virtual bool WasAttacked();
@@ -35,5 +38,9 @@ protected:
 	};
 	GhostAnimation currAnim;
 	GhostAnimation prevAnim;
+	class PathFinder* pathFinder;
+
+public:
+	std::vector<hgeVector> pathToTarget;
 };
 #endif

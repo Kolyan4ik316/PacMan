@@ -6,25 +6,52 @@
 class PathFinder
 {
 public:
+	struct Node
+	{
+		Node(const hgeVector& pos_in, hgeVector targetPos_in, int G_in, Node* parent_in);
+		int F;
+		int G;
+		int H;
+		Node* parent;
+		hgeVector pos;
+		hgeVector targetPos;
+		~Node();
+	};
+		
+public:
 	PathFinder(unsigned int nMapWidth_in, unsigned int nMapHeight_in, std::vector<Tiles*>* tiles_in);
-	void SolveA_Star(DynamicEntity* explorer);
-	static float Distance(Tiles* a, Tiles* b);
-	static float Heuristic(Tiles* a, Tiles* b);
+	std::vector<hgeVector> GetPath(const hgeVector& startPos, const hgeVector& target);
+	std::vector<hgeVector> CalculatePathFromNode(Node* node);
+	static bool LessFValue(Node* rhs, Node* lhs)
+	{
+		return rhs->F < lhs->F;
+	}
+	const bool IsExist(std::vector<Node*>* rhs, Node* nodeForChek) const
+	{
+		for(unsigned int i = 0; i < rhs->size(); i++)
+		{
+			
+			if(rhs->at(i)->pos.x == nodeForChek->pos.x && rhs->at(i)->pos.y == nodeForChek->pos.y)
+			{
+				return true;
+			}
+			
+		}
+		return false;
+	}
+	void Render();
 	virtual ~PathFinder();
-	static bool LessfGlobalGoal(const Tiles* lhs, const Tiles* rhs)
-	{
-		return lhs->fGlobalGoal < rhs->fGlobalGoal;
-	}
-	static bool LessfLocalGoal(const Tiles* lhs, const Tiles* rhs)
-	{
-		return std::fabs(lhs->fLocalGoal)< std::fabs(rhs->fLocalGoal);
-	}
 private:
+	std::vector<hgeVector> pathToTarget;
+	std::vector<Tiles*>* tiles;
+	std::vector<Node*> GetNeighbourNodes(Node* node);
+private:
+	std::vector<Node*> checkedNodes;
+	std::vector<Node*> waitingNodes;
+	hgeVector targetPos;
 	unsigned int nMapWidth;
 	unsigned int nMapHeight;
-	std::vector<Tiles*>* tiles;
-	
 };
-
+typedef PathFinder::Node Node;
 
 #endif

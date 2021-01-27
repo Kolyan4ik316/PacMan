@@ -9,12 +9,11 @@ Ghost::Ghost(HGE* hge_in)
 	animation.back()->Play();
 	currAnim = GhostAnimation::LeftRight;
 	prevAnim = currAnim;
-	nodeStart = NULL;
-	nodeEnd = NULL;
 	canSolve = 0.0f;
 	releaseTime = 0.0f;
 	canBeAtacket = false;
 	wasAtattacked = false;
+	pathFinder = NULL;
 }
 void Ghost::LoadResources()
 {
@@ -33,6 +32,10 @@ void Ghost::LoadResources()
 	animation.back()->SetHotSpot(7,7);
 	animation.push_back(new hgeAnimation(tex, 1, 6, 256, 17, 16, 16)); 
 	animation.back()->SetHotSpot(7,7);
+}
+void Ghost::SetPathFinder(PathFinder* pathFinder_in)
+{
+	pathFinder = pathFinder_in;
 }
 void Ghost::ChoseAnimation()
 {
@@ -91,6 +94,14 @@ void Ghost::SetDestination(const hgeVector& pos_in)
 	}
 	
 }
+void Ghost::SetPathTo(const hgeVector& target)
+{
+	/*if(canSolve >= 1.0f)
+	{
+		pathToTarget = pathFinder->GetPath(pos_tile, target);
+	}*/
+	
+}
 void Ghost::Update(const float& dt)
 {
 	pos.x+=dir.x * speed * scaleX * dt;
@@ -120,6 +131,7 @@ bool Ghost::CanBeAtacket()
 void Ghost::Render()
 {
 	animation.at(unsigned int(currAnim))->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY* 1.7f);
+	//pathFinder->Render();
 	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
 }
 /*void Ghost::Render(const float& sizeX, const float& sizeY)
@@ -136,5 +148,9 @@ void Ghost::FreeResources()
 }
 Ghost::~Ghost()
 {
+	if(pathFinder)
+	{
+		delete pathFinder;
+	}
 	FreeResources();
 }

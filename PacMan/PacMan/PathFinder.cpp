@@ -1,4 +1,20 @@
 #include "PathFinder.h"
+
+PathFinder::Node::Node(const hgeVector& pos_in, hgeVector targetPos_in, int G_in, Node* parent_in)
+	:
+	pos(pos_in),
+	targetPos(targetPos_in),
+	G(G_in),
+	parent(parent_in)
+{
+	H = int(std::abs(targetPos.x - pos.x) + std::abs(targetPos.y - pos.y));
+	F = G + H;
+}
+PathFinder::Node::~Node()
+{
+
+}
+
 PathFinder::PathFinder(unsigned int nMapWidth_in, unsigned int nMapHeight_in, std::vector<Tiles*>* tiles_in)
 	:
 	nMapWidth(nMapWidth_in),
@@ -7,74 +23,135 @@ PathFinder::PathFinder(unsigned int nMapWidth_in, unsigned int nMapHeight_in, st
 {
 
 }
-float PathFinder::Distance(Tiles* a, Tiles* b)
+std::vector<hgeVector> PathFinder::GetPath(const hgeVector& startPos,const hgeVector& target)
 {
-	return sqrtf((a->pos.x - b->pos.x) * (a->pos.x - b->pos.x) + (a->pos.y - b->pos.y) * (a->pos.y - b->pos.y));
-}
-float PathFinder::Heuristic(Tiles* a, Tiles* b)
-{
-	return Distance(a, b);
-}
-void PathFinder::SolveA_Star(DynamicEntity* explorer)
-{
-	if(explorer->TimeForSolvingWasReached()) 
+	
+	if(target.x == startPos.x && target.y == startPos.y)
 	{
-		// Reset Navigation Graph - default all node states
-		for (unsigned int x = 0; x < nMapWidth; x++)
-		{
-			for (unsigned int y = 0; y < nMapHeight; y++)
-			{
-				(*tiles)[y * nMapWidth + x]->bVisited = false;
-				(*tiles)[y * nMapWidth + x]->fGlobalGoal = FLT_MAX;
-				(*tiles)[y * nMapWidth + x]->fLocalGoal = FLT_MAX;
-				(*tiles)[y * nMapWidth + x]->parent = NULL;	// No parents
-			}
-		}
-		Tiles* nodeCurrent = explorer->nodeStart;
-		explorer->nodeStart->fLocalGoal = 0.0f;
-		explorer->nodeStart->fGlobalGoal = Heuristic(explorer->nodeStart, explorer->nodeEnd);
+		return pathToTarget;
+	}
+	Node* startNode = new Node(startPos, target, 0, NULL);//;
 
-		std::list<Tiles*> listNotTestedNodes;
-		listNotTestedNodes.push_back(explorer->nodeStart);
-		while (!listNotTestedNodes.empty() && nodeCurrent != explorer->nodeEnd)// Find absolutely shortest path // && nodeCurrent != nodeEnd)
+	checkedNodes.push_back(startNode);
+	for(unsigned int i = 0; i< GetNeighbourNodes(startNode).size(); i++)
+	{
+		waitingNodes.push_back(GetNeighbourNodes(startNode).at(i));
+	}
+	while(!waitingNodes.empty())
+	{
+		Node* curNode = NULL;
+		std::sort(waitingNodes.begin(), waitingNodes.end(), LessFValue);
+		curNode = waitingNodes.front();
+		if(curNode->pos.x == target.x && curNode->pos.y == target.y)
 		{
-			listNotTestedNodes.sort(LessfGlobalGoal);
-		
-			while (!listNotTestedNodes.empty() && listNotTestedNodes.front()->bVisited)
-			{
-				listNotTestedNodes.pop_front();
-			}
-			if (listNotTestedNodes.empty())
-			{
-				break;
-			}
-			nodeCurrent = listNotTestedNodes.front();
-			nodeCurrent->bVisited = true; // We only explore a node once	
-			for (unsigned int i = 0; i <nodeCurrent->vecNeighbours.size(); i++)
-			{
-				if (!nodeCurrent->vecNeighbours.at(i)->bVisited && nodeCurrent->vecNeighbours.at(i)->ObstaclesInside() == false)
-				{
-					listNotTestedNodes.push_back(nodeCurrent->vecNeighbours.at(i));
-				}
-				float fPossiblyLowerGoal = nodeCurrent->fLocalGoal + Distance(nodeCurrent, nodeCurrent->vecNeighbours.at(i));
-				if (fPossiblyLowerGoal < nodeCurrent->vecNeighbours.at(i)->fLocalGoal)
-				{
-					nodeCurrent->vecNeighbours.at(i)->parent = nodeCurrent;
-					nodeCurrent->vecNeighbours.at(i)->fLocalGoal = fPossiblyLowerGoal;
-					
-					
-					nodeCurrent->vecNeighbours.at(i)->fGlobalGoal = nodeCurrent->vecNeighbours.at(i)->fLocalGoal + Heuristic(nodeCurrent->vecNeighbours.at(i), explorer->nodeEnd);
-					
-				}
-			}
+			/*if(startNode)
+			{	
+				delete startNode;
+				startNode = NULL;
+			}*/
+			return CalculatePathFromNode(curNode);
 		}
-		explorer->prevNodeEnd = explorer->nodeEnd;
-		explorer->ResetTimeForSolving();
+		if((*tiles).at(unsigned int(curNode->pos.y * nMapWidth  + curNode->pos.x))->ObstaclesInside())
+		{
+			std::swap(waitingNodes.front(), waitingNodes.back());
+			waitingNodes.pop_back();
+			checkedNodes.push_back(curNode);
+		}
+		else
+		{
+			std::swap(waitingNodes.front(), waitingNodes.back());
+			waitingNodes.pop_back();
+			if(!IsExist(&checkedNodes, curNode))
+			{
+				checkedNodes.push_back(curNode);
+				for(unsigned int j = 0; j< GetNeighbourNodes(curNode).size(); j++)
+				{
+					waitingNodes.push_back(GetNeighbourNodes(curNode).at(j));
+				}
+			}
+			
+		}
+	}
+	/*while(!checkedNodes.empty())
+	{
+		if(checkedNodes.back())
+		{
+			delete checkedNodes.back();
+			checkedNodes.back() = NULL;
+		}
+		checkedNodes.pop_back();
+	}*/
+	//delete startNode;
+	/*if(startNode)
+	{	
+		delete startNode;
+		startNode = NULL;
+	}*/
+	
+	return pathToTarget;
+}
+std::vector<hgeVector> PathFinder::CalculatePathFromNode(Node* node)
+{
+	std::vector<hgeVector> calcPath;
+	Node* curNode = node;
+	hgeVector tempPos;
+	while(curNode->parent)
+	{
+		tempPos = curNode->pos;
+		calcPath.push_back(tempPos);
+		curNode = curNode->parent;
+	}
+	while(!checkedNodes.empty())
+	{
+		delete checkedNodes.back();
+		checkedNodes.back() = NULL;
+		checkedNodes.pop_back();
+	}
+	return calcPath;
+	
+}
+std::vector<Node*> PathFinder::GetNeighbourNodes(Node* node)
+{
+	std::vector<Node*> vecNeighbours;
+	
+	if(node->pos.x > 0)
+	{
+		vecNeighbours.push_back(new Node(hgeVector(node->pos.x - 1, node->pos.y), node->targetPos, node->G + 1, node));
+	}
+	if(node->pos.x < nMapHeight - 1)
+	{
+		vecNeighbours.push_back(new Node(hgeVector(node->pos.x + 1, node->pos.y), node->targetPos, node->G + 1, node));
+	}
+
+	if(node->pos.y > 0)
+	{
+		vecNeighbours.push_back(new Node(hgeVector(node->pos.x, node->pos.y - 1), node->targetPos, node->G + 1, node));
 	}
 	
+	if (node->pos.y < nMapHeight - 1)
+	{
+		vecNeighbours.push_back(new Node(hgeVector(node->pos.x, node->pos.y + 1), node->targetPos, node->G + 1, node));
+	}
 
+	return vecNeighbours;
 }
+void PathFinder::Render()
+{
+	for(unsigned int i = 0; i < checkedNodes.size(); i++)
+	{
+		(*tiles).at(unsigned int(checkedNodes.at(i)->pos.y * nMapWidth  + checkedNodes.at(i)->pos.x))->RenderChosen();
+	}
+}
+
 PathFinder::~PathFinder()
 {
-
+	/*while(!checkedNodes.empty())
+	{
+		if(checkedNodes.back())
+		{
+			delete checkedNodes.back();
+			checkedNodes.back() = NULL;
+		}
+		checkedNodes.pop_back();
+	}*/
 }

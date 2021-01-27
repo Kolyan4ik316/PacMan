@@ -46,6 +46,14 @@ public:
 		scaleX = sizeX;
 		scaleY = sizeY;
 	}
+	virtual void SetPosTile(const hgeVector& pos_in)
+	{
+		pos_tile = pos_in;
+	}
+	virtual const hgeVector GetPosTile()
+	{
+		return pos_tile;
+	}
 	// Loading and releasing resources
 	virtual void LoadResources() = 0;
 	virtual void FreeResources() = 0;
@@ -59,6 +67,7 @@ protected:
 	// Position and direction
 	hgeVector pos;
 	hgeVector dir;
+	hgeVector pos_tile;
 	hgeSprite* sprite;
 	HTEXTURE	 tex;
 	hgeRect rect;

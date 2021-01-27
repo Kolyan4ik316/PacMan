@@ -25,6 +25,18 @@ void DynamicEntity::SetStartPoint(Tiles* tile)
 {
 	startPoint = tile;
 }
+void DynamicEntity::SetGloabalGoal(const hgeVector gloabalGoal_in)
+{
+	gloabalGoal = gloabalGoal_in;
+}
+void DynamicEntity::SetGloabalStart(const hgeVector gloabalStart_in)
+{
+	gloabalStart = gloabalStart_in;
+}
+const hgeVector DynamicEntity::GetTileGoal() const
+{
+	return gloabalGoal;
+}
 Tiles* DynamicEntity::GetStartPoint()
 {
 	return startPoint;

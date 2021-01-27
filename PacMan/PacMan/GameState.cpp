@@ -1,12 +1,13 @@
 #include "GameState.h"
 //PacMan GameState::player = PacMan();
+
 GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
 {
+	Tiles::SetScale(scaleX, scaleY);
+	Tiles::SetOrigin(originX, originY);
+	
 	// Setting place for our tiles
 	eatenFood = 0;
-	const float offset = 36.0f;
-	float prevX = originX / scaleX - 400.0f;
-	float prevY = originY / scaleY - 300.0f;
 	nMapWidth = 20;
 	nMapHeight = 16;
 	ReleaseTimer = diffs.at(unsigned int(difficult)).release_delay;
@@ -17,51 +18,12 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	{
 		for (unsigned int j = 0; j < nMapWidth; j++)
 		{
-			tiles.push_back(new Tiles(hge, hgeVector(prevX , prevY), scaleX, scaleY));
-			prevX += offset;
-			
+			tiles.push_back(new Tiles(hge, hgeVector(float(j), float(i))));
 		}
-		prevX = originX / scaleX - 400.0f;
-		prevY += offset;
-	}
-	for (unsigned int x = 0; x < nMapWidth; x++)
-	{
-			for (unsigned int y = 0; y < nMapHeight; y++)
-			{
-				if (y > 0)
-					tiles[y * nMapWidth + x]->vecNeighbours.push_back(tiles[(y - 1) * nMapWidth + (x + 0)]);
-				if (y < nMapHeight - 1)
-					tiles[y * nMapWidth + x]->vecNeighbours.push_back(tiles[(y + 1) * nMapWidth + (x + 0)]);
-				if (x > 0)
-					tiles[y * nMapWidth + x]->vecNeighbours.push_back(tiles[(y + 0) * nMapWidth + (x - 1)]);
-				if (x < nMapWidth - 1)
-					tiles[y * nMapWidth + x]->vecNeighbours.push_back(tiles[(y + 0) * nMapWidth + (x + 1)]);
-				
-				//remove this because ghost trying to go diagnoly thru obstacles
-				/*if (y>0 && x>0)
-					tiles[y*nMapWidth + x]->vecNeighbours.push_back(tiles[(y - 1) * nMapWidth + (x - 1)]);
-				if (y<nMapHeight-1 && x>0)
-					tiles[y*nMapWidth + x]->vecNeighbours.push_back(tiles[(y + 1) * nMapWidth + (x - 1)]);
-				if (y>0 && x<nMapWidth-1)
-					tiles[y*nMapWidth + x]->vecNeighbours.push_back(tiles[(y - 1) * nMapWidth + (x + 1)]);
-				if (y<nMapHeight - 1 && x<nMapWidth-1)
-					tiles[y*nMapWidth + x]->vecNeighbours.push_back(tiles[(y + 1) * nMapWidth + (x + 1)]);
-				*/	
-			}
 	}
 
 	LoadResources();
 	quit = false;
-	for (unsigned int x = 0; x < nMapWidth; x++)
-	{
-		for (unsigned int y = 0; y < nMapHeight; y++)
-		{
-			tiles[y * nMapWidth + x]->parent = NULL;
-			tiles[y * nMapWidth + x]->fGlobalGoal = FLT_MAX;
-			tiles[y * nMapWidth + x]->fLocalGoal = FLT_MAX;
-			tiles[y * nMapWidth + x]->bVisited = false;
-		}
-	}
 	// Setting position of player;
 	for(unsigned int i = 0; i <mapItems.size(); i++)
 	{
@@ -88,6 +50,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 					player->SetStartPoint(tiles.at(i));
 					player->SetSpeed(diffs.at(unsigned int(difficult)).pacMan_speed);
 					player->SetPosition(tiles.at(i)->GetOrigin());
+					player->SetPosTile(tiles.at(i)->GetPosition());
 					pmstart->SetPosition(tiles.at(i)->GetOrigin());
 				}
 			}
@@ -100,12 +63,14 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 				ghosts.push_back(new Ghost(hge));
 				ghosts.back()->SetPosition(mapItems.at(i)->GetPosition());
 				ghosts.back()->SetSpeed(diffs.at(unsigned int(difficult)).speed_of_ghosts);
+				ghosts.back()->SetPathFinder(new PathFinder(nMapWidth, nMapHeight, &tiles));
 				for (unsigned int i = 0; i < tiles.size(); i++)
 				{
 					if(tiles.at(i)->IsInside(ghosts.back()->GetPosition()))
 					{
 						ghosts.back()->SetStartPoint(tiles.at(i));
 						ghosts.back()->SetPosition(tiles.at(i)->GetOrigin());
+						ghosts.back()->SetPosTile(tiles.at(i)->GetPosition());
 						ghstart->SetPosition(tiles.at(i)->GetOrigin());
 						break;
 					}
@@ -122,7 +87,7 @@ void GameState::LoadResources()
 	player = new PacMan(hge);
 	mapManager = new MapManager(hge, &mapItems, &tiles, nMapWidth, nMapHeight);
 	mapManager->LoadMap();
-	pathfinder = new PathFinder(nMapWidth, nMapHeight, &tiles);
+	//pathfinder = new PathFinder(nMapWidth, nMapHeight, &tiles);
 }
 const bool GameState::CheckForColiding(DynamicEntity* checker, Entity* colisior) const
 {
@@ -154,39 +119,32 @@ void GameState::UpdateEnemies(Ghost* ghost)
 {
 	hgeVector dir = hgeVector(0.0f, 0.0f);
 	
-	pathfinder->SolveA_Star(ghost);
 	
 	
-	std::list<Tiles*> chooseList;
-	for(unsigned int i = 0; i < ghost->nodeStart->vecNeighbours.size(); i++)
+	if(!ghost->pathToTarget.empty())
 	{
-		if(ghost->nodeStart->vecNeighbours.at(i)->parent == ghost->nodeStart)
+		/*for(unsigned int i = 0; i < tiles.size(); i++)
 		{
-			if(ghost->nodeStart->vecNeighbours.at(i)->ObstaclesInside() == false)
+			if(tiles.at(i)->GetPosition().x == ghost->pathToTarget.front().x && tiles.at(i)->GetPosition().y == ghost->pathToTarget.front().y)
 			{
-				chooseList.push_back(ghost->nodeStart->vecNeighbours.at(i));
+				ghost->SetGloabalGoal(tiles.at(i));
 			}
-			
-		}
-	}
-	if(!chooseList.empty())
-	{
-		chooseList.sort(pathfinder->LessfGlobalGoal);
-			
-		ghost->SetDestination(chooseList.front()->GetOrigin());
-		if(ghost->GetPosition().x > chooseList.front()->GetOrigin().x)
+		}*/
+		Tiles* tempTile = tiles.at(unsigned int(ghost->pathToTarget.front().y * nMapWidth + ghost->pathToTarget.front().x));
+		ghost->SetDestination(tempTile->GetOrigin());
+		if(ghost->GetPosition().x > tempTile->GetOrigin().x)
 		{
 			dir -= hgeVector(1.0f, 0.0f);
 		}
-		if(ghost->GetPosition().x < chooseList.front()->GetOrigin().x)
+		if(ghost->GetPosition().x < tempTile->GetOrigin().x)
 		{
 			dir += hgeVector(1.0f, 0.0f);
 		}
-		if(ghost->GetPosition().y < chooseList.front()->GetOrigin().y)
+		if(ghost->GetPosition().y < tempTile->GetOrigin().y)
 		{
 			dir += hgeVector(0.0f, 1.0f);
 		}
-		if(ghost->GetPosition().y > chooseList.front()->GetOrigin().y)
+		if(ghost->GetPosition().y > tempTile->GetOrigin().y)
 		{
 			dir -= hgeVector(0.0f, 1.0f);
 		}	
@@ -207,7 +165,8 @@ void GameState::Update(const float& dt)
 		{
 			if(tiles.at(i)->IsInside(ghosts.at(j)->GetPosition()))
 			{
-				ghosts.at(j)->nodeStart = tiles.at(i);
+				ghosts.at(j)->SetGloabalStart(tiles.at(i)->GetPosition());
+				ghosts.at(j)->SetPosTile(tiles.at(i)->GetPosition());
 			}
 			for(unsigned int j = 0; j < ghosts.size(); j++)
 			{
@@ -227,8 +186,8 @@ void GameState::Update(const float& dt)
 							}
 							if(ghosts.at(j)->CanBeAtacket())
 							{
-								ghosts.at(j)->nodeEnd = tiles.at(i);
-								if(ghosts.at(j)->nodeEnd == ghosts.at(j)->nodeStart && ghosts.at(j)->CanBeAtacket())
+								ghosts.at(j)->SetPathTo(tiles.at(i)->GetPosition());
+								if(ghosts.at(j)->GetPosTile() == ghosts.at(j)->GetTileGoal() && ghosts.at(j)->CanBeAtacket())
 								{
 									ghosts.at(j)->SwitchAtacked();
 								}
@@ -246,7 +205,9 @@ void GameState::Update(const float& dt)
 					{
 						if(tiles.at(i)->IsInside(player->GetPosition()))
 						{
-							ghosts.at(j)->nodeEnd = tiles.at(i);
+							ghosts.at(j)->SetPathTo(tiles.at(i)->GetPosition());
+							
+							
 						}
 							
 					}
@@ -276,6 +237,17 @@ void GameState::Update(const float& dt)
 	}
 	for(unsigned int i = 0; i < obsts.size(); i++)
 	{
+		for(unsigned int j = 0; j < tiles.size(); j++)
+		{
+			if(tiles.at(j)->IsInside(obsts.at(i)->GetPosition()))
+			{
+				tiles.at(j)->HaveObstacles(true);
+			}
+			else
+			{
+				tiles.at(j)->HaveObstacles(false);
+			}
+		}
 		if(CheckForColiding(player, obsts.at(i)))
 		{
 			Colision(player, obsts.at(i));
@@ -381,6 +353,7 @@ void GameState::Update(const float& dt)
 }
 void GameState::Render()
 {
+	
 	for(unsigned int i = 0; i <obsts.size(); i++)
 	{
 		obsts.at(i)->Render();
@@ -399,10 +372,10 @@ void GameState::Render()
 			hFoods.at(i)->Render();
 		}
 	}
-	/*for(unsigned int i = 0; i < tiles.size(); i++)
+	for(unsigned int i = 0; i < tiles.size(); i++)
 	{
 		tiles.at(i)->Render();
-	}*/
+	}
 	for(unsigned int i = 0; i < ghosts.size(); i++)
 	{
 		ghosts.at(i)->Render();
@@ -453,7 +426,7 @@ void GameState::FreeResources()
 {
 	delete player;
 	
-	delete pathfinder;
+	//delete pathfinder;
 	delete mapManager;
 	while(!mapItems.empty())
 	{

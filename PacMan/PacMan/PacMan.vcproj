@@ -190,6 +190,10 @@
 				RelativePath=".\PathFinder.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Tiles.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
