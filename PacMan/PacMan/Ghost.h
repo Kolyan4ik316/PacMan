@@ -17,6 +17,7 @@ public:
 	virtual void FreeResources() override;
 	virtual void SetDestination(const hgeVector& pos_in);
 	virtual void SetPathTo(const hgeVector& target);
+	virtual Tiles* Ghost::GetNextPosition();
 	virtual void SetPathFinder(class PathFinder* pathFinder_in);
 	virtual void SwitchAtacked();
 	virtual bool CanBeAtacket();
@@ -41,6 +42,6 @@ protected:
 	class PathFinder* pathFinder;
 
 public:
-	std::vector<hgeVector> pathToTarget;
+	std::vector<Tiles*> pathToTarget;
 };
 #endif

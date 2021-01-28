@@ -23,9 +23,8 @@ PathFinder::PathFinder(unsigned int nMapWidth_in, unsigned int nMapHeight_in, st
 {
 
 }
-std::vector<hgeVector> PathFinder::GetPath(const hgeVector& startPos,const hgeVector& target)
+std::vector<Tiles*> PathFinder::GetPath(const hgeVector& startPos,const hgeVector& target)
 {
-	
 	if(target.x == startPos.x && target.y == startPos.y)
 	{
 		return pathToTarget;
@@ -49,7 +48,12 @@ std::vector<hgeVector> PathFinder::GetPath(const hgeVector& startPos,const hgeVe
 				delete startNode;
 				startNode = NULL;
 			}*/
-			return CalculatePathFromNode(curNode);
+			std::vector<Tiles*> tempVector;
+			for (unsigned int i = 0; i < CalculatePathFromNode(curNode).size(); i++ )
+			{
+				tempVector.push_back((*tiles).at(unsigned int(CalculatePathFromNode(curNode).at(i).y * nMapWidth  + CalculatePathFromNode(curNode).at(i).x)));
+			}
+			return tempVector;
 		}
 		if((*tiles).at(unsigned int(curNode->pos.y * nMapWidth  + curNode->pos.x))->ObstaclesInside())
 		{
@@ -89,6 +93,18 @@ std::vector<hgeVector> PathFinder::GetPath(const hgeVector& startPos,const hgeVe
 	}*/
 	
 	return pathToTarget;
+}
+void PathFinder::CleanUpNodes()
+{
+	while(!checkedNodes.empty())
+	{
+		if(checkedNodes.back())
+		{
+			delete checkedNodes.back();
+			checkedNodes.back() = NULL;
+		}
+		checkedNodes.pop_back();
+	}
 }
 std::vector<hgeVector> PathFinder::CalculatePathFromNode(Node* node)
 {
@@ -139,7 +155,11 @@ void PathFinder::Render()
 {
 	for(unsigned int i = 0; i < pathToTarget.size(); i++)
 	{
-		(*tiles).at(unsigned int(pathToTarget.at(i).y * nMapWidth  + pathToTarget.at(i).x))->RenderChosen();
+		pathToTarget.at(i)->RenderChosen();
+	}
+	for(unsigned int i = 0; i < checkedNodes.size(); i++)
+	{
+		(*tiles).at(unsigned int(checkedNodes.at(i)->pos.y * nMapWidth  + checkedNodes.at(i)->pos.x))->Render();
 	}
 }
 

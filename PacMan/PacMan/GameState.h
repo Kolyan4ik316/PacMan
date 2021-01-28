@@ -44,6 +44,7 @@ private:
 	GHStartPoint* ghstart;
 	float playerPunchedTimer;
 	unsigned int numOfLife;
+	hgeVector goal;
 };
 
 #endif

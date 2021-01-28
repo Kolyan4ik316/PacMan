@@ -118,24 +118,13 @@ void GameState::Colision(DynamicEntity* checker, Entity* colisior)
 void GameState::UpdateEnemies(Ghost* ghost)
 {
 	hgeVector dir = hgeVector(0.0f, 0.0f);
-	
-	
-	
+	Tiles* tempTile = NULL;
 	if(!ghost->pathToTarget.empty())
 	{
-		/*for(unsigned int i = 0; i < tiles.size(); i++)
-		{
-			if(tiles.at(i)->GetPosition().x == ghost->pathToTarget.front().x && tiles.at(i)->GetPosition().y == ghost->pathToTarget.front().y)
-			{
-				ghost->SetGloabalGoal(tiles.at(i));
-			}
-		}*/
-		Tiles* tempTile = tiles.at(unsigned int(ghost->pathToTarget.back().y * nMapWidth + ghost->pathToTarget.back().x));
-		if(tempTile->IsInside(ghost->GetPosition()))
-		{
-			ghost->pathToTarget.pop_back();
-		}
-		tempTile = tiles.at(unsigned int(ghost->pathToTarget.back().y * nMapWidth + ghost->pathToTarget.back().x));
+		tempTile = ghost->GetNextPosition();
+	}
+	if(tempTile)
+	{
 		ghost->SetDestination(tempTile->GetOrigin());
 		if(ghost->GetPosition().x > tempTile->GetOrigin().x)
 		{
@@ -153,10 +142,7 @@ void GameState::UpdateEnemies(Ghost* ghost)
 		{
 			dir -= hgeVector(0.0f, 1.0f);
 		}	
-		
 	}
-	
-	
 	
 	ghost->SetDirection(dir);
 }
@@ -211,7 +197,7 @@ void GameState::Update(const float& dt)
 						if(tiles.at(i)->IsInside(player->GetPosition()))
 						{
 							ghosts.at(j)->SetPathTo(tiles.at(i)->GetPosition());
-							
+							player->SetPosTile(tiles.at(i)->GetPosition());
 							
 						}
 							
@@ -373,10 +359,11 @@ void GameState::Render()
 	for(unsigned int i = 0; i < ghosts.size(); i++)
 	{
 		ghosts.at(i)->Render();
-		for(unsigned int j = 0; j <ghosts.at(i)->pathToTarget.size(); j++)
+		/*for(unsigned int j = 0; j <ghosts.at(i)->pathToTarget.size(); j++)
 		{
-			tiles.at(unsigned int (ghosts.at(i)->pathToTarget.at(j).y * nMapWidth + ghosts.at(i)->pathToTarget.at(j).x))->Render();
-		}
+			ghosts.at(i)->pathToTarget.at(j)->Render();
+			//tiles.at(unsigned int (ghosts.at(i)->pathToTarget.at(j).y * nMapWidth + ghosts.at(i)->pathToTarget.at(j).x))->Render();
+		}*/
 		
 	}
 	// rendering player

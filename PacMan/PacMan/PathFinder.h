@@ -20,8 +20,9 @@ public:
 		
 public:
 	PathFinder(unsigned int nMapWidth_in, unsigned int nMapHeight_in, std::vector<Tiles*>* tiles_in);
-	std::vector<hgeVector> GetPath(const hgeVector& startPos, const hgeVector& target);
+	std::vector<Tiles*> GetPath(const hgeVector& startPos, const hgeVector& target);
 	std::vector<hgeVector> CalculatePathFromNode(Node* node);
+	void CleanUpNodes();
 	static bool LessFValue(Node* rhs, Node* lhs)
 	{
 		return rhs->F < lhs->F;
@@ -42,7 +43,7 @@ public:
 	void Render();
 	virtual ~PathFinder();
 private:
-	std::vector<hgeVector> pathToTarget;
+	std::vector<Tiles*> pathToTarget;
 	std::vector<Tiles*>* tiles;
 	std::vector<Node*> GetNeighbourNodes(Node* node);
 private:
