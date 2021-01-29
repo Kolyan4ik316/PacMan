@@ -101,19 +101,19 @@ void GameState::Colision(DynamicEntity* checker, Entity* colisior)
 	hgeVector dir = hgeVector(0.0f, 0.0f);
 	if(checker->Rectangle()->x1 < colisior->Rectangle()->x1)
 	{
-		dir -= hgeVector(1.25f, 0.0f);
+		dir -= hgeVector(4.25f, 0.0f);
 	}
 	if(checker->Rectangle()->x2 > colisior->Rectangle()->x2)
 	{
-		dir += hgeVector(1.25f, 0.0f);
+		dir += hgeVector(4.25f, 0.0f);
 	}
 	if(checker->Rectangle()->y1 < colisior->Rectangle()->y1)
 	{
-		dir -= hgeVector(0.0f, 1.25f);
+		dir -= hgeVector(0.0f, 4.25f);
 	}
 	if(checker->Rectangle()->y2 > colisior->Rectangle()->y2)
 	{
-		dir += hgeVector(0.0f, 1.25f);
+		dir += hgeVector(0.0f, 4.25f);
 	}
 	checker->SetDirection(dir);
 	
@@ -209,7 +209,7 @@ void GameState::Update(const float& dt)
 				
 				else
 				{
-					ghosts.at(j)->SetPathTo(ghstart->GetPosTile());
+					ghosts.at(j)->SetPosition(ghstart->GetPosition());
 					ghosts.at(j)->releaseTime = 0.0f;
 
 				}
