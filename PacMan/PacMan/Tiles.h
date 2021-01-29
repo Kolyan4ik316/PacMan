@@ -24,10 +24,6 @@ public:
 	{
 		return worldPos;
 	};
-	virtual void SetTargetPosition(const hgeVector& pos_in)
-	{
-		targetPos = pos_in;
-	};
 	virtual void Update(const float& dt)
 	{
 		//rect.Set(worldPos.x * scaleX, worldPos.y * scaleY, (worldPos.x + 36.0f) * scaleX, (worldPos.y + 36.0f) * scaleY);
@@ -101,7 +97,6 @@ private:
 	static float originY;
 public:
 	hgeVector pos;
-	hgeVector targetPos;
 
 };
 #endif

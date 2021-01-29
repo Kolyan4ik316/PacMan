@@ -8,7 +8,7 @@ class PathFinder
 public:
 	struct Node
 	{
-		Node(const hgeVector& pos_in, hgeVector targetPos_in, int G_in, Node* parent_in);
+		Node(hgeVector pos_in, hgeVector targetPos_in, int G_in, Node* parent_in);
 		int F;
 		int G;
 		int H;
@@ -49,7 +49,6 @@ private:
 private:
 	std::vector<Node*> checkedNodes;
 	std::vector<Node*> waitingNodes;
-	hgeVector targetPos;
 	unsigned int nMapWidth;
 	unsigned int nMapHeight;
 };

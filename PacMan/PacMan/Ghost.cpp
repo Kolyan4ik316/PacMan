@@ -98,13 +98,13 @@ void Ghost::SetDestination(const hgeVector& pos_in)
 }
 void Ghost::SetPathTo(const hgeVector& target)
 {
-	if(canSolve >= 0.7f)
+	if(canSolve >= 0.5f)
 	{
 		pathToTarget = pathFinder->GetPath(pos_tile, target);
 		ResetTimeForSolving();
 		
 	}
-	if(canSolve <= 0.7f)
+	if(canSolve <= 0.5f)
 	{
 		pathFinder->CleanUpNodes();
 	}
@@ -149,7 +149,7 @@ bool Ghost::CanBeAtacket()
 void Ghost::Render()
 {
 	animation.at(unsigned int(currAnim))->RenderEx(pos.x, pos.y, angle, scaleX * 1.7f, scaleY* 1.7f);
-	//pathFinder->Render();
+	pathFinder->Render();
 	//hge->Gfx_RenderLine(rect.x1, rect.y1, rect.x2, rect.y2);
 }
 /*void Ghost::Render(const float& sizeX, const float& sizeY)
