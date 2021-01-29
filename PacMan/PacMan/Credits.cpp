@@ -31,7 +31,7 @@ void Credits::Update(const float& dt)
 }
 void Credits::Render()
 {
-	hge->Gfx_RenderQuad(&quad);
+	bgSpr->RenderEx(0.0f, 0.0f, 0.0f, scaleX, scaleY); 
 	gui->Render();
 	fnt->printf(originX, originY - 200.0f, HGETEXT_CENTER, "Game was created by Kolyan4ik316\ngithub.com/kolyan4ik316");
 }

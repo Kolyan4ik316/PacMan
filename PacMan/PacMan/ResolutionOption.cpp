@@ -116,7 +116,7 @@ void ResolutionOption::ChangeResolution()
 }
 void ResolutionOption::Render()
 {
-	hge->Gfx_RenderQuad(&quad);
+	bgSpr->RenderEx(0.0f, 0.0f, 0.0f, scaleX, scaleY); 
 	gui->Render();
 	fnt->SetColor(0xFFFFFFFF);
 	fnt->printf(originX, originY - 200.0f, HGETEXT_CENTER, "Resolution will be changed \nafter resatrting the game");

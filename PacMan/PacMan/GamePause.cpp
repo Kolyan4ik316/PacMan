@@ -43,7 +43,7 @@ void GamePause::Update(const float& dt)
 }
 void GamePause::Render()
 {
-	hge->Gfx_RenderQuad(&quad);
+	bgSpr->RenderEx(0.0f, 0.0f, 0.0f, scaleX, scaleY); 
 	gui->Render();
 	//fnt->SetColor(0xFFFFFFFF);
 	//fnt->printf(5, 5, HGETEXT_LEFT, "dt:%.3f\nFPS:%d", hge->Timer_GetDelta(), hge->Timer_GetFPS());

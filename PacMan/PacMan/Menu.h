@@ -16,11 +16,12 @@ protected:
 	// Some resource handles
 	HEFFECT				snd;
 	HTEXTURE			tex;
-	hgeQuad				quad;
+	HTEXTURE			bgText;
 
 	// Pointers to the HGE objects we will use
 	hgeGUI				*gui;
 	hgeFont				*fnt;
 	hgeSprite			*spr;
+	hgeSprite			*bgSpr;
 };
 #endif

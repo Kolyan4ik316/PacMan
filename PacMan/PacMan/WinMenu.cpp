@@ -31,7 +31,7 @@ void WinMenu::Update(const float& dt)
 }
 void WinMenu::Render()
 {
-	hge->Gfx_RenderQuad(&quad);
+	bgSpr->RenderEx(0.0f, 0.0f, 0.0f, scaleX, scaleY); 
 	gui->Render();
 	fnt->printf(originX, originY - 200.0f, HGETEXT_CENTER, "Congratulation, you've win!!!");
 }

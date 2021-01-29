@@ -56,7 +56,7 @@ void DiffOption::Update(const float& dt)
 }
 void DiffOption::Render()
 {
-	hge->Gfx_RenderQuad(&quad);
+	bgSpr->RenderEx(0.0f, 0.0f, 0.0f, scaleX, scaleY); 
 	gui->Render();
 	fnt->SetColor(0xFFFFFFFF);
 	fnt->printf(originX, originY - 200.0f, HGETEXT_CENTER, "Choose difficult");
