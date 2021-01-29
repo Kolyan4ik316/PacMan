@@ -24,7 +24,7 @@ void MapManager::LoadMap()
 			int tempNumItem = int(tempItem);
 			switch (tempNumItem)
 			{
-			case 79:
+			case 'O':
 				if(nOfTile < width * height)
 				{
 					mapItems->push_back(new Obstacles(hge));
@@ -34,7 +34,7 @@ void MapManager::LoadMap()
 				}
 				
 				break;
-			case 70:
+			case 'F':
 				if(nOfTile < width * height)
 				{
 					mapItems->push_back(new Food(hge));
@@ -42,7 +42,7 @@ void MapManager::LoadMap()
 					nOfTile++;
 				}
 				break;
-			case 72:
+			case 'H':
 				if(nOfTile < width * height)
 				{
 					mapItems->push_back(new HolyFood(hge));
@@ -50,7 +50,7 @@ void MapManager::LoadMap()
 					nOfTile++;
 				}
 				break;
-			case 80:
+			case 'P':
 				if(nOfTile < width * height)
 				{
 					mapItems->push_back(new PMStartPoint(hge));
@@ -58,7 +58,7 @@ void MapManager::LoadMap()
 					nOfTile++;
 				}
 				break;
-			case 71:
+			case 'G':
 				if(nOfTile < width * height)
 				{
 					mapItems->push_back(new GHStartPoint(hge));
@@ -67,7 +67,6 @@ void MapManager::LoadMap()
 				}
 				break;
 			default:
-				tempNumItem = tempNumItem;
 				break;
 
 			};

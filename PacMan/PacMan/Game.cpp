@@ -30,23 +30,23 @@ void Game::InitWindow()
 		while(!ifs.eof())
 		{
 			ifs>> tempStr;
-			if(tempStr.compare("[Window_Width]") == 0)
+			if(!tempStr.compare("[Window_Width]"))
 			{
 				ifs>>screenWidth;
 			}
-			if(tempStr.compare("[Window_Height]") == 0)
+			if(!tempStr.compare("[Window_Height]"))
 			{
 				ifs>>screenHeight;
 			}
-			if(tempStr.compare("[Windowed]") == 0)
+			if(!tempStr.compare("[Windowed]"))
 			{
 				ifs>>windowed;
 			}
-			if(tempStr.compare("[Resolution_Mode]") == 0)
+			if(!tempStr.compare("[Resolution_Mode]"))
 			{
 				ifs>>windowMode;
 			}
-			if(tempStr.compare("[Window_Name]") == 0)
+			if(!tempStr.compare("[Window_Name]"))
 			{
 				nameOfWindow.clear();
 				while(getline(ifs,tempStr))
@@ -103,21 +103,21 @@ void Game::InitDiff()
 			{
 				ifs>> tempStr;
 				State::DiffAtributes tempAttr;
-				while(!tempStr.compare("[End]") == 0)
+				while(tempStr.compare("[End]"))
 				{
-					if(tempStr.compare("[Num_of_ghosts]") == 0)
+					if(!tempStr.compare("[Num_of_ghosts]") )
 					{
 						ifs>>tempAttr.num_of_ghosts;
 					}
-					if(tempStr.compare("[Speed_of_ghosts]") == 0)
+					if(!tempStr.compare("[Speed_of_ghosts]"))
 					{
 						ifs>>tempAttr.speed_of_ghosts;
 					}
-					if(tempStr.compare("[Release_delay]") == 0)
+					if(!tempStr.compare("[Release_delay]"))
 					{
 						ifs>>tempAttr.release_delay;
 					}
-					if(tempStr.compare("[PacMan_speed]") == 0)
+					if(!tempStr.compare("[PacMan_speed]"))
 					{
 						ifs>>tempAttr.pacMan_speed;
 					}
@@ -125,25 +125,25 @@ void Game::InitDiff()
 				}
 				states.top()->LoadDifficults(tempAttr);
 			}
-			if(tempStr.compare("[Normal]") == 0)
+			if(!tempStr.compare("[Normal]"))
 			{
 				ifs>> tempStr;
 				State::DiffAtributes tempAttr;
-				while(!tempStr.compare("[End]") == 0)
+				while(tempStr.compare("[End]"))
 				{
-					if(tempStr.compare("[Num_of_ghosts]") == 0)
+					if(!tempStr.compare("[Num_of_ghosts]"))
 					{
 						ifs>>tempAttr.num_of_ghosts;
 					}
-					if(tempStr.compare("[Speed_of_ghosts]") == 0)
+					if(!tempStr.compare("[Speed_of_ghosts]"))
 					{
 						ifs>>tempAttr.speed_of_ghosts;
 					}
-					if(tempStr.compare("[Release_delay]") == 0)
+					if(!tempStr.compare("[Release_delay]"))
 					{
 						ifs>>tempAttr.release_delay;
 					}
-					if(tempStr.compare("[PacMan_speed]") == 0)
+					if(!tempStr.compare("[PacMan_speed]"))
 					{
 						ifs>>tempAttr.pacMan_speed;
 					}
@@ -151,25 +151,25 @@ void Game::InitDiff()
 				}
 				states.top()->LoadDifficults(tempAttr);
 			}
-			if(tempStr.compare("[Hard]") == 0)
+			if(!tempStr.compare("[Hard]"))
 			{
 				ifs>> tempStr;
 				State::DiffAtributes tempAttr;
-				while(!tempStr.compare("[End]") == 0)
+				while(tempStr.compare("[End]"))
 				{
-					if(tempStr.compare("[Num_of_ghosts]") == 0)
+					if(!tempStr.compare("[Num_of_ghosts]"))
 					{
 						ifs>>tempAttr.num_of_ghosts;
 					}
-					if(tempStr.compare("[Speed_of_ghosts]") == 0)
+					if(!tempStr.compare("[Speed_of_ghosts]"))
 					{
 						ifs>>tempAttr.speed_of_ghosts;
 					}
-					if(tempStr.compare("[Release_delay]") == 0)
+					if(!tempStr.compare("[Release_delay]"))
 					{
 						ifs>>tempAttr.release_delay;
 					}
-					if(tempStr.compare("[PacMan_speed]") == 0)
+					if(!tempStr.compare("[PacMan_speed]"))
 					{
 						ifs>>tempAttr.pacMan_speed;
 					}

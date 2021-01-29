@@ -24,14 +24,19 @@ void Ghost::LoadResources()
 	}
 	animation.push_back(new hgeAnimation(tex, 2, 6, 2, 17, 16, 16)); 
 	animation.back()->SetHotSpot(7,7);
+	
 	animation.push_back(new hgeAnimation(tex, 2, 6, 35, 17, 16, 16)); 
 	animation.back()->SetHotSpot(7,7);
+
 	animation.push_back(new hgeAnimation(tex, 2, 6, 70, 17, 16, 16)); 
 	animation.back()->SetHotSpot(7,7);
+
 	animation.push_back(new hgeAnimation(tex, 2, 6, 206, 17, 16, 16)); 
 	animation.back()->SetHotSpot(7,7);
+
 	animation.push_back(new hgeAnimation(tex, 1, 6, 256, 17, 16, 16)); 
 	animation.back()->SetHotSpot(7,7);
+
 }
 void Ghost::SetPathFinder(PathFinder* pathFinder_in)
 {

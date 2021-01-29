@@ -24,9 +24,6 @@ protected:
 	hgeVector goal;
 	hgeVector gloabalGoal;
 	float canSolve;
-	Tiles* startPoint;
-	hgeVector gloabalStart;
-	Tiles* endPoint;
 public:
 	
 

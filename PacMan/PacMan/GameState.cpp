@@ -47,7 +47,6 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 			{
 				if(tiles.at(i)->IsInside(player->GetPosition()))
 				{
-					player->SetStartPoint(tiles.at(i));
 					player->SetSpeed(diffs.at(unsigned int(difficult)).pacMan_speed);
 					player->SetPosition(tiles.at(i)->GetOrigin());
 					player->SetPosTile(tiles.at(i)->GetPosition());
@@ -70,7 +69,6 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 				{
 					if(tiles.at(i)->IsInside(ghosts.back()->GetPosition()))
 					{
-						ghosts.back()->SetStartPoint(tiles.at(i));
 						ghosts.back()->SetPosition(tiles.at(i)->GetOrigin());
 						ghosts.back()->SetPosTile(tiles.at(i)->GetPosition());
 						ghstart->SetPosition(tiles.at(i)->GetOrigin());
@@ -99,21 +97,27 @@ const bool GameState::CheckForColiding(DynamicEntity* checker, Entity* colisior)
 void GameState::Colision(DynamicEntity* checker, Entity* colisior)
 {
 	hgeVector dir = hgeVector(0.0f, 0.0f);
+	static float speed;
+#ifdef _DEBUG
+	speed = 1.25f;
+#else
+	speed = 4.25f;
+#endif
 	if(checker->Rectangle()->x1 < colisior->Rectangle()->x1)
 	{
-		dir -= hgeVector(4.25f, 0.0f);
+		dir -= hgeVector(speed, 0.0f);
 	}
 	if(checker->Rectangle()->x2 > colisior->Rectangle()->x2)
 	{
-		dir += hgeVector(4.25f, 0.0f);
+		dir += hgeVector(speed, 0.0f);
 	}
 	if(checker->Rectangle()->y1 < colisior->Rectangle()->y1)
 	{
-		dir -= hgeVector(0.0f, 4.25f);
+		dir -= hgeVector(0.0f, speed);
 	}
 	if(checker->Rectangle()->y2 > colisior->Rectangle()->y2)
 	{
-		dir += hgeVector(0.0f, 4.25f);
+		dir += hgeVector(0.0f, speed);
 	}
 	checker->SetDirection(dir);
 	
@@ -152,7 +156,10 @@ void GameState::UpdateEnemies(Ghost* ghost)
 void GameState::Update(const float& dt)
 {	
 	// Process keys
-	UpdateInput(dt);
+	if(playerPunchedTimer > 1.2f)
+	{	
+		UpdateInput(dt);
+	}
 	for(unsigned int i = 0; i < tiles.size(); i++)
 	{
 		for(unsigned int j = 0; j < ghosts.size(); j++)
