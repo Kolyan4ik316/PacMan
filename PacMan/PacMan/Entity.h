@@ -50,6 +50,10 @@ public:
 	{
 		pos_tile = pos_in;
 	}
+	const hgeVector GetPosTile() const
+	{
+		return pos_tile;
+	}
 	virtual const hgeVector GetPosTile()
 	{
 		return pos_tile;

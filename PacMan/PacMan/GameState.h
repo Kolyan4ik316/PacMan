@@ -45,6 +45,7 @@ private:
 	float playerPunchedTimer;
 	unsigned int numOfLife;
 	hgeVector goal;
+	
 };
 
 #endif

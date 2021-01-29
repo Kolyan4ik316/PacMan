@@ -65,7 +65,7 @@ void Ghost::ChoseAnimation()
 	{
 		currAnim = GhostAnimation::Scary;
 	}
-	else if(WasAttacked())
+	if(WasAttacked())
 	{
 		currAnim = GhostAnimation::Attacked;
 	}

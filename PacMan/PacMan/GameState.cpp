@@ -51,6 +51,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 					player->SetSpeed(diffs.at(unsigned int(difficult)).pacMan_speed);
 					player->SetPosition(tiles.at(i)->GetOrigin());
 					player->SetPosTile(tiles.at(i)->GetPosition());
+					pmstart->SetPosTile(tiles.at(i)->GetPosition());
 					pmstart->SetPosition(tiles.at(i)->GetOrigin());
 				}
 			}
@@ -58,6 +59,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 		if(typeid(GHStartPoint) == typeid(*mapItems.at(i)))
 		{
 			ghstart = (GHStartPoint*)mapItems.at(i);
+
 			for (unsigned int j = 0; j < diffs.at(unsigned int(difficult)).num_of_ghosts; j++)
 			{
 				ghosts.push_back(new Ghost(hge));
@@ -72,6 +74,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 						ghosts.back()->SetPosition(tiles.at(i)->GetOrigin());
 						ghosts.back()->SetPosTile(tiles.at(i)->GetPosition());
 						ghstart->SetPosition(tiles.at(i)->GetOrigin());
+						ghstart->SetPosTile(tiles.at(i)->GetPosition());
 						break;
 					}
 				}
@@ -167,18 +170,18 @@ void GameState::Update(const float& dt)
 					{
 						if(tiles.at(i)->IsInside(ghstart->GetPosition()))
 						{
-							
+							ghosts.at(j)->SetPathTo(tiles.at(i)->GetPosition());
 							if(ghosts.at(j)->WasAttacked())
 							{
-								ghosts.at(j)->SetPosition(ghstart->GetPosition());
-								
-								ghosts.at(j)->SwitchWasAtacked();
+								if(ghosts.at(j)->GetPosTile() ==  tiles.at(i)->GetPosition() && ghosts.at(j)->WasAttacked())
+								{
+									ghosts.at(j)->SwitchWasAtacked();
+								}
 								
 							}
 							if(ghosts.at(j)->CanBeAtacket())
 							{
-								ghosts.at(j)->SetPathTo(tiles.at(i)->GetPosition());
-								if(ghosts.at(j)->GetPosTile() == ghosts.at(j)->GetTileGoal() && ghosts.at(j)->CanBeAtacket())
+								if(ghosts.at(j)->GetPosTile() == tiles.at(i)->GetPosition() && ghosts.at(j)->CanBeAtacket())
 								{
 									ghosts.at(j)->SwitchAtacked();
 								}
@@ -206,8 +209,7 @@ void GameState::Update(const float& dt)
 				
 				else
 				{
-
-					ghosts.at(j)->SetPosition(ghstart->GetPosition());
+					ghosts.at(j)->SetPathTo(ghstart->GetPosTile());
 					ghosts.at(j)->releaseTime = 0.0f;
 
 				}
@@ -301,7 +303,6 @@ void GameState::Update(const float& dt)
 			{
 				ghosts.at(i)->SwitchAtacked();
 			}
-
 			if(attackTimer > 7.0f && !ghosts.at(i)->CanBeAtacket() && !ghosts.at(i)->WasAttacked())
 			{
 				if(ghosts.at(i)->IsColiding(player->Rectangle()))
