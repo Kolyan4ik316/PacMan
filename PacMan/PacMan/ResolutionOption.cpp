@@ -7,14 +7,14 @@ ResolutionOption::ResolutionOption(std::stack<State*>* states_in, HGE* hge_in) :
 	tempWidth = screenWidth;
 	tempHeight = screenHeight;
 	tempRes = resolut;
-	gui->AddCtrl(new Button(1,fnt, snd, originX, originY - 140.0f, 0.0f, "800 x 600 | 4:3"));
-	gui->AddCtrl(new Button(2,fnt, snd, originX, originY - 100.0f, 0.1f, "1280 x 720 | 16:9"));
-	gui->AddCtrl(new Button(3,fnt, snd, originX, originY - 60.0f, 0.1f, "1600 x 900 | 16:9"));
-	gui->AddCtrl(new Button(4,fnt, snd, originX, originY - 20.0f, 0.1f, "1600 x 1000 | 16:10"));
-	gui->AddCtrl(new Button(5,fnt, snd, originX, originY + 20.0f, 0.2f, "1920 x 1080 | 16:9"));
-	gui->AddCtrl(new Button(6,fnt, snd, originX, originY + 60.0f, 0.3f, "Windowed"));
-	gui->AddCtrl(new Button(7,fnt, snd, originX, originY + 100.0f, 0.3f, "Return to Options"));
-	gui->AddCtrl(new Button(8,fnt, snd, originX, originY + 140.0f, 0.3f, "Exit"));
+	gui->AddCtrl(new Button(1,fnt, snd, originX, button1, 0.0f, "800 x 600 | 4:3"));
+	gui->AddCtrl(new Button(2,fnt, snd, originX, button2, 0.1f, "1280 x 720 | 16:9"));
+	gui->AddCtrl(new Button(3,fnt, snd, originX, button3, 0.1f, "1600 x 900 | 16:9"));
+	gui->AddCtrl(new Button(4,fnt, snd, originX, button4, 0.1f, "1600 x 1000 | 16:10"));
+	gui->AddCtrl(new Button(5,fnt, snd, originX, button5, 0.2f, "1920 x 1080 | 16:9"));
+	gui->AddCtrl(new Button(6,fnt, snd, originX, button6, 0.3f, "Windowed"));
+	gui->AddCtrl(new Button(7,fnt, snd, originX, button7, 0.3f, "Return to Options"));
+	gui->AddCtrl(new Button(8,fnt, snd, originX, button8, 0.3f, "Exit"));
 
 	gui->SetNavMode(HGEGUI_UPDOWN | HGEGUI_CYCLED);
 	gui->SetCursor(spr);

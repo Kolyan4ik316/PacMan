@@ -2,9 +2,9 @@
 GamePause::GamePause(std::stack<State*>* states_in, HGE* hge_in) : Menu(states_in, hge_in)
 {
 
-	gui->AddCtrl(new Button(1,fnt, snd, originX, originY - 100.0f, 0.0f, "Continue"));
-	gui->AddCtrl(new Button(2,fnt, snd, originX, originY - 60.0f, 0.1f, "Main Menu"));
-	gui->AddCtrl(new Button(3,fnt, snd, originX, originY - 20.0f, 0.2f, "Exit"));
+	gui->AddCtrl(new Button(1,fnt, snd, originX, button1, 0.0f, "Continue"));
+	gui->AddCtrl(new Button(2,fnt, snd, originX, button2, 0.1f, "Main Menu"));
+	gui->AddCtrl(new Button(3,fnt, snd, originX, button3, 0.2f, "Exit"));
 
 	gui->SetNavMode(HGEGUI_UPDOWN | HGEGUI_CYCLED);
 	gui->SetCursor(spr);

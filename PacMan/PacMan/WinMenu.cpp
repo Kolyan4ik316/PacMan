@@ -14,7 +14,7 @@ WinMenu::WinMenu(std::stack<State*>* states_in, HGE* hge_in) : Menu(states_in, h
 			throw(std::exception("Can't find Sounds\\intermission.wav"));
 		}
 	}
-	gui->AddCtrl(new Button(1, fnt, snd, originX, originY + 60.0f, 0.4f, "Return to Main Menu"));
+	gui->AddCtrl(new Button(1, fnt, snd, originX, button6, 0.4f, "Return to Main Menu"));
 	
 	gui->SetNavMode(HGEGUI_UPDOWN | HGEGUI_CYCLED);
 	gui->SetCursor(spr);

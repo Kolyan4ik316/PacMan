@@ -23,5 +23,13 @@ protected:
 	hgeFont				*fnt;
 	hgeSprite			*spr;
 	hgeSprite			*bgSpr;
+	float button1;
+	float button2;
+	float button3;
+	float button4;
+	float button5;
+	float button6;
+	float button7;
+	float button8;
 };
 #endif
