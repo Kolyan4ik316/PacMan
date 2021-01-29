@@ -10,7 +10,7 @@ class MapManager
 {
 public:
 	MapManager(HGE* hge_in, std::vector<Entity*>* mapItems_in, std::vector<Tiles*>* tiles_in, const unsigned int& width_in, const unsigned int&  height_in);
-	void LoadMap();
+	void LoadMap(const std::string& path);
 	virtual ~MapManager();
 private:
 	std::vector<Entity*>* mapItems;

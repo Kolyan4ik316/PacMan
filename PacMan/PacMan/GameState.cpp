@@ -1,5 +1,4 @@
 #include "GameState.h"
-//PacMan GameState::player = PacMan();
 
 GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in)
 {
@@ -81,14 +80,12 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 		}
 	}
 	player->SetSize(scaleX, scaleY);
-	//player->SetPosition(hgeVector(tiles.at(nMapHeight /2 * nMapWidth + nMapWidth/2)->GetOrigin()));
 }
 void GameState::LoadResources()
 {
 	player = new PacMan(hge);
 	mapManager = new MapManager(hge, &mapItems, &tiles, nMapWidth, nMapHeight);
-	mapManager->LoadMap();
-	//pathfinder = new PathFinder(nMapWidth, nMapHeight, &tiles);
+	mapManager->LoadMap("Maps\\SimpleMap.ini");
 }
 const bool GameState::CheckForColiding(DynamicEntity* checker, Entity* colisior) const
 {
@@ -156,7 +153,7 @@ void GameState::UpdateEnemies(Ghost* ghost)
 void GameState::Update(const float& dt)
 {	
 	// Process keys
-	if(playerPunchedTimer > 1.2f)
+	if(playerPunchedTimer > 0.4f)
 	{	
 		UpdateInput(dt);
 	}
@@ -166,7 +163,6 @@ void GameState::Update(const float& dt)
 		{
 			if(tiles.at(i)->IsInside(ghosts.at(j)->GetPosition()))
 			{
-				//ghosts.at(j)->SetGloabalStart(tiles.at(i)->GetPosition());
 				ghosts.at(j)->SetPosTile(tiles.at(i)->GetPosition());
 			}
 			for(unsigned int j = 0; j < ghosts.size(); j++)
@@ -360,18 +356,10 @@ void GameState::Render()
 			hFoods.at(i)->Render();
 		}
 	}
-	/*for(unsigned int i = 0; i < tiles.size(); i++)
-	{
-		tiles.at(i)->Render();
-	}*/
+	// rendering enemies
 	for(unsigned int i = 0; i < ghosts.size(); i++)
 	{
 		ghosts.at(i)->Render();
-		/*for(unsigned int j = 0; j <ghosts.at(i)->pathToTarget.size(); j++)
-		{
-			ghosts.at(i)->pathToTarget.at(j)->Render();
-			//tiles.at(unsigned int (ghosts.at(i)->pathToTarget.at(j).y * nMapWidth + ghosts.at(i)->pathToTarget.at(j).x))->Render();
-		}*/
 		
 	}
 	// rendering player
@@ -399,10 +387,6 @@ void GameState::UpdateInput(const float& dt)
 	{
 		dir += hgeVector(0.0f, 1.0f);
 	};
-	if(hge->Input_GetKeyState(HGEK_SPACE))
-	{
-		player->SetPosition(hgeVector(tiles.at(20 * 9 - 2)->GetOrigin()));
-	};
 	// Input to back to main menu
 	if(hge->Input_GetKeyState(HGEK_ESCAPE))
 	{
@@ -420,7 +404,6 @@ void GameState::FreeResources()
 {
 	delete player;
 	
-	//delete pathfinder;
 	delete mapManager;
 	while(!mapItems.empty())
 	{

@@ -7,9 +7,8 @@ MapManager::MapManager(HGE* hge_in, std::vector<Entity*>* mapItems_in, std::vect
 	width = width_in;
 	height = height_in;
 }
-void MapManager::LoadMap()
+void MapManager::LoadMap(const std::string& path)
 {
-	std::string path = "Maps\\SimpleMap.ini";
 	std::ifstream ifs;
 	ifs.open(path.c_str());
 	// if file is already exist
