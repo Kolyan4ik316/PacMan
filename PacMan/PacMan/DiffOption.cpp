@@ -56,7 +56,9 @@ void DiffOption::Update(const float& dt)
 }
 void DiffOption::Render()
 {
-	bgSpr->RenderEx(0.0f, 0.0f, 0.0f, scaleX, scaleY); 
+	const float posX = originX / scaleX - 1280.0f / 2.0f;
+	const float posY = originY / scaleY - 720.0f / 2.0f;
+	bgSpr->RenderEx(posX , posY, 0.0f, scaleX, scaleY); 
 	gui->Render();
 	fnt->SetColor(0xFFFFFFFF);
 	fnt->printf(originX, originY - 200.0f, HGETEXT_CENTER, "Choose difficult");
