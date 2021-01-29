@@ -12,9 +12,6 @@ public:
 	float givenTimeForSolving;
 	void SetStartPoint(Tiles* tile);
 	void SetSpeed(const float& speed_in);
-	void SetGloabalGoal(const hgeVector gloabalGoal_in);
-	const hgeVector GetTileGoal() const;
-	void SetGloabalStart(const hgeVector gloabalStart_in);
 	Tiles* GetStartPoint();
 protected:
 	float speed;

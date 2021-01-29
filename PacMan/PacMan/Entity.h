@@ -29,7 +29,7 @@ public:
 		dir = dir_in;
 	};
 	// Taking position
-	virtual const hgeVector GetPosition() const
+	virtual const hgeVector GetWorldPosition() const
 	{
 		return pos;
 	};

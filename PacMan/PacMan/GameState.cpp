@@ -41,10 +41,10 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 		if(typeid(PMStartPoint) == typeid(*mapItems.at(i)))
 		{
 			pmstart = (PMStartPoint*)mapItems.at(i);
-			player->SetPosition(mapItems.at(i)->GetPosition());
+			player->SetPosition(mapItems.at(i)->GetWorldPosition());
 			for (unsigned int i = 0; i < tiles.size(); i++)
 			{
-				if(tiles.at(i)->IsInside(player->GetPosition()))
+				if(tiles.at(i)->IsInside(player->GetWorldPosition()))
 				{
 					player->SetSpeed(diffs.at(unsigned int(difficult)).pacMan_speed);
 					player->SetPosition(tiles.at(i)->GetOrigin());
@@ -61,12 +61,12 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 			for (unsigned int j = 0; j < diffs.at(unsigned int(difficult)).num_of_ghosts; j++)
 			{
 				ghosts.push_back(new Ghost(hge));
-				ghosts.back()->SetPosition(mapItems.at(i)->GetPosition());
+				ghosts.back()->SetPosition(mapItems.at(i)->GetWorldPosition());
 				ghosts.back()->SetSpeed(diffs.at(unsigned int(difficult)).speed_of_ghosts);
 				ghosts.back()->SetPathFinder(new PathFinder(nMapWidth, nMapHeight, &tiles));
 				for (unsigned int i = 0; i < tiles.size(); i++)
 				{
-					if(tiles.at(i)->IsInside(ghosts.back()->GetPosition()))
+					if(tiles.at(i)->IsInside(ghosts.back()->GetWorldPosition()))
 					{
 						ghosts.back()->SetPosition(tiles.at(i)->GetOrigin());
 						ghosts.back()->SetPosTile(tiles.at(i)->GetPosition());
@@ -130,19 +130,19 @@ void GameState::UpdateEnemies(Ghost* ghost)
 	if(tempTile)
 	{
 		ghost->SetDestination(tempTile->GetOrigin());
-		if(ghost->GetPosition().x > tempTile->GetOrigin().x)
+		if(ghost->GetWorldPosition().x > tempTile->GetOrigin().x)
 		{
 			dir -= hgeVector(1.0f, 0.0f);
 		}
-		if(ghost->GetPosition().x < tempTile->GetOrigin().x)
+		if(ghost->GetWorldPosition().x < tempTile->GetOrigin().x)
 		{
 			dir += hgeVector(1.0f, 0.0f);
 		}
-		if(ghost->GetPosition().y < tempTile->GetOrigin().y)
+		if(ghost->GetWorldPosition().y < tempTile->GetOrigin().y)
 		{
 			dir += hgeVector(0.0f, 1.0f);
 		}
-		if(ghost->GetPosition().y > tempTile->GetOrigin().y)
+		if(ghost->GetWorldPosition().y > tempTile->GetOrigin().y)
 		{
 			dir -= hgeVector(0.0f, 1.0f);
 		}	
@@ -161,7 +161,7 @@ void GameState::Update(const float& dt)
 	{
 		for(unsigned int j = 0; j < ghosts.size(); j++)
 		{
-			if(tiles.at(i)->IsInside(ghosts.at(j)->GetPosition()))
+			if(tiles.at(i)->IsInside(ghosts.at(j)->GetWorldPosition()))
 			{
 				ghosts.at(j)->SetPosTile(tiles.at(i)->GetPosition());
 			}
@@ -171,7 +171,7 @@ void GameState::Update(const float& dt)
 				{
 					if(ghosts.at(j)->CanBeAtacket() || ghosts.at(j)->WasAttacked())
 					{
-						if(tiles.at(i)->IsInside(ghstart->GetPosition()))
+						if(tiles.at(i)->IsInside(ghstart->GetWorldPosition()))
 						{
 							ghosts.at(j)->SetPathTo(tiles.at(i)->GetPosition());
 							if(ghosts.at(j)->WasAttacked())
@@ -200,7 +200,7 @@ void GameState::Update(const float& dt)
 						
 					else
 					{
-						if(tiles.at(i)->IsInside(player->GetPosition()))
+						if(tiles.at(i)->IsInside(player->GetWorldPosition()))
 						{
 							ghosts.at(j)->SetPathTo(tiles.at(i)->GetPosition());
 							player->SetPosTile(tiles.at(i)->GetPosition());
@@ -212,7 +212,7 @@ void GameState::Update(const float& dt)
 				
 				else
 				{
-					ghosts.at(j)->SetPosition(ghstart->GetPosition());
+					ghosts.at(j)->SetPosition(ghstart->GetWorldPosition());
 					ghosts.at(j)->releaseTime = 0.0f;
 
 				}
@@ -224,7 +224,7 @@ void GameState::Update(const float& dt)
 			{
 				numOfLife--;
 				player->SwitchWasAttacked();
-				player->SetPosition(pmstart->GetPosition());
+				player->SetPosition(pmstart->GetWorldPosition());
 				playerPunchedTimer = 0.0f;
 					
 
