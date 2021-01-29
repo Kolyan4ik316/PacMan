@@ -18,7 +18,7 @@ void Menu::LoadResources()
 	{
 		throw(std::exception("Can't find cursor.png or menu.wav"));
 	}
-	fnt = 0;
+	fnt = NULL;
 	fnt=new hgeFont("font1.fnt");
 	if(!fnt)
 	{

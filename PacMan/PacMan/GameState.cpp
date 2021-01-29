@@ -120,6 +120,12 @@ void GameState::LoadResources()
 	{
 		throw(std::exception("Can't find Sounds\\eat_ghost.wav"));
 	}
+	fnt = NULL;
+	fnt=new hgeFont("font1.fnt");
+	if(!fnt)
+	{
+		throw(std::exception("Can't find font1.fnt"));
+	}
 }
 const bool GameState::CheckForColiding(DynamicEntity* checker, Entity* colisior) const
 {
@@ -422,6 +428,10 @@ void GameState::Render()
 	}
 	// rendering player
 	player->Render();
+	fnt->printf(originX + (750.0f / 2.0f) * scaleX, originY - (300.0f / 2.0f) * scaleY, HGETEXT_RIGHT, "NUM\nOF\nLIFE:");
+	std::ostringstream ss;
+    ss << numOfLife;
+	fnt->printf(originX + (750.0f / 2.0f) * scaleX, originY - (140.0f / 2.0f) * scaleY, HGETEXT_RIGHT, ss.str().c_str());
 }
 void GameState::UpdateInput(const float& dt)
 {	
@@ -461,7 +471,7 @@ void GameState::UpdateInput(const float& dt)
 void GameState::FreeResources()
 {
 	delete player;
-	
+	delete fnt;
 	delete mapManager;
 	while(!mapItems.empty())
 	{

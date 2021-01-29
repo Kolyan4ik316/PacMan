@@ -30,5 +30,6 @@
 #include <limits>
 #include <algorithm>
 #include <typeinfo.h>
+#include <sstream>
 
 #endif

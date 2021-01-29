@@ -54,6 +54,7 @@ private:
 	float beginTimer;
 	float eatTimer;
 	float sirenTimer;
+	hgeFont	*fnt;
 
 };
 
