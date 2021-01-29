@@ -86,6 +86,7 @@ void GameState::LoadResources()
 	player = new PacMan(hge);
 	mapManager = new MapManager(hge, &mapItems, &tiles, nMapWidth, nMapHeight);
 	mapManager->LoadMap("Maps\\SimpleMap.ini");
+	
 }
 const bool GameState::CheckForColiding(DynamicEntity* checker, Entity* colisior) const
 {
@@ -273,7 +274,10 @@ void GameState::Update(const float& dt)
 			{
 				hFoods.at(i)->EatFood();
 				eatenFood++;
-				
+				if(player->CanBeAtacket())
+				{
+					player->SwitchAtacked();
+				}
 				attackTimer = 0.0f;
 				
 			}
@@ -329,7 +333,10 @@ void GameState::Update(const float& dt)
 		}
 		
 	}
-	
+	if(!player->CanBeAtacket() && attackTimer > 7.0f)
+	{
+		player->SwitchAtacked();
+	}
 	player->Update(dt);
 	attackTimer += dt;
 	playerPunchedTimer += dt;

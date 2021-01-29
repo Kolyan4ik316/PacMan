@@ -4,7 +4,6 @@ Menu::Menu(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in
 	quit = false;
 	LoadResources();
 	gui=new hgeGUI();
-	
 }
 void Menu::LoadResources()
 {
@@ -27,6 +26,7 @@ void Menu::LoadResources()
 	}
 	spr=new hgeSprite(tex,0,0,32,32);
 	bgSpr =new hgeSprite(bgText,0,0,1280,720);
+	
 }
 void Menu::UpdateBG(const float& dt)
 {
@@ -37,6 +37,7 @@ void Menu::FreeResources()
 	delete fnt;
 	delete spr;
 	delete bgSpr;
+	
 	hge->Effect_Free(snd);
 	hge->Texture_Free(tex);
 	hge->Texture_Free(bgText);

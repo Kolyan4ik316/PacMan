@@ -15,6 +15,8 @@ public:
 	virtual void LoadResources() override;
 	virtual void FreeResources() override;
 	virtual const bool WasAttacked() const;
+	virtual void SwitchAtacked();
+	virtual bool CanBeAtacket();
 	virtual void SwitchWasAttacked();
 	virtual ~PacMan();
 private:
@@ -26,6 +28,11 @@ private:
 	bool wasAttacked;
 	PacManAnimation curAnim;
 	PacManAnimation prevAnim;
-
+	hgeParticleSystem*	par;
+	float dx; 
+	float dy;
+	float friction;
+	bool canBeAtacket;
+	HTEXTURE	 partTex;
 };
 #endif
