@@ -152,38 +152,15 @@ std::vector<Node*> PathFinder::GetNeighbourNodes(Node* node)
 {
 	std::vector<Node*> vecNeighbours;
 	
-	//if(node->pos.x > 0)
-	{
-		vecNeighbours.push_back(new Node(hgeVector(node->pos.x - 1, node->pos.y), node->targetPos, node->G + 1, node));
-	}
-	//if(node->pos.x < nMapHeight - 1)
-	{
-		vecNeighbours.push_back(new Node(hgeVector(node->pos.x + 1, node->pos.y), node->targetPos, node->G + 1, node));
-	}
-
-	//if(node->pos.y > 0)
-	{
-		vecNeighbours.push_back(new Node(hgeVector(node->pos.x, node->pos.y - 1), node->targetPos, node->G + 1, node));
-	}
+	vecNeighbours.push_back(new Node(hgeVector(node->pos.x - 1, node->pos.y), node->targetPos, node->G + 1, node));
 	
-	//if (node->pos.y < nMapHeight - 1)
-	{
-		vecNeighbours.push_back(new Node(hgeVector(node->pos.x, node->pos.y + 1), node->targetPos, node->G + 1, node));
-	}
+	vecNeighbours.push_back(new Node(hgeVector(node->pos.x + 1, node->pos.y), node->targetPos, node->G + 1, node));
+
+	vecNeighbours.push_back(new Node(hgeVector(node->pos.x, node->pos.y - 1), node->targetPos, node->G + 1, node));
+	
+	vecNeighbours.push_back(new Node(hgeVector(node->pos.x, node->pos.y + 1), node->targetPos, node->G + 1, node));
 
 	return vecNeighbours;
-}
-void PathFinder::Render()
-{
-	/*for(unsigned int i = 0; i < pathToTarget.size(); i++)
-	{
-		pathToTarget.at(i)->RenderChosen();
-	}
-	for(unsigned int i = 0; i < checkedNodes.size(); i++)
-	{
-		(*tiles).at(unsigned int(checkedNodes.at(i)->pos.y * nMapWidth  + checkedNodes.at(i)->pos.x))->Render();
-	}*/
-	(*tiles).at(unsigned int(7 * nMapWidth  + 16))->Render();
 }
 
 PathFinder::~PathFinder()
