@@ -13,5 +13,7 @@ public:
 	virtual void UpdateInput(const float& dt) override;
 
 	virtual ~WinMenu();
+private:
+	HEFFECT	winSnd;
 };
 #endif

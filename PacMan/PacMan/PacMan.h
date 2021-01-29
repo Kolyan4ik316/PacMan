@@ -29,9 +29,6 @@ private:
 	PacManAnimation curAnim;
 	PacManAnimation prevAnim;
 	hgeParticleSystem*	par;
-	float dx; 
-	float dy;
-	float friction;
 	bool canBeAtacket;
 	HTEXTURE	 partTex;
 };

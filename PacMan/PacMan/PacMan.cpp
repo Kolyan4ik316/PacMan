@@ -1,12 +1,7 @@
 #include "PacMan.h"
-//hgeSprite* PacMan::sprite = 0;
-//HTEXTURE PacMan::tex = 0;
-//HEFFECT PacMan::snd = 0;
-//const float PacMan::speed = 90;
-//const float PacMan::friction = 0.98f;
 PacMan::PacMan(HGE* hge_in)
 	:
-	DynamicEntity(hge_in), dx(0.0f), dy(0.0f)
+	DynamicEntity(hge_in)
 {
 	speed = 170.0f;
 	LoadResources();
@@ -15,7 +10,6 @@ PacMan::PacMan(HGE* hge_in)
 	prevAnim = curAnim; 
 	animation.at(unsigned int(curAnim))->Play();
 	wasAttacked = false;
-	friction = 0.98f;
 	canBeAtacket = true;
 }
 void PacMan::Update(const float& dt)

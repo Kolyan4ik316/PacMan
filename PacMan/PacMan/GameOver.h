@@ -13,5 +13,7 @@ public:
 	virtual void UpdateInput(const float& dt) override;
 
 	virtual ~GameOver();
+private:
+	HEFFECT	looseSnd;
 };
 #endif

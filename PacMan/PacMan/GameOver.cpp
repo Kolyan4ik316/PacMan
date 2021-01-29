@@ -8,6 +8,11 @@ GameOver::GameOver(std::stack<State*>* states_in, HGE* hge_in) : Menu(states_in,
 		hge->Texture_Free(bgText);
 		bgText = hge->Texture_Load("GameOver.png");
 		bgSpr =new hgeSprite(bgText,0,0,1280,720);
+		looseSnd = snd=hge->Effect_Load("Sounds\\extend.wav");
+		if(!looseSnd)
+		{
+			throw(std::exception("Can't find Sounds\\extend.wav"));
+		}
 	}
 	gui->AddCtrl(new Button(1, fnt, snd, originX, originY + 60.0f, 0.4f, "Return to Main Menu"));
 
@@ -15,6 +20,7 @@ GameOver::GameOver(std::stack<State*>* states_in, HGE* hge_in) : Menu(states_in,
 	gui->SetCursor(spr);
 	gui->SetFocus(1);
 	gui->Enter();
+	hge->Effect_Play(looseSnd);
 }
 void GameOver::Update(const float& dt)
 {
@@ -55,4 +61,5 @@ void GameOver::UpdateInput(const float& dt)
 }
 GameOver::~GameOver()
 {
+	hge->Effect_Free(looseSnd);
 }

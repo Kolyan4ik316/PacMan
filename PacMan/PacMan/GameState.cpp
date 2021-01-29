@@ -13,6 +13,9 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	attackTimer = 7.0f;
 	playerPunchedTimer = 0.0f;
 	numOfLife = 3;
+	beginTimer = 0.0f;
+	sirenTimer = 0.0f;
+	eatTimer = 0.0f;
 	for(unsigned int i = 0; i < nMapHeight; i++)
 	{
 		for (unsigned int j = 0; j < nMapWidth; j++)
@@ -80,13 +83,43 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 		}
 	}
 	player->SetSize(scaleX, scaleY);
+	hge->Effect_Play(beginSnd);
 }
 void GameState::LoadResources()
 {
 	player = new PacMan(hge);
 	mapManager = new MapManager(hge, &mapItems, &tiles, nMapWidth, nMapHeight);
 	mapManager->LoadMap("Maps\\SimpleMap.ini");
-	
+	beginSnd = hge->Effect_Load("Sounds\\game_start.wav");
+	if(!beginSnd)
+	{
+		throw(std::exception("Can't find Sounds\\game_start.wav"));
+	}
+	sirenSnd = hge->Effect_Load("Sounds\\siren_1.wav");
+	if(!sirenSnd)
+	{
+		throw(std::exception("Can't find Sounds\\siren_1.wav"));
+	}
+	wakaSnd = hge->Effect_Load("Sounds\\dp_superpac_wakka.wav");
+	if(!wakaSnd)
+	{
+		throw(std::exception("Can't find Sounds\\dp_superpac_wakka.wav"));
+	}
+	deathSnd = hge->Effect_Load("Sounds\\pacman.wav");
+	if(!deathSnd)
+	{
+		throw(std::exception("Can't find Sounds\\pacman.wav"));
+	}
+	eatHFoodSnd = hge->Effect_Load("Sounds\\power_pellet.wav");
+	if(!eatHFoodSnd)
+	{
+		throw(std::exception("Can't find Sounds\\power_pellet.wav"));
+	}
+	eatGhostSnd = hge->Effect_Load("Sounds\\eat_ghost.wav");
+	if(!eatGhostSnd)
+	{
+		throw(std::exception("Can't find Sounds\\eat_ghost.wav"));
+	}
 }
 const bool GameState::CheckForColiding(DynamicEntity* checker, Entity* colisior) const
 {
@@ -118,7 +151,6 @@ void GameState::Colision(DynamicEntity* checker, Entity* colisior)
 		dir += hgeVector(0.0f, speed);
 	}
 	checker->SetDirection(dir);
-	
 }
 void GameState::UpdateEnemies(Ghost* ghost)
 {
@@ -158,10 +190,12 @@ void GameState::Update(const float& dt)
 	{	
 		UpdateInput(dt);
 	}
+	// Updating position of entitie by tiles
 	for(unsigned int i = 0; i < tiles.size(); i++)
 	{
 		for(unsigned int j = 0; j < ghosts.size(); j++)
 		{
+			// if ghost inside tile setting his pos node pos
 			if(tiles.at(i)->IsInside(ghosts.at(j)->GetWorldPosition()))
 			{
 				ghosts.at(j)->SetPosTile(tiles.at(i)->GetPosition());
@@ -227,7 +261,7 @@ void GameState::Update(const float& dt)
 				player->SwitchWasAttacked();
 				player->SetPosition(pmstart->GetWorldPosition());
 				playerPunchedTimer = 0.0f;
-					
+				
 
 			}
 		}
@@ -260,6 +294,12 @@ void GameState::Update(const float& dt)
 			foods.at(i)->Update(dt);
 			if(CheckForColiding(player, foods.at(i)))
 			{
+				if(eatTimer>=0.35f)
+				{
+					eatTimer = 0.0f;
+					hge->Effect_Play(wakaSnd);
+				}
+				
 				foods.at(i)->EatFood();
 				eatenFood++;
 			}
@@ -277,6 +317,7 @@ void GameState::Update(const float& dt)
 				if(player->CanBeAtacket())
 				{
 					player->SwitchAtacked();
+					hge->Effect_Play(eatHFoodSnd);
 				}
 				attackTimer = 0.0f;
 				
@@ -316,6 +357,7 @@ void GameState::Update(const float& dt)
 				{
 					playerPunchedTimer = 0.0f;
 					player->SwitchWasAttacked();
+					hge->Effect_Play(deathSnd);
 				}
 			}
 			else if (ghosts.at(i)->CanBeAtacket())
@@ -324,6 +366,8 @@ void GameState::Update(const float& dt)
 				{
 					if(!ghosts.at(i)->WasAttacked())
 					{
+						
+						hge->Effect_Play(eatGhostSnd);
 						ghosts.at(i)->SwitchWasAtacked();
 					}
 					
@@ -337,10 +381,17 @@ void GameState::Update(const float& dt)
 	{
 		player->SwitchAtacked();
 	}
+	if(beginTimer > 4.0f&& sirenTimer >= 1.58f)
+	{
+		sirenTimer = 0.0f;
+		hge->Effect_Play(sirenSnd);
+	}
 	player->Update(dt);
+	beginTimer += dt;
 	attackTimer += dt;
+	sirenTimer += dt;
 	playerPunchedTimer += dt;
-	
+	eatTimer += dt;
 }
 void GameState::Render()
 {
@@ -417,6 +468,12 @@ void GameState::FreeResources()
 		delete mapItems.back();
 		mapItems.pop_back();
 	}
+	hge->Effect_Free(beginSnd);
+	hge->Effect_Free(sirenSnd);
+	hge->Effect_Free(wakaSnd);
+	hge->Effect_Free(deathSnd);
+	hge->Effect_Free(eatHFoodSnd);
+	hge->Effect_Free(eatGhostSnd);
 }
 GameState::~GameState()
 {

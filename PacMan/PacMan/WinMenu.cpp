@@ -8,13 +8,19 @@ WinMenu::WinMenu(std::stack<State*>* states_in, HGE* hge_in) : Menu(states_in, h
 		hge->Texture_Free(bgText);
 		bgText = hge->Texture_Load("WinMenu.png");
 		bgSpr =new hgeSprite(bgText,0,0,1280,720);
+		winSnd = snd=hge->Effect_Load("Sounds\\intermission.wav");
+		if(!winSnd)
+		{
+			throw(std::exception("Can't find Sounds\\intermission.wav"));
+		}
 	}
 	gui->AddCtrl(new Button(1, fnt, snd, originX, originY + 60.0f, 0.4f, "Return to Main Menu"));
-
+	
 	gui->SetNavMode(HGEGUI_UPDOWN | HGEGUI_CYCLED);
 	gui->SetCursor(spr);
 	gui->SetFocus(1);
 	gui->Enter();
+	hge->Effect_Play(winSnd);
 }
 void WinMenu::Update(const float& dt)
 {
@@ -34,7 +40,7 @@ void WinMenu::Update(const float& dt)
 	else if(id) { lastid=id; gui->Leave(); }
 	UpdateBG(dt);
 
-
+	
 	UpdateInput(dt);
 }
 void WinMenu::Render()
@@ -55,4 +61,5 @@ void WinMenu::UpdateInput(const float& dt)
 }
 WinMenu::~WinMenu()
 {
+	hge->Effect_Free(winSnd);
 }

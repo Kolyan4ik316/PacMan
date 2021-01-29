@@ -103,15 +103,12 @@ void Ghost::SetDestination(const hgeVector& pos_in)
 }
 void Ghost::SetPathTo(const hgeVector& target)
 {
-	if(canSolve >= 0.5f)
+	if(canSolve >= 0.4f)
 	{
 		pathToTarget = pathFinder->GetPath(pos_tile, target);
 		ResetTimeForSolving();
-		
-	}
-	if(canSolve <= 0.5f)
-	{
 		pathFinder->CleanUpNodes();
+		
 	}
 }
 Tiles* Ghost::GetNextPosition()

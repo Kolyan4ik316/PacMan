@@ -45,7 +45,16 @@ private:
 	float playerPunchedTimer;
 	unsigned int numOfLife;
 	hgeVector goal;
-	
+	HEFFECT	wakaSnd;
+	HEFFECT	eatHFoodSnd;
+	HEFFECT	beginSnd;
+	HEFFECT	eatGhostSnd;
+	HEFFECT	sirenSnd;
+	HEFFECT	deathSnd;
+	float beginTimer;
+	float eatTimer;
+	float sirenTimer;
+
 };
 
 #endif
