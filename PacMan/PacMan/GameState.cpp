@@ -291,35 +291,44 @@ void GameState::Update(const float& dt)
 			Colision(player, obsts.at(i));
 			break;
 		}
+		// updating obstacles
 		obsts.at(i)->Update(dt);
 	}
+	// updating food
 	for(unsigned int i = 0; i < foods.size(); i++)
 	{
 		if(!foods.at(i)->IsEaten())
 		{
 			foods.at(i)->Update(dt);
+			// eating hFood
 			if(CheckForColiding(player, foods.at(i)))
 			{
+				// playing sound if eatTimer reached
 				if(eatTimer>=0.35f)
 				{
 					eatTimer = 0.0f;
 					hge->Effect_Play(wakaSnd);
 				}
-				
+				// incrementing number of eaten foods
 				foods.at(i)->EatFood();
 				eatenFood++;
 			}
 		}
 	}
+	// updating hFood
 	for(unsigned int i = 0; i < hFoods.size(); i++)
 	{
 		if(!hFoods.at(i)->IsEaten())
 		{
+			
 			hFoods.at(i)->Update(dt);
 			if(CheckForColiding(player, hFoods.at(i)))
 			{
+				// eating hFood
 				hFoods.at(i)->EatFood();
 				eatenFood++;
+				// if ghosts can be attacked we are gonna to play sound, and play particles system
+				// switching to false
 				if(player->CanBeAtacket())
 				{
 					player->SwitchAtacked();
@@ -330,14 +339,17 @@ void GameState::Update(const float& dt)
 			}
 		}
 	}
+	// if you ate all of food, you have win
 	if(eatenFood == foods.size() + hFoods.size())
 	{
 		states->push(new WinMenu(states, hge));
 	}
+	//if 0 lifes, you have lost
 	if(numOfLife == 0)
 	{
 		states->push(new GameOver(states, hge));
 	}
+	// releasing ghosts if releaseTime is reached
 	for(unsigned int i = 0; i < ghosts.size(); i++)
 	{
 		if(ghosts.at(i)->releaseTime <= ReleaseTimer)
@@ -347,16 +359,21 @@ void GameState::Update(const float& dt)
 		}
 		
 	}
+	// updating ghosts
 	for(unsigned int i = 0; i < ghosts.size(); i++)
 	{
+		// only if release timer is granted
 		if(ghosts.at(i)->releaseTime >= ReleaseTimer)
 		{
+			// updating path and position of enemies
 			UpdateEnemies(ghosts.at(i));
+			// updating ghost
 			ghosts.at(i)->Update(dt);
+			// if player ate holly food, switching ghost, and he could be attacked
 			if(attackTimer < 7.0f && !ghosts.at(i)->CanBeAtacket() && !ghosts.at(i)->WasAttacked())
 			{
 				ghosts.at(i)->SwitchAtacked();
-			}
+			}// if ghost can attack the player, coliding with him - player dead
 			if(attackTimer > 7.0f && !ghosts.at(i)->CanBeAtacket() && !ghosts.at(i)->WasAttacked())
 			{
 				if(ghosts.at(i)->IsColiding(player->Rectangle()))
@@ -365,7 +382,7 @@ void GameState::Update(const float& dt)
 					player->SwitchWasAttacked();
 					hge->Effect_Play(deathSnd);
 				}
-			}
+			}// if ghost is can be attacked and player is coliding with him - ghost dead
 			else if (ghosts.at(i)->CanBeAtacket())
 			{
 				if(ghosts.at(i)->IsColiding(player->Rectangle()))
@@ -383,16 +400,22 @@ void GameState::Update(const float& dt)
 		}
 		
 	}
+	// if player can't be attacked and time is reached
+	// player could be attacked
 	if(!player->CanBeAtacket() && attackTimer > 7.0f)
 	{
 		player->SwitchAtacked();
 	}
+	// sound of siren if timer is granted
 	if(beginTimer > 4.0f&& sirenTimer >= 1.58f)
 	{
 		sirenTimer = 0.0f;
 		hge->Effect_Play(sirenSnd);
 	}
+	// updating player
 	player->Update(dt);
+	// updating timers
+	// we are gonna need this to making event when time was reached
 	beginTimer += dt;
 	attackTimer += dt;
 	sirenTimer += dt;
@@ -401,11 +424,12 @@ void GameState::Update(const float& dt)
 }
 void GameState::Render()
 {
-	
+	// rendering obstacles
 	for(unsigned int i = 0; i <obsts.size(); i++)
 	{
 		obsts.at(i)->Render();
 	}
+	// rendering food
 	for(unsigned int i = 0; i <foods.size(); i++)
 	{
 		if(!foods.at(i)->IsEaten())
@@ -413,6 +437,7 @@ void GameState::Render()
 			foods.at(i)->Render();
 		}
 	}
+	// rendering holly food
 	for(unsigned int i = 0; i <hFoods.size(); i++)
 	{
 		if(!hFoods.at(i)->IsEaten())
@@ -470,6 +495,7 @@ void GameState::UpdateInput(const float& dt)
 }
 void GameState::FreeResources()
 {
+	// clean up memory
 	delete player;
 	delete fnt;
 	delete mapManager;
