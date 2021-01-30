@@ -23,6 +23,7 @@ void MapManager::LoadMap(const std::string& path)
 			int tempNumItem = int(tempItem);
 			switch (tempNumItem)
 			{
+				//pushing obstacles
 			case 'O':
 				if(nOfTile < width * height)
 				{
@@ -33,6 +34,7 @@ void MapManager::LoadMap(const std::string& path)
 				}
 				
 				break;
+				// pushing food
 			case 'F':
 				if(nOfTile < width * height)
 				{
@@ -41,6 +43,7 @@ void MapManager::LoadMap(const std::string& path)
 					nOfTile++;
 				}
 				break;
+				// pushing holy food
 			case 'H':
 				if(nOfTile < width * height)
 				{
@@ -50,6 +53,7 @@ void MapManager::LoadMap(const std::string& path)
 				}
 				break;
 			case 'P':
+				// pushing pacman start position
 				if(nOfTile < width * height)
 				{
 					mapItems->push_back(new PMStartPoint(hge));
@@ -58,6 +62,7 @@ void MapManager::LoadMap(const std::string& path)
 				}
 				break;
 			case 'G':
+				// pushing ghosts start position
 				if(nOfTile < width * height)
 				{
 					mapItems->push_back(new GHStartPoint(hge));

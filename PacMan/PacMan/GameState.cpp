@@ -5,17 +5,20 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 	Tiles::SetScale(scaleX, scaleY);
 	Tiles::SetOrigin(originX, originY);
 	
-	// Setting place for our tiles
 	eatenFood = 0;
+	// Setting width and height
 	nMapWidth = 20;
 	nMapHeight = 16;
+	// game timers
 	ReleaseTimer = diffs.at(unsigned int(difficult)).release_delay;
 	attackTimer = 7.0f;
 	playerPunchedTimer = 0.0f;
-	numOfLife = 3;
 	beginTimer = 0.0f;
 	sirenTimer = 0.0f;
 	eatTimer = 0.0f;
+	// num of lifes
+	numOfLife = 3;
+	// pushing tiles
 	for(unsigned int i = 0; i < nMapHeight; i++)
 	{
 		for (unsigned int j = 0; j < nMapWidth; j++)
@@ -26,7 +29,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 
 	LoadResources();
 	quit = false;
-	// Setting position of player;
+	// Setting entites by tile position
 	for(unsigned int i = 0; i <mapItems.size(); i++)
 	{
 		if(typeid(Obstacles) == typeid(*mapItems.at(i)))
@@ -43,12 +46,14 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 		}
 		if(typeid(PMStartPoint) == typeid(*mapItems.at(i)))
 		{
+			// setting position of player on pacman start position
 			pmstart = (PMStartPoint*)mapItems.at(i);
 			player->SetPosition(mapItems.at(i)->GetWorldPosition());
 			for (unsigned int i = 0; i < tiles.size(); i++)
 			{
 				if(tiles.at(i)->IsInside(player->GetWorldPosition()))
 				{
+					// setting position and etc.
 					player->SetSpeed(diffs.at(unsigned int(difficult)).pacMan_speed);
 					player->SetPosition(tiles.at(i)->GetOrigin());
 					player->SetPosTile(tiles.at(i)->GetPosition());
@@ -56,7 +61,7 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 					pmstart->SetPosition(tiles.at(i)->GetOrigin());
 				}
 			}
-		}
+		} //same for ghosts
 		if(typeid(GHStartPoint) == typeid(*mapItems.at(i)))
 		{
 			ghstart = (GHStartPoint*)mapItems.at(i);
@@ -82,14 +87,18 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 			
 		}
 	}
+	// setting size for scaling of our entities
 	player->SetSize(scaleX, scaleY);
+	// playing begin sound
 	hge->Effect_Play(beginSnd);
 }
 void GameState::LoadResources()
 {
 	player = new PacMan(hge);
 	mapManager = new MapManager(hge, &mapItems, &tiles, nMapWidth, nMapHeight);
+	// loading map
 	mapManager->LoadMap("Maps\\SimpleMap.ini");
+	// loading sounds
 	beginSnd = hge->Effect_Load("Sounds\\game_start.wav");
 	if(!beginSnd)
 	{
@@ -166,6 +175,7 @@ void GameState::UpdateEnemies(Ghost* ghost)
 	{
 		tempTile = ghost->GetNextPosition();
 	}
+	// setting direction
 	if(tempTile)
 	{
 		ghost->SetDestination(tempTile->GetOrigin());
@@ -206,10 +216,12 @@ void GameState::Update(const float& dt)
 			{
 				ghosts.at(j)->SetPosTile(tiles.at(i)->GetPosition());
 			}
+			// updating ghosts
 			for(unsigned int j = 0; j < ghosts.size(); j++)
 			{
 				if(!player->WasAttacked())
 				{
+					//if ghost was attacked or can be attacked set path to start position tile
 					if(ghosts.at(j)->CanBeAtacket() || ghosts.at(j)->WasAttacked())
 					{
 						if(tiles.at(i)->IsInside(ghstart->GetWorldPosition()))
@@ -241,6 +253,7 @@ void GameState::Update(const float& dt)
 						
 					else
 					{
+						//if ghosts can attack set their position to tile where is inside player
 						if(tiles.at(i)->IsInside(player->GetWorldPosition()))
 						{
 							ghosts.at(j)->SetPathTo(tiles.at(i)->GetPosition());
@@ -253,14 +266,16 @@ void GameState::Update(const float& dt)
 				
 				else
 				{
+					//if player was attacket setting ghost position on their start position
 					ghosts.at(j)->SetPosition(ghstart->GetWorldPosition());
 					ghosts.at(j)->releaseTime = 0.0f;
 
 				}
 			}
-		}
+		}// if player was attcked by ghost
 		if(player->WasAttacked())
 		{
+			// incrementing hp
 			if(playerPunchedTimer > 1.2f)
 			{
 				numOfLife--;
@@ -272,13 +287,10 @@ void GameState::Update(const float& dt)
 			}
 		}
 	}
+	// updating obtsacles
 	for(unsigned int i = 0; i < obsts.size(); i++)
 	{
-		if(CheckForColiding(player, obsts.at(i)))
-		{
-			Colision(player, obsts.at(i));
-			break;
-		}
+		// checking collision of ghosts and obstacles
 		for (unsigned int j = 0; j < ghosts.size(); j++)
 		{
 			if(CheckForColiding(ghosts.at(j), obsts.at(i)))
@@ -286,6 +298,7 @@ void GameState::Update(const float& dt)
 				Colision(ghosts.at(j), obsts.at(i));
 			}
 		}
+		// checking collision of player and obstacles
 		if(CheckForColiding(player, obsts.at(i)))
 		{
 			Colision(player, obsts.at(i));

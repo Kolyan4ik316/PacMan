@@ -33,27 +33,28 @@ public:
 	{
 		return pos;
 	};
+	// checking for collision
 	virtual const bool IsColiding(hgeRect* rect_in) const
 	{
 		return rect.Intersect(rect_in);
 	}
+	// returning rectangle of entities
 	virtual hgeRect* Rectangle()
 	{
 		return &rect;
 	}
+	// setter for size
 	virtual void SetSize(const float& sizeX, const float& sizeY)
 	{
 		scaleX = sizeX;
 		scaleY = sizeY;
 	}
+	// setting grid position
 	virtual void SetPosTile(const hgeVector& pos_in)
 	{
 		pos_tile = pos_in;
 	}
-	const hgeVector GetPosTile() const
-	{
-		return pos_tile;
-	}
+	// getting grid position
 	virtual const hgeVector GetPosTile()
 	{
 		return pos_tile;

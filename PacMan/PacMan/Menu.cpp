@@ -4,6 +4,7 @@ Menu::Menu(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in
 	quit = false;
 	LoadResources();
 	gui=new hgeGUI();
+	// setting position for button
 	button1 = originY - 140.0f;
 	button2 = originY - 100.0f;
 	button3 = originY - 60.0f;

@@ -13,6 +13,7 @@ State::State(std::stack<State*>* states_in, HGE* hge_in)
 	states(states_in),
 	hge(hge_in)
 {
+	// setting useful variables for our game
 	screenWidth =  hge->System_GetState(HGE_SCREENWIDTH);
 	screenHeight =  hge->System_GetState(HGE_SCREENHEIGHT);
 	originX = float(screenWidth / 2);
@@ -23,6 +24,7 @@ State::State(std::stack<State*>* states_in, HGE* hge_in)
 }
 void State::SetReoslution(const std::string& resolution)
 {
+	// seting resolution by loop
 	resolut = resolution;
 	if(resolution.compare("4:3") == 0)
 	{
@@ -71,5 +73,6 @@ void State::SetReoslution(const std::string& resolution)
 }
 void State::LoadDifficults(State::DiffAtributes attr)
 {
+	//loading diffs
 	diffs.push_back(attr);
 }
