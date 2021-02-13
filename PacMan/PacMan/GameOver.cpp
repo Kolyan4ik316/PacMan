@@ -6,7 +6,11 @@ GameOver::GameOver(std::stack<State*>* states_in, HGE* hge_in) : Menu(states_in,
 		delete bgSpr;
 		bgSpr = NULL;
 		hge->Texture_Free(bgText);
-		bgText = hge->Texture_Load("GameOver.png");
+		bgText = hge->Texture_Load("Images\\GameOver.png");
+		if(!bgText)
+		{
+			throw(std::exception("Can't find Images\\GameOver.png"));
+		}
 		bgSpr =new hgeSprite(bgText,0,0,1280,720);
 		looseSnd = snd=hge->Effect_Load("Sounds\\extend.wav");
 		if(!looseSnd)

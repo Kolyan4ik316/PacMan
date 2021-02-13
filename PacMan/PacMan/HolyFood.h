@@ -13,10 +13,10 @@ public:
 	}
 	virtual void LoadResources() override
 	{
-		tex=hge->Texture_Load("pacman.png");
+		tex=hge->Texture_Load("Images\\pacman.png");
 		if(!tex)
 		{
-			throw(std::exception("Can't find pacman.png"));
+			throw(std::exception("Can't find Images\\pacman.png"));
 		}
 		animation = new hgeAnimation(tex, 2, 2, 223, 52, 16, 16);
 		animation->SetHotSpot(8.0f,8.0f);

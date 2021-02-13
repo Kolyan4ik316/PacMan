@@ -57,10 +57,10 @@ void PacMan::Render()
 }
 void PacMan::LoadResources()
 {
-	tex=hge->Texture_Load("pacman.png");
+	tex=hge->Texture_Load("Images\\pacman.png");
 	if(!tex)
 	{
-		throw(std::exception("Can't find pacman.png"));
+		throw(std::exception("Can't find Images\\pacman.png"));
 	}
 	animation.push_back(new hgeAnimation(tex, 3, 12, 2, 2, 16, 16));
 	animation.back()->SetHotSpot(7,7);
@@ -73,10 +73,10 @@ void PacMan::LoadResources()
 	
 	//animation.back()->SetBlendMode(BLEND_COLORMUL |BLEND_ALPHABLEND | BLEND_NOZWRITE);
 	//animation.back()->SetColor(00000000, BLEND_ALPHABLEND);
-	partTex = hge->Texture_Load("particles.png");
+	partTex = hge->Texture_Load("Images\\particles.png");
 	if(!partTex )
 	{
-		throw(std::exception("Can't find particles.png"));
+		throw(std::exception("Can't find Images\\particles.png"));
 	}
 	sprite = new hgeSprite(partTex, 32, 32, 32, 32);
 	sprite->SetBlendMode(BLEND_COLORMUL | BLEND_ALPHAADD | BLEND_NOZWRITE);

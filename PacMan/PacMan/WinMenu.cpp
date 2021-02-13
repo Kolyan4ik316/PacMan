@@ -6,7 +6,11 @@ WinMenu::WinMenu(std::stack<State*>* states_in, HGE* hge_in) : Menu(states_in, h
 		delete bgSpr;
 		bgSpr = NULL;
 		hge->Texture_Free(bgText);
-		bgText = hge->Texture_Load("WinMenu.png");
+		bgText = hge->Texture_Load("Images\\WinMenu.png");
+		if(!bgText)
+		{
+			throw(std::exception("Can't find Images\\WinMenu.png"));
+		}
 		bgSpr =new hgeSprite(bgText,0,0,1280,720);
 		winSnd = snd=hge->Effect_Load("Sounds\\intermission.wav");
 		if(!winSnd)

@@ -21,7 +21,6 @@ public:
 	void FreeResources() override;
 	virtual ~GameState();
 private:
-	void UpdateEnemies(Ghost* ghost);
 	const bool CheckForColiding(DynamicEntity* checker, Entity* colisior) const;
 	void Colision(DynamicEntity* checker, Entity* colisior);
 	// Player variable

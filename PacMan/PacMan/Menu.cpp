@@ -16,16 +16,16 @@ Menu::Menu(std::stack<State*>* states_in, HGE* hge_in) : State(states_in, hge_in
 }
 void Menu::LoadResources()
 {
-	bgText = hge->Texture_Load("PacManBackGround.png");
+	bgText = hge->Texture_Load("Images\\PacManBackGround.png");
 	if(!bgText)
 	{
 		throw(std::exception("Can't find cursor.png or PacManBackGround.png"));
 	}
-	tex=hge->Texture_Load("cursor.png");
-	snd=hge->Effect_Load("menu.wav");
+	tex=hge->Texture_Load("Images\\cursor.png");
+	snd=hge->Effect_Load("Sounds\\menu.wav");
 	if(!tex || !snd)
 	{
-		throw(std::exception("Can't find cursor.png or menu.wav"));
+		throw(std::exception("Can't find Images\\cursor.png or Sounds\\menu.wav"));
 	}
 	fnt = NULL;
 	fnt=new hgeFont("font1.fnt");

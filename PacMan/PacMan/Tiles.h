@@ -18,7 +18,7 @@ public:
 		
 	}
 	// Setter for grid position
-	virtual void SetPosition(const hgeVector& pos_in)
+	virtual void SetGridPosition(const hgeVector& pos_in)
 	{
 		pos = pos_in;
 	};
@@ -60,7 +60,7 @@ public:
 		hge->Gfx_RenderLine(rect.x1, rect.y1, GetOrigin().x, GetOrigin().y, tempColor);
 	}
 	// Getter for grid position
-	virtual const hgeVector GetPosition() const
+	virtual const hgeVector GetGridPosition() const
 	{
 		return pos;
 	};

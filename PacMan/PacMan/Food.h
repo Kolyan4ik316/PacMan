@@ -13,10 +13,10 @@ public:
 	}
 	virtual void LoadResources() override
 	{
-		tex=hge->Texture_Load("pacman.png");
+		tex=hge->Texture_Load("Images\\pacman.png");
 		if(!tex)
 		{
-			throw(std::exception("Can't find pacman.png"));
+			throw(std::exception("Can't find Images\\pacman.png"));
 		}
 		sprite = new hgeSprite(tex, 223, 52, 16, 16);
 		sprite->SetHotSpot(8.0f,8.0f);

@@ -6,7 +6,7 @@ DynamicEntity::DynamicEntity(HGE *hge_in)
 	Entity(hge_in)
 {
 	speed = 0.0f;
-	canSolve = 0.0f;
+	canSolve = 0.6f;
 	givenTimeForSolving = 0.5f;
 }
 bool DynamicEntity::TimeForSolvingWasReached()

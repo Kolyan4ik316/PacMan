@@ -17,10 +17,10 @@ Ghost::Ghost(HGE* hge_in)
 }
 void Ghost::LoadResources()
 {
-	tex=hge->Texture_Load("pacman.png");
+	tex=hge->Texture_Load("Images\\pacman.png");
 	if(!tex)
 	{
-		throw(std::exception("Can't find pacman.png"));
+		throw(std::exception("Can't find Images\\pacman.png"));
 	}
 	animation.push_back(new hgeAnimation(tex, 2, 6, 2, 17, 16, 16)); 
 	animation.back()->SetHotSpot(7,7);
@@ -117,13 +117,39 @@ Tiles* Ghost::GetNextPosition()
 }
 void Ghost::Update(const float& dt)
 {
+	hgeVector dir = hgeVector(0.0f, 0.0f);
+	Tiles* tempTile = NULL;
 	if(!pathToTarget.empty())
 	{
-		if(pos_tile == GetNextPosition()->GetPosition())
+		tempTile = GetNextPosition();
+		if(pos_tile == GetNextPosition()->GetGridPosition())
 		{
 			pathToTarget.pop_back();
 		}
 	}
+	// setting direction
+	if(tempTile)
+	{
+		SetDestination(tempTile->GetOrigin());
+		if(GetWorldPosition().x > tempTile->GetOrigin().x)
+		{
+			dir -= hgeVector(1.0f, 0.0f);
+		}
+		if(GetWorldPosition().x < tempTile->GetOrigin().x)
+		{
+			dir += hgeVector(1.0f, 0.0f);
+		}
+		if(GetWorldPosition().y < tempTile->GetOrigin().y)
+		{
+			dir += hgeVector(0.0f, 1.0f);
+		}
+		if(GetWorldPosition().y > tempTile->GetOrigin().y)
+		{
+			dir -= hgeVector(0.0f, 1.0f);
+		}	
+	}
+	
+	SetDirection(dir);
 	pos.x+=dir.x * speed * scaleX * dt;
 	pos.y+=dir.y * speed * scaleY * dt;
 

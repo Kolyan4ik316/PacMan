@@ -56,8 +56,8 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 					// setting position and etc.
 					player->SetSpeed(diffs.at(unsigned int(difficult)).pacMan_speed);
 					player->SetPosition(tiles.at(i)->GetOrigin());
-					player->SetPosTile(tiles.at(i)->GetPosition());
-					pmstart->SetPosTile(tiles.at(i)->GetPosition());
+					player->SetPosTile(tiles.at(i)->GetGridPosition());
+					pmstart->SetPosTile(tiles.at(i)->GetGridPosition());
 					pmstart->SetPosition(tiles.at(i)->GetOrigin());
 				}
 			}
@@ -77,9 +77,9 @@ GameState::GameState(std::stack<State*>* states_in, HGE* hge_in) : State(states_
 					if(tiles.at(i)->IsInside(ghosts.back()->GetWorldPosition()))
 					{
 						ghosts.back()->SetPosition(tiles.at(i)->GetOrigin());
-						ghosts.back()->SetPosTile(tiles.at(i)->GetPosition());
+						ghosts.back()->SetPosTile(tiles.at(i)->GetGridPosition());
 						ghstart->SetPosition(tiles.at(i)->GetOrigin());
-						ghstart->SetPosTile(tiles.at(i)->GetPosition());
+						ghstart->SetPosTile(tiles.at(i)->GetGridPosition());
 						break;
 					}
 				}
@@ -147,7 +147,7 @@ void GameState::Colision(DynamicEntity* checker, Entity* colisior)
 #ifdef _DEBUG
 	speed = 1.25f;
 #else
-	speed = 4.25f;
+	speed = 8.0f;
 #endif
 	if(checker->Rectangle()->x1 < colisior->Rectangle()->x1)
 	{
@@ -167,38 +167,6 @@ void GameState::Colision(DynamicEntity* checker, Entity* colisior)
 	}
 	checker->SetDirection(dir);
 }
-void GameState::UpdateEnemies(Ghost* ghost)
-{
-	hgeVector dir = hgeVector(0.0f, 0.0f);
-	Tiles* tempTile = NULL;
-	if(!ghost->pathToTarget.empty())
-	{
-		tempTile = ghost->GetNextPosition();
-	}
-	// setting direction
-	if(tempTile)
-	{
-		ghost->SetDestination(tempTile->GetOrigin());
-		if(ghost->GetWorldPosition().x > tempTile->GetOrigin().x)
-		{
-			dir -= hgeVector(1.0f, 0.0f);
-		}
-		if(ghost->GetWorldPosition().x < tempTile->GetOrigin().x)
-		{
-			dir += hgeVector(1.0f, 0.0f);
-		}
-		if(ghost->GetWorldPosition().y < tempTile->GetOrigin().y)
-		{
-			dir += hgeVector(0.0f, 1.0f);
-		}
-		if(ghost->GetWorldPosition().y > tempTile->GetOrigin().y)
-		{
-			dir -= hgeVector(0.0f, 1.0f);
-		}	
-	}
-	
-	ghost->SetDirection(dir);
-}
 void GameState::Update(const float& dt)
 {	
 	// Process keys
@@ -214,7 +182,7 @@ void GameState::Update(const float& dt)
 			// if ghost inside tile setting his pos node pos
 			if(tiles.at(i)->IsInside(ghosts.at(j)->GetWorldPosition()))
 			{
-				ghosts.at(j)->SetPosTile(tiles.at(i)->GetPosition());
+				ghosts.at(j)->SetPosTile(tiles.at(i)->GetGridPosition());
 			}
 			// updating ghosts
 			for(unsigned int j = 0; j < ghosts.size(); j++)
@@ -226,10 +194,10 @@ void GameState::Update(const float& dt)
 					{
 						if(tiles.at(i)->IsInside(ghstart->GetWorldPosition()))
 						{
-							ghosts.at(j)->SetPathTo(tiles.at(i)->GetPosition());
+							ghosts.at(j)->SetPathTo(tiles.at(i)->GetGridPosition());
 							if(ghosts.at(j)->WasAttacked())
 							{
-								if(ghosts.at(j)->GetPosTile() ==  tiles.at(i)->GetPosition() && ghosts.at(j)->WasAttacked())
+								if(ghosts.at(j)->GetPosTile() ==  tiles.at(i)->GetGridPosition() && ghosts.at(j)->WasAttacked())
 								{
 									ghosts.at(j)->SwitchWasAtacked();
 								}
@@ -237,7 +205,7 @@ void GameState::Update(const float& dt)
 							}
 							if(ghosts.at(j)->CanBeAtacket())
 							{
-								if(ghosts.at(j)->GetPosTile() == tiles.at(i)->GetPosition() && ghosts.at(j)->CanBeAtacket())
+								if(ghosts.at(j)->GetPosTile() == tiles.at(i)->GetGridPosition() && ghosts.at(j)->CanBeAtacket())
 								{
 									ghosts.at(j)->SwitchAtacked();
 								}
@@ -256,8 +224,8 @@ void GameState::Update(const float& dt)
 						//if ghosts can attack set their position to tile where is inside player
 						if(tiles.at(i)->IsInside(player->GetWorldPosition()))
 						{
-							ghosts.at(j)->SetPathTo(tiles.at(i)->GetPosition());
-							player->SetPosTile(tiles.at(i)->GetPosition());
+							ghosts.at(j)->SetPathTo(tiles.at(i)->GetGridPosition());
+							player->SetPosTile(tiles.at(i)->GetGridPosition());
 							
 						}
 							
@@ -378,8 +346,6 @@ void GameState::Update(const float& dt)
 		// only if release timer is granted
 		if(ghosts.at(i)->releaseTime >= ReleaseTimer)
 		{
-			// updating path and position of enemies
-			UpdateEnemies(ghosts.at(i));
 			// updating ghost
 			ghosts.at(i)->Update(dt);
 			// if player ate holly food, switching ghost, and he could be attacked
